@@ -1,76 +1,153 @@
 ja:
   activerecord:
     models:
-      user: ユーザー
-      household: 世帯
+      breed: 犬種
+      vaccine: ワクチン
+      vaccine_schedule_rule: ワクチンスケジュールルール
+      vaccination: ワクチン接種
+      medication_plan: 投薬プラン
+      health_risk_rule: 健康リスクルール
+      notification: 通知
       pet: ペット
-      contact: 連絡先
-      event: 予定
+      household: 世帯
+      user: ユーザー
       membership: メンバーシップ
-      notification_setting: 通知設定
+      event: 予定
+    
     attributes:
-      user:
-        name: 名前
-        username: ユーザー名
-        email: メールアドレス
-        password: パスワード
-        password_confirmation: パスワード確認
-        time_zone: タイムゾーン
-        line_notify_token: LINE Notifyトークン
-      household:
-        name: 世帯名
+      breed:
+        name: 犬種名
+        risk_tags: リスクタグ
+      
+      vaccine:
+        name: ワクチン名
+        description: 説明
+      
+      vaccine_schedule_rule:
+        min_age_weeks: 最小接種週齢
+        repeat_every_days: 接種間隔（日）
+        booster_times: 追加接種回数
+      
+      vaccination:
+        due_on: 接種予定日
+        status: ステータス
+        completed_at: 完了日時
+      
+      medication_plan:
+        name: 薬品名
+        dosage_mg_per_kg: 体重1kgあたりの投薬量（mg）
+        interval_days: 投薬間隔（日）
+        season_from: 投薬開始日
+        season_to: 投薬終了日
+      
+      health_risk_rule:
+        trigger_conditions: トリガー条件
+        message: メッセージ
+        priority: 優先度
+      
+      notification:
+        notification_type: 通知タイプ
+        title: タイトル
+        message: メッセージ
+        scheduled_for: 通知予定日時
+        status: ステータス
+      
       pet:
         name: 名前
         species: 種類
         sex: 性別
-        birthday: 誕生日
+        birthdate: 誕生日
+        breed_id: 犬種
+        weight_kg: 体重（kg）
+        profile_image: プロフィール画像
         notes: メモ
-      contact:
+      
+      household:
+        name: 世帯名
+      
+      user:
+        email: メールアドレス
+        password: パスワード
         name: 名前
-        birthday: 誕生日
-        relation: 関係
-        notes: メモ
-      event:
-        title: タイトル
-        kind: 種類
-        scheduled_on: 予定日
-        scheduled_time: 予定時間
-        remind_before_minutes: リマインダー
-        note: メモ
-        status: ステータス
+        profile_image: プロフィール画像
+      
       membership:
         role: 役割
-      notification_setting:
-        email_enabled: メール通知
-        line_notify_enabled: LINE通知
-        daily_digest_time: 日次ダイジェスト時間
-    enums:
-      membership:
-        role:
-          owner: オーナー
-          editor: 編集者
-          viewer: 閲覧者
+      
       event:
-        kind:
-          vaccine: ワクチン
-          checkup: 健康診断
-          medication: 投薬
-          grooming: トリミング
-          other: その他
-        status:
-          pending: 未完了
-          completed: 完了
-  helpers:
-    submit:
-      create: 作成
-      update: 更新
-      submit: 送信
-    select:
-      prompt: 選択してください
+        title: タイトル
+        description: 説明
+        event_type: 予定タイプ
+        scheduled_at: 予定日時
+        status: ステータス
+
+  enums:
+    vaccination:
+      status:
+        pending: 予定
+        completed: 完了
+        missed: 期限切れ
+    
+    notification:
+      notification_type:
+        vaccination: ワクチン接種
+        medication: 投薬
+        health_advice: 健康アドバイス
+      
+      status:
+        pending: 待機中
+        sent: 送信済み
+        read: 既読
+    
+    membership:
+      role:
+        owner: オーナー
+        editor: 編集者
+        viewer: 閲覧者
+    
+    event:
+      event_type:
+        vaccine: ワクチン
+        medication: 投薬
+        checkup: 健康診断
+        other: その他
+        birthday: 誕生日
+      
+      status:
+        pending: 未完了
+        completed: 完了済み
+        skipped: スキップ
+
+  services:
+    schedule_builder:
+      vaccination_schedule_generated: ワクチンスケジュールを生成しました
+      medication_schedule_generated: 投薬スケジュールを生成しました
+    
+    health_advisor:
+      breed_specific_advice: 犬種固有のアドバイス
+      age_based_advice: 年齢に基づくアドバイス
+      weight_based_advice: 体重に基づくアドバイス
+      seasonal_advice: 季節に基づくアドバイス
+
+  jobs:
+    daily_notification:
+      started: 日次通知ジョブを開始しました
+      completed: 日次通知ジョブが完了しました
+      notifications_generated: 通知を生成しました
+      old_notifications_cleaned: 古い通知をクリーンアップしました
+
   views:
-    pagination:
-      first: "&laquo; 最初"
-      last: "最後 &raquo;"
-      previous: "&lsaquo; 前"
-      next: "次 &rsaquo;"
-      truncate: "..."
+    pets:
+      show:
+        todays_schedule: 今日の予定
+        this_weeks_schedule: 今週の予定
+        health_advice: 健康アドバイス
+        no_schedule_today: 今日の予定はありません
+        no_schedule_this_week: 今週の予定はありません
+        no_advice_today: 今日の特別なアドバイスはありません
+        vaccination_scheduled: ワクチン接種予定
+        medication_scheduled: 投薬予定
+        important: 重要
+        attention: 注意
+        complete: 完了
+        details: 詳細

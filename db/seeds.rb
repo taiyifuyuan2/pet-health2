@@ -1,55 +1,171 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
+# 犬種データを作成
+breeds = [
+  {
+    name: "ダックスフンド",
+    risk_tags: {
+      "6-120" => ["腰・関節トラブル", "椎間板ヘルニア", "肥満注意"]
+    }
+  },
+  {
+    name: "ゴールデンレトリバー",
+    risk_tags: {
+      "4-120" => ["股関節形成不全", "肘関節形成不全", "肥満注意"],
+      "84-120" => ["がん", "心疾患", "関節炎"]
+    }
+  },
+  {
+    name: "柴犬",
+    risk_tags: {
+      "0-120" => ["皮膚疾患", "アレルギー"],
+      "60-120" => ["白内障", "緑内障"]
+    }
+  },
+  {
+    name: "トイプードル",
+    risk_tags: {
+      "0-120" => ["膝蓋骨脱臼", "皮膚疾患", "歯周病"]
+    }
+  }
+]
 
-# サンプルユーザーを作成（開発環境のみ）
-if Rails.env.development?
-  # テストユーザー
-  user = User.find_or_create_by!(email: "test@example.com") do |u|
-    u.name = "テストユーザー"
-    u.password = "password"
-    u.password_confirmation = "password"
+breeds.each do |breed_data|
+  Breed.find_or_create_by(name: breed_data[:name]) do |breed|
+    breed.risk_tags = breed_data[:risk_tags]
   end
-
-  # 世帯を作成
-  household = Household.find_or_create_by!(name: "テスト世帯") do |h|
-    h.name = "テスト世帯"
-  end
-
-  # メンバーシップを作成
-  Membership.find_or_create_by!(user: user, household: household) do |m|
-    m.role = :owner
-  end
-
-  # サンプルペット
-  pet = Pet.find_or_create_by!(household: household, name: "ポチ") do |p|
-    p.species = "dog"
-    p.sex = "male"
-    p.birthday = Date.current - 2.years
-    p.notes = "元気な柴犬です"
-  end
-
-  # サンプルイベント（明日のフィラリア）
-  Event.find_or_create_by!(household: household, subject: pet, title: "フィラリア予防薬") do |e|
-    e.kind = :medication
-    e.scheduled_on = Date.current + 1.day
-    e.scheduled_time = Time.parse("09:00")
-    e.remind_before_minutes = 1440 # 前日
-    e.note = "月1回のフィラリア予防薬投与"
-  end
-
-  # サンプルイベント（来週のワクチン）
-  Event.find_or_create_by!(household: household, subject: pet, title: "混合ワクチン") do |e|
-    e.kind = :vaccine
-    e.scheduled_on = Date.current + 7.days
-    e.scheduled_time = Time.parse("14:00")
-    e.remind_before_minutes = 1440 # 前日
-    e.note = "年1回の混合ワクチン接種"
-  end
-
-  puts "サンプルデータを作成しました:"
-  puts "- ユーザー: #{user.email}"
-  puts "- 世帯: #{household.name}"
-  puts "- ペット: #{pet.name}"
-  puts "- イベント: #{Event.count}件"
 end
+
+# ワクチンデータを作成
+vaccines = [
+  {
+    name: "混合ワクチン（5種）",
+    description: "犬ジステンパー、犬パルボウイルス感染症、犬アデノウイルス2型感染症、犬パラインフルエンザ、犬コロナウイルス感染症を予防"
+  },
+  {
+    name: "狂犬病ワクチン",
+    description: "狂犬病を予防（法律で義務付けられている）"
+  },
+  {
+    name: "レプトスピラワクチン",
+    description: "レプトスピラ症を予防"
+  },
+  {
+    name: "ボルデテラワクチン",
+    description: "ケンネルコフ（犬の咳）を予防"
+  }
+]
+
+vaccines.each do |vaccine_data|
+  vaccine = Vaccine.find_or_create_by(name: vaccine_data[:name]) do |v|
+    v.description = vaccine_data[:description]
+  end
+  
+  # ワクチンスケジュールルールを作成
+  case vaccine.name
+  when "混合ワクチン（5種）"
+    VaccineScheduleRule.find_or_create_by(vaccine: vaccine) do |rule|
+      rule.min_age_weeks = 6
+      rule.repeat_every_days = 365
+      rule.booster_times = 0
+    end
+  when "狂犬病ワクチン"
+    VaccineScheduleRule.find_or_create_by(vaccine: vaccine) do |rule|
+      rule.min_age_weeks = 12
+      rule.repeat_every_days = 365
+      rule.booster_times = 0
+    end
+  when "レプトスピラワクチン"
+    VaccineScheduleRule.find_or_create_by(vaccine: vaccine) do |rule|
+      rule.min_age_weeks = 8
+      rule.repeat_every_days = 365
+      rule.booster_times = 0
+    end
+  when "ボルデテラワクチン"
+    VaccineScheduleRule.find_or_create_by(vaccine: vaccine) do |rule|
+      rule.min_age_weeks = 6
+      rule.repeat_every_days = 365
+      rule.booster_times = 0
+    end
+  end
+end
+
+# 投薬プランデータを作成
+medication_plans = [
+  {
+    name: "ノミ・ダニ予防薬",
+    dosage_mg_per_kg: 0.5,
+    interval_days: 30,
+    season_from: Date.new(2024, 3, 1),
+    season_to: Date.new(2024, 11, 30)
+  },
+  {
+    name: "フィラリア予防薬",
+    dosage_mg_per_kg: 0.1,
+    interval_days: 30,
+    season_from: Date.new(2024, 5, 1),
+    season_to: Date.new(2024, 12, 31)
+  },
+  {
+    name: "サプリメント（グルコサミン）",
+    dosage_mg_per_kg: 20,
+    interval_days: 1,
+    season_from: nil,
+    season_to: nil
+  }
+]
+
+medication_plans.each do |plan_data|
+  MedicationPlan.find_or_create_by(name: plan_data[:name]) do |plan|
+    plan.dosage_mg_per_kg = plan_data[:dosage_mg_per_kg]
+    plan.interval_days = plan_data[:interval_days]
+    plan.season_from = plan_data[:season_from]
+    plan.season_to = plan_data[:season_to]
+  end
+end
+
+# 健康リスクルールを作成
+health_risk_rules = [
+  {
+    trigger_conditions: {
+      "breed_names" => ["ダックスフンド"],
+      "age_months" => { "min" => 6 }
+    },
+    message: "ダックスフンドは6か月以降、腰や関節のトラブルに注意が必要です。階段の上り下りを控え、適度な運動を心がけましょう。",
+    priority: 1
+  },
+  {
+    trigger_conditions: {
+      "breed_names" => ["ゴールデンレトリバー"],
+      "age_months" => { "min" => 4 }
+    },
+    message: "大型犬は股関節形成不全になりやすい傾向があります。過度な運動を避け、適切な体重管理を心がけましょう。",
+    priority: 2
+  },
+  {
+    trigger_conditions: {
+      "age_months" => { "min" => 84 }
+    },
+    message: "シニア期に入りました。定期的な健康チェックと、年齢に応じた食事管理が重要です。",
+    priority: 1
+  },
+  {
+    trigger_conditions: {
+      "weight_kg" => { "min" => 30 }
+    },
+    message: "体重が重めです。適切な食事管理と運動で体重をコントロールしましょう。",
+    priority: 2
+  }
+]
+
+health_risk_rules.each do |rule_data|
+  HealthRiskRule.find_or_create_by(message: rule_data[:message]) do |rule|
+    rule.trigger_conditions = rule_data[:trigger_conditions]
+    rule.priority = rule_data[:priority]
+  end
+end
+
+puts "シードデータの作成が完了しました！"
+puts "- 犬種: #{Breed.count}件"
+puts "- ワクチン: #{Vaccine.count}件"
+puts "- ワクチンスケジュールルール: #{VaccineScheduleRule.count}件"
+puts "- 投薬プラン: #{MedicationPlan.count}件"
+puts "- 健康リスクルール: #{HealthRiskRule.count}件"

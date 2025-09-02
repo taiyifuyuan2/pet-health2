@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  dosage_mg_per_kg: 9.99
+  interval_days: 1
+  season_from: 2025-09-02
+  season_to: 2025-09-02
+
+two:
+  name: MyString
+  dosage_mg_per_kg: 9.99
+  interval_days: 1
+  season_from: 2025-09-02
+  season_to: 2025-09-02

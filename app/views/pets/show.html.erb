@@ -17,10 +17,22 @@
             <%= @pet.sex %>
           </div>
         <% end %>
-        <% if @pet.birthday.present? %>
+        <% if @pet.birthdate.present? %>
           <div class="pet-info-item">
             <span class="info-icon">🎂</span>
-            <%= @pet.birthday.strftime('%Y年%m月%d日') %>
+            <%= @pet.birthdate.strftime('%Y年%m月%d日') %>
+          </div>
+        <% end %>
+        <% if @pet.breed.present? %>
+          <div class="pet-info-item">
+            <span class="info-icon">🐕</span>
+            <%= @pet.breed.name %>
+          </div>
+        <% end %>
+        <% if @pet.weight_kg.present? %>
+          <div class="pet-info-item">
+            <span class="info-icon">⚖️</span>
+            <%= @pet.weight_kg %>kg
           </div>
         <% end %>
       </div>
@@ -94,12 +106,30 @@
               </div>
             </div>
           <% end %>
-          <% if @pet.birthday.present? %>
+          <% if @pet.birthdate.present? %>
             <div class="detail-item">
               <div class="detail-icon">🎂</div>
               <div class="detail-content">
                 <div class="detail-label">誕生日</div>
-                <div class="detail-value"><%= @pet.birthday.strftime('%Y年%m月%d日') %></div>
+                <div class="detail-value"><%= @pet.birthdate.strftime('%Y年%m月%d日') %></div>
+              </div>
+            </div>
+          <% end %>
+          <% if @pet.breed.present? %>
+            <div class="detail-item">
+              <div class="detail-icon">🐕</div>
+              <div class="detail-content">
+                <div class="detail-label">犬種</div>
+                <div class="detail-value"><%= @pet.breed.name %></div>
+              </div>
+            </div>
+          <% end %>
+          <% if @pet.weight_kg.present? %>
+            <div class="detail-item">
+              <div class="detail-icon">⚖️</div>
+              <div class="detail-content">
+                <div class="detail-label">体重</div>
+                <div class="detail-value"><%= @pet.weight_kg %>kg</div>
               </div>
             </div>
           <% end %>
@@ -117,52 +147,109 @@
     </div>
   </div>
 
-  <!-- 関連予定 -->
+  <!-- 今日の予定 -->
   <div class="pet-detail-card">
     <div class="card-header">
-      <h2 class="card-title">📅 関連予定</h2>
-      <%= link_to "予定を追加", new_event_path(subject_type: 'Pet', subject_id: @pet.id), class: "btn btn-sm btn-primary" %>
+      <h2 class="card-title">📅 今日の予定</h2>
     </div>
-    <div class="events-content">
-      <% if @events.any? %>
-        <% @events.each do |event| %>
-          <div class="event-item event-<%= event.kind %>">
-            <div class="event-content">
-              <div class="event-header">
-                <h4 class="event-title"><%= event.title %></h4>
-                <span class="event-status <%= event.pending? ? 'pending' : 'completed' %>">
-                  <%= event.pending? ? '未完了' : '完了済み' %>
-                </span>
+    <div class="schedule-content">
+      <% if @todays_schedule.any? %>
+        <% @todays_schedule.each do |vaccination| %>
+          <div class="schedule-item vaccination-item">
+            <div class="schedule-content">
+              <div class="schedule-header">
+                <h4 class="schedule-title">ワクチン接種: <%= vaccination.vaccine.name %></h4>
+                <span class="schedule-status pending">予定</span>
               </div>
-              <div class="event-details">
-                <div class="event-datetime">
+              <div class="schedule-details">
+                <div class="schedule-datetime">
                   <span class="date-icon">📅</span>
-                  <%= event.scheduled_on.strftime("%m月%d日") %>
-                  <% if event.scheduled_time %>
-                    <%= event.scheduled_time.strftime("%H:%M") %>
-                  <% end %>
+                  <%= vaccination.due_on.strftime("%m月%d日") %>
                 </div>
-                <% if event.note.present? %>
-                  <div class="event-note">
-                    <span class="note-icon">📝</span>
-                    <%= event.note %>
-                  </div>
-                <% end %>
+                <div class="schedule-description">
+                  <%= vaccination.vaccine.description %>
+                </div>
               </div>
             </div>
-            <div class="event-actions">
-              <%= link_to "詳細", event, class: "btn btn-sm btn-secondary" %>
-              <% if event.pending? %>
-                <%= link_to "完了", complete_event_path(event), data: { turbo_method: :patch }, class: "btn btn-sm btn-success" %>
-              <% end %>
+            <div class="schedule-actions">
+              <%= link_to "完了", "#", class: "btn btn-sm btn-success" %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="empty-state">
+          <div class="empty-icon">✅</div>
+          <p>今日の予定はありません</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 今週の予定 -->
+  <div class="pet-detail-card">
+    <div class="card-header">
+      <h2 class="card-title">📅 今週の予定</h2>
+    </div>
+    <div class="schedule-content">
+      <% if @this_weeks_schedule.any? %>
+        <% @this_weeks_schedule.each do |vaccination| %>
+          <div class="schedule-item vaccination-item">
+            <div class="schedule-content">
+              <div class="schedule-header">
+                <h4 class="schedule-title">ワクチン接種: <%= vaccination.vaccine.name %></h4>
+                <span class="schedule-status pending">予定</span>
+              </div>
+              <div class="schedule-details">
+                <div class="schedule-datetime">
+                  <span class="date-icon">📅</span>
+                  <%= vaccination.due_on.strftime("%m月%d日") %>
+                </div>
+                <div class="schedule-description">
+                  <%= vaccination.vaccine.description %>
+                </div>
+              </div>
+            </div>
+            <div class="schedule-actions">
+              <%= link_to "詳細", "#", class: "btn btn-sm btn-secondary" %>
             </div>
           </div>
         <% end %>
       <% else %>
         <div class="empty-state">
           <div class="empty-icon">📅</div>
-          <p>関連する予定がありません</p>
-          <%= link_to "予定を追加", new_event_path(subject_type: 'Pet', subject_id: @pet.id), class: "btn btn-primary" %>
+          <p>今週の予定はありません</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 健康アドバイス -->
+  <div class="pet-detail-card">
+    <div class="card-header">
+      <h2 class="card-title">💡 健康アドバイス</h2>
+    </div>
+    <div class="advice-content">
+      <% if @todays_advice.any? %>
+        <% @todays_advice.each do |advice| %>
+          <div class="advice-item advice-<%= advice[:priority] %>">
+            <div class="advice-header">
+              <h4 class="advice-title"><%= advice[:title] %></h4>
+              <span class="advice-priority <%= advice[:priority] %>">
+                <%= advice[:priority] == 'high' ? '重要' : '注意' %>
+              </span>
+            </div>
+            <div class="advice-message">
+              <%= advice[:message] %>
+            </div>
+            <div class="advice-category">
+              <span class="category-tag"><%= advice[:category] %></span>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="empty-state">
+          <div class="empty-icon">💡</div>
+          <p>今日の特別なアドバイスはありません</p>
         </div>
       <% end %>
     </div>
