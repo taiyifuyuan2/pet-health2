@@ -1,4 +1,5 @@
 class PetsController < ApplicationController
+  before_action :ensure_household_exists!
   before_action :set_pet, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -11,7 +12,18 @@ class PetsController < ApplicationController
   end
 
   def show
-    @events = @pet.events.order(:scheduled_on, :scheduled_time)
+    @events = @pet.events.order(:scheduled_at)
+    @vaccinations = @pet.vaccinations.includes(:vaccine).order(:due_on)
+    @notifications = @pet.notifications.order(:scheduled_for)
+    
+    # 健康アドバイスを取得
+    @health_advisor = HealthAdvisor.new(@pet)
+    @todays_advice = @health_advisor.get_todays_advice
+    @weekly_advice = @health_advisor.get_weekly_advice
+    
+    # 今日の予定を取得
+    @todays_schedule = @pet.todays_schedule
+    @this_weeks_schedule = @pet.this_weeks_schedule
   end
 
   def new
@@ -51,6 +63,6 @@ class PetsController < ApplicationController
   end
 
   def pet_params
-    params.require(:pet).permit(:name, :species, :sex, :birthday, :notes, :profile_image)
+    params.require(:pet).permit(:name, :species, :sex, :birthdate, :notes, :profile_image, :breed_id, :weight_kg)
   end
 end

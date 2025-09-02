@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pet: one
+  notification_type: MyString
+  title: MyString
+  message: MyText
+  scheduled_for: 2025-09-02 19:01:23
+  status: MyString
+
+two:
+  pet: two
+  notification_type: MyString
+  title: MyString
+  message: MyText
+  scheduled_for: 2025-09-02 19:01:23
+  status: MyString

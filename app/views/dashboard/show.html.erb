@@ -59,7 +59,7 @@
     <div class="events-list">
       <% if @upcoming_events.any? %>
         <% @upcoming_events.each do |event| %>
-          <div class="event-item event-<%= event.kind %>">
+          <div class="event-item event-<%= event.event_type %>">
             <div class="event-content">
               <div class="event-header">
                 <h4 class="event-title"><%= event.title %></h4>
@@ -78,17 +78,15 @@
                   <span class="date-icon">
                     <%= image_tag "icons/calendar.jpg", alt: "日付", class: "icon-small" %>
                   </span>
-                  <%= event.scheduled_on.strftime("%m月%d日") %>
-                  <% if event.scheduled_time %>
-                    <%= event.scheduled_time.strftime("%H:%M") %>
-                  <% end %>
+                  <%= event.scheduled_at.strftime("%m月%d日") %>
+                  <%= event.scheduled_at.strftime("%H:%M") %>
                 </div>
-                <% if event.note.present? %>
+                <% if event.description.present? %>
                   <div class="event-note">
                     <span class="note-icon">
                       <%= image_tag "icons/edit.svg", alt: "メモ", class: "icon-small" %>
                     </span>
-                    <%= event.note %>
+                    <%= event.description %>
                   </div>
                 <% end %>
               </div>
@@ -128,7 +126,7 @@
             <div class="overdue-item">
               <div class="overdue-content">
                 <h5><%= event.title %></h5>
-                <p><%= event.subject.name %> - <%= event.scheduled_on.strftime("%m/%d") %></p>
+                <p><%= event.subject.name %> - <%= event.scheduled_at.strftime("%m/%d") %></p>
               </div>
               <%= link_to "完了", complete_event_path(event), data: { turbo_method: :patch }, class: "btn btn-sm btn-danger" %>
             </div>

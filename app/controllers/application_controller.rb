@@ -13,4 +13,10 @@ class ApplicationController < ActionController::Base
     @current_household ||= current_user&.households&.first
   end
   helper_method :current_household
+
+  def ensure_household_exists!
+    unless current_household
+      redirect_to new_household_path, alert: '世帯を作成してください。'
+    end
+  end
 end

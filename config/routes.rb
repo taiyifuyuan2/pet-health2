@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get 'mypage/edit', to: 'users#edit'
   patch 'mypage', to: 'users#update'
 
-  resources :households, only: [:show, :new, :create, :edit, :update] do
+  resources :households, only: [:show, :new, :create, :edit, :update, :destroy] do
     resources :memberships, only: [:index, :create, :update, :destroy]
     post :invitations, to: "invitations#create" # 招待リンク生成
   end
@@ -21,9 +21,7 @@ Rails.application.routes.draw do
     resources :events, shallow: true
   end
 
-  resources :contacts, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
-    resources :events, shallow: true
-  end
+
 
 
 

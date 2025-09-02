@@ -1,11 +1,12 @@
 class CreatePets < ActiveRecord::Migration[7.1]
   def change
     create_table :pets do |t|
-      t.references :household, null: false, foreign_key: true
-      t.string :name, null: false
-      t.string :species, null: false
+      t.string :name
+      t.string :species
       t.string :sex
-      t.date :birthday
+      t.date :birthdate
+      t.references :household, null: false, foreign_key: true
+      t.string :profile_image
       t.text :notes
 
       t.timestamps

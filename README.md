@@ -4,6 +4,7 @@
 
 ## 機能
 
+### 基本機能
 - ペット登録（複数頭対応）
 - 予定登録（ワクチン/投薬/健診/その他/誕生日）
 - メール通知（前日・当日9:00）
@@ -11,11 +12,18 @@
 - 家族共有（世帯単位）
 - ダッシュボード（今月の予定・未完了表示）
 
+### 新機能（自動スケジュール・健康アドバイス）
+- **自動ワクチンスケジュール生成**: ペットの年齢・犬種に基づいてワクチン接種スケジュールを自動計算
+- **投薬スケジュール管理**: 体重に応じた投薬量の自動計算と季節性投薬の管理
+- **健康アドバイスシステム**: 犬種・年齢・体重に応じた個別の健康アドバイスを提供
+- **日次通知システム**: 毎朝自動でワクチン・投薬・健康アドバイスの通知を生成
+- **犬種固有リスク管理**: ダックスフンドの腰・関節トラブルなど、犬種特有のリスクを管理
+
 ## 技術スタック
 
 - Ruby 3.2.0
 - Rails 7.1.5
-- MySQL 8 (utf8mb4)
+- PostgreSQL 15 (jsonb対応)
 - Sidekiq (Redis)
 - Devise (認証)
 - Vanilla JavaScript + CSS + HTML
@@ -25,7 +33,7 @@
 ### 前提条件
 
 - Ruby 3.2.0
-- MySQL 8
+- PostgreSQL 15
 - Redis
 
 ### インストール
@@ -69,9 +77,9 @@ foreman start -f Procfile.dev
 
 ```bash
 # データベース
-DB_USERNAME=root
+DB_USERNAME=postgres
 DB_PASSWORD=
-DB_HOST=127.0.0.1
+DB_HOST=localhost
 
 # Redis
 REDIS_URL=redis://localhost:6379/0
@@ -87,7 +95,35 @@ bin/rails test
 bin/rails test:system
 ```
 
-## 通知テスト
+## 新機能のテスト
+
+### 自動スケジュール生成
+```ruby
+# ペットのワクチンスケジュールを生成
+pet = Pet.first
+schedule_builder = ScheduleBuilder.new(pet)
+vaccinations = schedule_builder.build_vaccination_schedule
+
+# 投薬スケジュールを生成
+medications = schedule_builder.build_medication_schedule
+```
+
+### 健康アドバイス
+```ruby
+# ペットの健康アドバイスを取得
+pet = Pet.first
+advisor = HealthAdvisor.new(pet)
+todays_advice = advisor.get_todays_advice
+weekly_advice = advisor.get_weekly_advice
+```
+
+### 日次通知ジョブ
+```ruby
+# 日次通知ジョブを実行
+DailyNotificationJob.perform_now
+```
+
+### 通知テスト
 
 1. ペットとイベントを登録
 2. イベントの日付を明日に設定

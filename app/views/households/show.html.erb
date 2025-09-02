@@ -11,10 +11,7 @@
           <span class="stat-icon">🐾</span>
           <%= @household.pets.count %>匹のペット
         </div>
-        <div class="household-stat">
-          <span class="stat-icon">👥</span>
-          <%= @household.contacts.count %>人の連絡先
-        </div>
+
         <div class="household-stat">
           <span class="stat-icon">📅</span>
           <%= @household.events.count %>件の予定
@@ -25,6 +22,13 @@
   <div class="household-actions">
     <%= link_to "編集", edit_household_path(@household), class: "btn btn-secondary" %>
     <%= link_to "ダッシュボード", dashboard_path, class: "btn btn-primary" %>
+    <%= link_to "削除", household_path(@household), 
+                method: :delete, 
+                data: { 
+                  turbo_method: :delete, 
+                  turbo_confirm: "本当に世帯を削除しますか？この操作は取り消せません。" 
+                }, 
+                class: "btn btn-danger" %>
   </div>
 </div>
 
@@ -37,13 +41,7 @@
       <div class="stat-label">登録ペット</div>
     </div>
   </div>
-  <div class="stat-card">
-    <div class="stat-icon">👥</div>
-    <div class="stat-content">
-      <div class="stat-number"><%= @household.contacts.count %></div>
-      <div class="stat-label">連絡先</div>
-    </div>
-  </div>
+
   <div class="stat-card">
     <div class="stat-icon">📅</div>
     <div class="stat-content">
@@ -102,43 +100,5 @@
     </div>
   </div>
 
-  <!-- 連絡先一覧 -->
-  <div class="household-card contacts-section">
-    <div class="card-header">
-      <h2 class="card-title">👥 連絡先一覧</h2>
-      <%= link_to "連絡先を追加", new_contact_path, class: "btn btn-sm btn-primary" %>
-    </div>
-    <div class="contacts-content">
-      <% if @household.contacts.any? %>
-        <% @household.contacts.each do |contact| %>
-          <div class="contact-item">
-            <div class="contact-info">
-              <div class="contact-avatar">
-                <span class="contact-icon">
-                  <%= image_tag "icons/user.jpg", alt: "ユーザー", class: "icon-small" %>
-                </span>
-              </div>
-              <div class="contact-details">
-                <div class="contact-name"><%= contact.name %></div>
-                <div class="contact-birthday">🎂 <%= contact.birthday.strftime('%m月%d日') %></div>
-                <% if contact.relation.present? %>
-                  <div class="contact-relation"><%= contact.relation %></div>
-                <% end %>
-              </div>
-            </div>
-            <div class="contact-actions">
-              <%= link_to "詳細", contact, class: "btn btn-sm btn-secondary" %>
-              <%= link_to "編集", edit_contact_path(contact), class: "btn btn-sm btn-outline" %>
-            </div>
-          </div>
-        <% end %>
-      <% else %>
-        <div class="empty-state">
-          <div class="empty-icon">👥</div>
-          <p>連絡先が登録されていません</p>
-          <%= link_to "連絡先を追加", new_contact_path, class: "btn btn-primary" %>
-        </div>
-      <% end %>
-    </div>
-  </div>
+
 </div>

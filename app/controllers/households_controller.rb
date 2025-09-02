@@ -1,5 +1,5 @@
 class HouseholdsController < ApplicationController
-  before_action :set_household, only: [:show, :edit, :update]
+  before_action :set_household, only: [:show, :edit, :update, :destroy]
 
   def show
   end
@@ -13,7 +13,7 @@ class HouseholdsController < ApplicationController
     
     if @household.save
       # 作成者をownerとして追加
-      @household.memberships.create!(user: current_user, role: :owner)
+      @household.memberships.create!(user: current_user, role: 'owner')
       redirect_to dashboard_path, notice: '世帯を作成しました'
     else
       render :new
@@ -29,6 +29,11 @@ class HouseholdsController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @household.destroy
+    redirect_to root_path, notice: '世帯を削除しました'
   end
 
   private
