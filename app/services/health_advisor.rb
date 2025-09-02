@@ -38,24 +38,74 @@ class HealthAdvisor
     return [] unless @pet.breed.present?
     
     advice = []
+    breed_name = @pet.breed.name.downcase
+    age_months = @pet.age_in_months
     
-    # ダックスフンドの腰・関節トラブル注意
-    if @pet.breed.name.downcase.include?('ダックスフンド') && @pet.age_in_months >= 6
+    # ダックスフンド・コーギーの腰・関節トラブル注意
+    if (breed_name.include?('ダックスフンド') || breed_name.include?('コーギー')) && age_months >= 6
       advice << {
         type: 'health_risk',
         title: '腰・関節トラブル注意',
-        message: 'ダックスフンドは6か月以降、腰や関節のトラブルに注意が必要です。階段の上り下りを控え、適度な運動を心がけましょう。',
+        message: 'この犬種は6か月以降、腰や関節のトラブルに注意が必要です。階段の上り下りを控え、適度な運動を心がけましょう。',
         priority: 'high',
         category: 'breed_specific'
       }
     end
     
     # 大型犬の股関節形成不全注意
-    if @pet.breed.name.downcase.include?('ゴールデンレトリバー') && @pet.age_in_months >= 4
+    if (breed_name.include?('ゴールデンレトリバー') || breed_name.include?('ラブラドールレトリバー') || 
+        breed_name.include?('ジャーマンシェパード') || breed_name.include?('ボーダーコリー')) && age_months >= 4
       advice << {
         type: 'health_risk',
         title: '股関節形成不全注意',
         message: '大型犬は股関節形成不全になりやすい傾向があります。過度な運動を避け、適切な体重管理を心がけましょう。',
+        priority: 'medium',
+        category: 'breed_specific'
+      }
+    end
+    
+    # 小型犬の膝蓋骨脱臼注意
+    if (breed_name.include?('トイプードル') || breed_name.include?('チワワ') || 
+        breed_name.include?('ポメラニアン') || breed_name.include?('マルチーズ') || 
+        breed_name.include?('ヨークシャーテリア')) && age_months >= 0
+      advice << {
+        type: 'health_risk',
+        title: '膝蓋骨脱臼注意',
+        message: '小型犬は膝蓋骨脱臼になりやすい傾向があります。高い場所からの飛び降りを避け、適切な運動を心がけましょう。',
+        priority: 'medium',
+        category: 'breed_specific'
+      }
+    end
+    
+    # 短頭種の呼吸器疾患注意
+    if (breed_name.include?('フレンチブルドッグ') || breed_name.include?('パグ') || 
+        breed_name.include?('シーズー')) && age_months >= 0
+      advice << {
+        type: 'health_risk',
+        title: '呼吸器疾患注意',
+        message: '短頭種は呼吸器疾患になりやすい傾向があります。暑い時期の運動を控え、十分な水分補給を心がけましょう。',
+        priority: 'high',
+        category: 'breed_specific'
+      }
+    end
+    
+    # ビーグルの肥満注意
+    if breed_name.include?('ビーグル') && age_months >= 0
+      advice << {
+        type: 'health_risk',
+        title: '肥満注意',
+        message: 'ビーグルは肥満になりやすい傾向があります。適切な食事管理と運動で体重をコントロールしましょう。',
+        priority: 'medium',
+        category: 'breed_specific'
+      }
+    end
+    
+    # ハスキーの眼疾患注意
+    if breed_name.include?('ハスキー') && age_months >= 0
+      advice << {
+        type: 'health_risk',
+        title: '眼疾患注意',
+        message: 'ハスキーは眼疾患になりやすい傾向があります。定期的な目のチェックと、紫外線対策を心がけましょう。',
         priority: 'medium',
         category: 'breed_specific'
       }

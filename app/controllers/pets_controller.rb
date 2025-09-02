@@ -1,4 +1,5 @@
 class PetsController < ApplicationController
+  before_action :ensure_household_exists!
   before_action :set_pet, only: [:show, :edit, :update, :destroy]
 
   def index

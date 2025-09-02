@@ -18,6 +18,7 @@ class Event < ApplicationRecord
   end
 
   def complete!
-    update!(status: :completed, completed_at: Time.current)
+    update_column(:status, 'completed')
+    update_column(:completed_at, Time.current)
   end
 end

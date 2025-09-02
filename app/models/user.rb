@@ -6,7 +6,6 @@ class User < ApplicationRecord
 
   has_many :memberships, dependent: :destroy
   has_many :households, through: :memberships
-  has_one :notification_setting, dependent: :destroy
 
   validates :name, presence: true
 

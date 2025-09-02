@@ -79,12 +79,12 @@
                 <span class="info-text"><%= pet.sex %></span>
               </div>
             <% end %>
-            <% if pet.birthday.present? %>
+            <% if pet.birthdate.present? %>
               <div class="pet-info-item">
                 <span class="info-icon">
                   <%= image_tag "icons/birthday.jpg", alt: "誕生日", class: "icon-small" %>
                 </span>
-                <span class="info-text"><%= pet.birthday.strftime("%Y年%m月%d日") %></span>
+                <span class="info-text"><%= pet.birthdate.strftime("%Y年%m月%d日") %></span>
               </div>
             <% end %>
           </div>

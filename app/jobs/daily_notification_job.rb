@@ -48,10 +48,10 @@ class DailyNotificationJob < ApplicationJob
     tomorrows_vaccinations = pet.vaccinations.where(due_on: Date.tomorrow).pending
     
     tomorrows_vaccinations.each do |vaccination|
-      next if notification_exists?(pet, 'vaccination_reminder', vaccination.vaccine.name)
+      next if notification_exists?(pet, 'vaccination_reminder', "ワクチン接種リマインダー: #{vaccination.vaccine.name}")
       
       pet.notifications.create!(
-        notification_type: 'vaccination',
+        notification_type: 'vaccination_reminder',
         title: "ワクチン接種リマインダー: #{vaccination.vaccine.name}",
         message: "明日、#{pet.name}の#{vaccination.vaccine.name}ワクチン接種が予定されています。",
         scheduled_for: Date.current.beginning_of_day + 18.hours, # 夕方6時に通知
@@ -120,7 +120,7 @@ class DailyNotificationJob < ApplicationJob
   def notification_exists?(pet, type, identifier)
     pet.notifications.exists?(
       notification_type: type,
-      title: /#{identifier}/,
+      title: identifier,
       scheduled_for: Date.current.beginning_of_day..Date.current.end_of_day
     )
   end

@@ -76,6 +76,15 @@ class ScheduleBuilder
     end
   end
   
+  # ペットの年齢に基づいてスケジュールを再計算
+  def recalculate_schedule
+    # 既存の未完了ワクチンを削除
+    @pet.vaccinations.pending.destroy_all
+    
+    # 新しいスケジュールを生成
+    update_existing_schedule
+  end
+  
   private
   
   def create_vaccination(vaccine, due_date)

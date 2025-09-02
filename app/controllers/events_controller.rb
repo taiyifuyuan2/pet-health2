@@ -1,10 +1,11 @@
 class EventsController < ApplicationController
+  before_action :ensure_household_exists!
   before_action :set_event, only: [:show, :edit, :update, :destroy, :complete]
 
   def index
     @events = current_household.events
                               .includes(:subject)
-                              .order(:scheduled_on, :scheduled_time)
+                              .order(:scheduled_at)
     
     if params[:month]
       @month = Date.parse("#{params[:month]}-01")
@@ -31,7 +32,6 @@ class EventsController < ApplicationController
     
     # 対象選択用のデータ
     @pets = current_household.pets.order(:name)
-    @contacts = current_household.contacts.order(:name)
     
     Rails.logger.info "=== Rendering events/new ==="
   end
@@ -78,14 +78,11 @@ class EventsController < ApplicationController
     case params[:subject_type]
     when 'Pet'
       current_household.pets.find(params[:subject_id])
-    when 'Contact'
-      current_household.contacts.find(params[:subject_id])
     end
   end
 
   def event_params
-    params.require(:event).permit(:subject_type, :subject_id, :kind, :title, 
-                                 :scheduled_on, :scheduled_time, :rrule, 
-                                 :remind_before_minutes, :note)
+    params.require(:event).permit(:subject_type, :subject_id, :event_type, :title, 
+                                 :scheduled_at, :description)
   end
 end

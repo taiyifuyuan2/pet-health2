@@ -8,30 +8,40 @@
       <h1 class="pet-name"><%= @pet.name %></h1>
       <div class="pet-basic-info">
         <div class="pet-info-item">
-          <span class="info-icon">🐕</span>
+          <span class="info-icon">
+            <%= image_tag "icons/dog.jpeg", alt: "種類", class: "icon-small" %>
+          </span>
           <%= @pet.species %>
         </div>
         <% if @pet.sex.present? %>
           <div class="pet-info-item">
-            <span class="info-icon">⚥</span>
+            <span class="info-icon">
+              <%= image_tag "icons/user.jpeg", alt: "性別", class: "icon-small" %>
+            </span>
             <%= @pet.sex %>
           </div>
         <% end %>
         <% if @pet.birthdate.present? %>
           <div class="pet-info-item">
-            <span class="info-icon">🎂</span>
+            <span class="info-icon">
+              <%= image_tag "icons/birthday.jpeg", alt: "誕生日", class: "icon-small" %>
+            </span>
             <%= @pet.birthdate.strftime('%Y年%m月%d日') %>
           </div>
         <% end %>
         <% if @pet.breed.present? %>
           <div class="pet-info-item">
-            <span class="info-icon">🐕</span>
+            <span class="info-icon">
+              <%= image_tag "icons/dog.jpeg", alt: "犬種", class: "icon-small" %>
+            </span>
             <%= @pet.breed.name %>
           </div>
         <% end %>
         <% if @pet.weight_kg.present? %>
           <div class="pet-info-item">
-            <span class="info-icon">⚖️</span>
+            <span class="info-icon">
+              <%= image_tag "icons/check.svg", alt: "体重", class: "icon-small" %>
+            </span>
             <%= @pet.weight_kg %>kg
           </div>
         <% end %>
@@ -48,21 +58,27 @@
 <!-- 統計カード -->
 <div class="stats-grid">
   <div class="stat-card">
-    <div class="stat-icon">📅</div>
+    <div class="stat-icon">
+      <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon" %>
+    </div>
     <div class="stat-content">
       <div class="stat-number"><%= @events.count %></div>
       <div class="stat-label">関連予定</div>
     </div>
   </div>
   <div class="stat-card">
-    <div class="stat-icon">✅</div>
+    <div class="stat-icon">
+      <%= image_tag "icons/check.svg", alt: "完了", class: "icon" %>
+    </div>
     <div class="stat-content">
       <div class="stat-number"><%= @events.completed.count %></div>
       <div class="stat-label">完了済み</div>
     </div>
   </div>
   <div class="stat-card">
-    <div class="stat-icon">⏳</div>
+    <div class="stat-icon">
+      <%= image_tag "icons/clock.svg", alt: "未完了", class: "icon" %>
+    </div>
     <div class="stat-content">
       <div class="stat-number"><%= @events.pending.count %></div>
       <div class="stat-label">未完了</div>
@@ -84,14 +100,19 @@
   <!-- ペット詳細情報 -->
   <div class="pet-detail-card">
     <div class="card-header">
-      <h2 class="card-title">📋 詳細情報</h2>
+      <h2 class="card-title">
+        <%= image_tag "icons/check.svg", alt: "詳細", class: "icon-inline" %>
+        詳細情報
+      </h2>
     </div>
     <div class="pet-detail-content">
       <div class="detail-section">
         <h3 class="detail-section-title">基本情報</h3>
         <div class="detail-items">
           <div class="detail-item">
-            <div class="detail-icon">🐕</div>
+            <div class="detail-icon">
+              <%= image_tag "icons/dog.jpeg", alt: "種類", class: "icon-small" %>
+            </div>
             <div class="detail-content">
               <div class="detail-label">種類</div>
               <div class="detail-value"><%= @pet.species %></div>
@@ -99,7 +120,9 @@
           </div>
           <% if @pet.sex.present? %>
             <div class="detail-item">
-              <div class="detail-icon">⚥</div>
+              <div class="detail-icon">
+                <%= image_tag "icons/user.jpeg", alt: "性別", class: "icon-small" %>
+              </div>
               <div class="detail-content">
                 <div class="detail-label">性別</div>
                 <div class="detail-value"><%= @pet.sex %></div>
@@ -108,7 +131,9 @@
           <% end %>
           <% if @pet.birthdate.present? %>
             <div class="detail-item">
-              <div class="detail-icon">🎂</div>
+              <div class="detail-icon">
+                <%= image_tag "icons/birthday.jpeg", alt: "誕生日", class: "icon-small" %>
+              </div>
               <div class="detail-content">
                 <div class="detail-label">誕生日</div>
                 <div class="detail-value"><%= @pet.birthdate.strftime('%Y年%m月%d日') %></div>
@@ -117,7 +142,9 @@
           <% end %>
           <% if @pet.breed.present? %>
             <div class="detail-item">
-              <div class="detail-icon">🐕</div>
+              <div class="detail-icon">
+                <%= image_tag "icons/dog.jpeg", alt: "犬種", class: "icon-small" %>
+              </div>
               <div class="detail-content">
                 <div class="detail-label">犬種</div>
                 <div class="detail-value"><%= @pet.breed.name %></div>
@@ -126,7 +153,9 @@
           <% end %>
           <% if @pet.weight_kg.present? %>
             <div class="detail-item">
-              <div class="detail-icon">⚖️</div>
+              <div class="detail-icon">
+                <%= image_tag "icons/check.svg", alt: "体重", class: "icon-small" %>
+              </div>
               <div class="detail-content">
                 <div class="detail-label">体重</div>
                 <div class="detail-value"><%= @pet.weight_kg %>kg</div>
@@ -150,7 +179,10 @@
   <!-- 今日の予定 -->
   <div class="pet-detail-card">
     <div class="card-header">
-      <h2 class="card-title">📅 今日の予定</h2>
+      <h2 class="card-title">
+        <%= image_tag "icons/calendar.jpeg", alt: "今日の予定", class: "icon-inline" %>
+        今日の予定
+      </h2>
     </div>
     <div class="schedule-content">
       <% if @todays_schedule.any? %>
@@ -163,7 +195,9 @@
               </div>
               <div class="schedule-details">
                 <div class="schedule-datetime">
-                  <span class="date-icon">📅</span>
+                  <span class="date-icon">
+                    <%= image_tag "icons/calendar.jpeg", alt: "日付", class: "icon-small" %>
+                  </span>
                   <%= vaccination.due_on.strftime("%m月%d日") %>
                 </div>
                 <div class="schedule-description">
@@ -178,7 +212,9 @@
         <% end %>
       <% else %>
         <div class="empty-state">
-          <div class="empty-icon">✅</div>
+          <div class="empty-icon">
+            <%= image_tag "icons/check.svg", alt: "完了", class: "icon-large" %>
+          </div>
           <p>今日の予定はありません</p>
         </div>
       <% end %>
@@ -188,7 +224,10 @@
   <!-- 今週の予定 -->
   <div class="pet-detail-card">
     <div class="card-header">
-      <h2 class="card-title">📅 今週の予定</h2>
+      <h2 class="card-title">
+        <%= image_tag "icons/calendar.jpeg", alt: "今週の予定", class: "icon-inline" %>
+        今週の予定
+      </h2>
     </div>
     <div class="schedule-content">
       <% if @this_weeks_schedule.any? %>
@@ -201,7 +240,9 @@
               </div>
               <div class="schedule-details">
                 <div class="schedule-datetime">
-                  <span class="date-icon">📅</span>
+                  <span class="date-icon">
+                    <%= image_tag "icons/calendar.jpeg", alt: "日付", class: "icon-small" %>
+                  </span>
                   <%= vaccination.due_on.strftime("%m月%d日") %>
                 </div>
                 <div class="schedule-description">
@@ -216,7 +257,9 @@
         <% end %>
       <% else %>
         <div class="empty-state">
-          <div class="empty-icon">📅</div>
+          <div class="empty-icon">
+            <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon-large" %>
+          </div>
           <p>今週の予定はありません</p>
         </div>
       <% end %>
@@ -226,7 +269,10 @@
   <!-- 健康アドバイス -->
   <div class="pet-detail-card">
     <div class="card-header">
-      <h2 class="card-title">💡 健康アドバイス</h2>
+      <h2 class="card-title">
+        <%= image_tag "icons/check.svg", alt: "健康アドバイス", class: "icon-inline" %>
+        健康アドバイス
+      </h2>
     </div>
     <div class="advice-content">
       <% if @todays_advice.any? %>
@@ -248,7 +294,9 @@
         <% end %>
       <% else %>
         <div class="empty-state">
-          <div class="empty-icon">💡</div>
+          <div class="empty-icon">
+            <%= image_tag "icons/check.svg", alt: "アドバイス", class: "icon-large" %>
+          </div>
           <p>今日の特別なアドバイスはありません</p>
         </div>
       <% end %>
@@ -258,25 +306,34 @@
   <!-- クイックアクション -->
   <div class="pet-detail-card quick-actions-section">
     <div class="card-header">
-      <h2 class="card-title">⚡ クイックアクション</h2>
+      <h2 class="card-title">
+        <%= image_tag "icons/check.svg", alt: "クイックアクション", class: "icon-inline" %>
+        クイックアクション
+      </h2>
     </div>
     <div class="quick-actions-grid">
       <%= link_to pets_path, class: "quick-action-card" do %>
-        <div class="action-icon">🐾</div>
+        <div class="action-icon">
+          <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon" %>
+        </div>
         <div class="action-content">
           <div class="action-title">ペット一覧</div>
           <div class="action-subtitle">すべてのペットを表示</div>
         </div>
       <% end %>
       <%= link_to dashboard_path, class: "quick-action-card" do %>
-        <div class="action-icon">📊</div>
+        <div class="action-icon">
+          <%= image_tag "icons/check.svg", alt: "ダッシュボード", class: "icon" %>
+        </div>
         <div class="action-content">
           <div class="action-title">ダッシュボード</div>
           <div class="action-subtitle">メインページに戻る</div>
         </div>
       <% end %>
       <%= link_to new_event_path(subject_type: 'Pet', subject_id: @pet.id), class: "quick-action-card" do %>
-        <div class="action-icon">📅</div>
+        <div class="action-icon">
+          <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon" %>
+        </div>
         <div class="action-content">
           <div class="action-title">予定を追加</div>
           <div class="action-subtitle">新しい予定を作成</div>
