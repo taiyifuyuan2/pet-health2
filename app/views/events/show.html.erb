@@ -1,0 +1,204 @@
+<% if @event.nil? %>
+  <div class="alert alert-danger">
+    <h4>エラー</h4>
+    <p>指定された予定が見つかりません。</p>
+    <%= link_to "予定一覧に戻る", events_path, class: "btn btn-primary" %>
+  </div>
+<% else %>
+<!-- 予定詳細ヘッダー -->
+<div class="event-detail-header">
+  <div class="event-detail-content">
+    <h1 class="event-detail-title"><%= @event.title %></h1>
+    <div class="event-detail-meta">
+      <div class="event-meta-item">
+        <span class="meta-icon">
+          <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-small" %>
+        </span>
+        <%= @event.subject.name %>
+      </div>
+      <div class="event-meta-item">
+        <span class="meta-icon">
+          <%= image_tag "icons/calendar.jpg", alt: "日付", class: "icon-small" %>
+        </span>
+        <%= @event.scheduled_on.strftime('%Y年%m月%d日') %>
+        <% if @event.scheduled_time %>
+          <%= @event.scheduled_time.strftime('%H:%M') %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="event-detail-actions">
+    <%= link_to "編集", edit_event_path(@event), class: "btn btn-secondary" %>
+    <% if @event.pending? %>
+      <%= link_to "完了", complete_event_path(@event), data: { turbo_method: :patch }, class: "btn btn-success" %>
+    <% else %>
+      <span class="status-badge completed">完了済み</span>
+    <% end %>
+  </div>
+</div>
+
+<!-- 予定詳細コンテンツ -->
+<div class="event-detail-grid">
+  <!-- 予定詳細情報 -->
+  <div class="event-detail-card main-card">
+    <div class="card-header">
+      <h2 class="card-title">
+        <%= image_tag "icons/edit.svg", alt: "詳細", class: "icon-inline" %>
+        予定詳細
+      </h2>
+    </div>
+    <div class="event-detail-content">
+      <div class="detail-section">
+        <h3 class="detail-section-title">基本情報</h3>
+        <div class="detail-items">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-small" %>
+            </div>
+            <div class="detail-content">
+              <div class="detail-label">対象</div>
+              <div class="detail-value"><%= @event.subject.name %></div>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <%= image_tag "icons/edit.svg", alt: "種類", class: "icon-small" %>
+            </div>
+            <div class="detail-content">
+              <div class="detail-label">種類</div>
+              <div class="detail-value"><%= @event.kind %></div>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <%= image_tag "icons/calendar.jpg", alt: "日付", class: "icon-small" %>
+            </div>
+            <div class="detail-content">
+              <div class="detail-label">日付</div>
+              <div class="detail-value"><%= @event.scheduled_on.strftime('%Y年%m月%d日') %></div>
+            </div>
+          </div>
+          <% if @event.scheduled_time %>
+            <div class="detail-item">
+              <div class="detail-icon">
+                <%= image_tag "icons/clock.jpg", alt: "時刻", class: "icon-small" %>
+              </div>
+              <div class="detail-content">
+                <div class="detail-label">時刻</div>
+                <div class="detail-value"><%= @event.scheduled_time.strftime('%H:%M') %></div>
+              </div>
+            </div>
+          <% end %>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <%= image_tag "icons/bell.svg", alt: "リマインド", class: "icon-small" %>
+            </div>
+            <div class="detail-content">
+              <div class="detail-label">リマインド</div>
+              <div class="detail-value">
+                <% case @event.remind_before_minutes %>
+                <% when 0 %>
+                  リマインドなし
+                <% when 30 %>
+                  30分前
+                <% when 60 %>
+                  1時間前
+                <% when 120 %>
+                  2時間前
+                <% when 360 %>
+                  6時間前
+                <% when 720 %>
+                  12時間前
+                <% when 1440 %>
+                  1日前
+                <% when 2880 %>
+                  2日前
+                <% when 10080 %>
+                  1週間前
+                <% else %>
+                  <%= @event.remind_before_minutes %>分前
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <%= image_tag "icons/chart.svg", alt: "ステータス", class: "icon-small" %>
+            </div>
+            <div class="detail-content">
+              <div class="detail-label">ステータス</div>
+              <div class="detail-value">
+                <% if @event.pending? %>
+                  <span class="status-badge pending">未完了</span>
+                <% else %>
+                  <span class="status-badge completed">完了済み</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <% if @event.completed_at %>
+            <div class="detail-item">
+              <div class="detail-icon">
+                <%= image_tag "icons/check.svg", alt: "完了", class: "icon-small" %>
+              </div>
+              <div class="detail-content">
+                <div class="detail-label">完了日時</div>
+                <div class="detail-value"><%= @event.completed_at.strftime('%Y年%m月%d日 %H:%M') %></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @event.note.present? %>
+        <div class="detail-section">
+          <h3 class="detail-section-title">メモ</h3>
+          <div class="event-notes">
+            <p><%= @event.note %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- アクション -->
+  <div class="event-detail-card actions-card">
+    <div class="card-header">
+      <h2 class="card-title">
+        <%= image_tag "icons/plus.svg", alt: "アクション", class: "icon-inline" %>
+        アクション
+      </h2>
+    </div>
+    <div class="actions-content">
+      <%= link_to events_path, class: "action-btn" do %>
+        <div class="action-icon">
+          <%= image_tag "icons/calendar.jpg", alt: "一覧", class: "icon" %>
+        </div>
+        <div class="action-text">
+          <div class="action-title">予定一覧</div>
+          <div class="action-subtitle">すべての予定を表示</div>
+        </div>
+      <% end %>
+      <%= link_to dashboard_path, class: "action-btn" do %>
+        <div class="action-icon">
+          <%= image_tag "icons/chart.svg", alt: "ダッシュボード", class: "icon" %>
+        </div>
+        <div class="action-text">
+          <div class="action-title">ダッシュボード</div>
+          <div class="action-subtitle">メインページに戻る</div>
+        </div>
+      <% end %>
+      <%= link_to @event, data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, 
+                  class: "action-btn danger" do %>
+        <div class="action-icon">
+          <%= image_tag "icons/trash.svg", alt: "削除", class: "icon" %>
+        </div>
+        <div class="action-text">
+          <div class="action-title">削除</div>
+          <div class="action-subtitle">この予定を削除</div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% end %>

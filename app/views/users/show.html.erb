@@ -1,0 +1,178 @@
+<!-- プロフィールヘッダー -->
+<div class="profile-header">
+  <div class="profile-avatar">
+    <div class="avatar-circle">
+      <img src="<%= @user.profile_image_url %>" alt="プロフィール写真" class="profile-avatar-image">
+    </div>
+  </div>
+  <div class="profile-info">
+    <h1 class="profile-name"><%= @user.name %></h1>
+    <p class="profile-email"><%= @user.email %></p>
+    <div class="profile-actions">
+      <%= link_to "プロフィール編集", mypage_edit_path, class: "btn btn-primary btn-lg" %>
+      <%= link_to "戻る", dashboard_path, class: "btn btn-outline btn-lg" %>
+    </div>
+  </div>
+</div>
+
+<!-- 統計カード -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/house.jpeg", alt: "世帯", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @households.count %></div>
+      <div class="stat-label">参加世帯</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">🐾</div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @pets_count %></div>
+      <div class="stat-label">登録ペット</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @events_count %></div>
+      <div class="stat-label">登録予定</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @user.created_at.strftime('%m/%d') %></div>
+      <div class="stat-label">登録日</div>
+    </div>
+  </div>
+</div>
+
+<!-- メインコンテンツ -->
+<div class="mypage-grid">
+  <!-- プロフィール詳細 -->
+  <div class="mypage-card profile-details">
+    <div class="card-header">
+      <h2 class="card-title">
+        <%= image_tag "icons/user.jpg", alt: "ユーザー", class: "icon-inline" %>
+        プロフィール詳細
+      </h2>
+    </div>
+    <div class="profile-details-content">
+      <div class="detail-item">
+        <div class="detail-icon">
+          <%= image_tag "icons/user.jpg", alt: "ユーザー", class: "icon-small" %>
+        </div>
+        <div class="detail-content">
+          <div class="detail-label">名前</div>
+          <div class="detail-value"><%= @user.name %></div>
+        </div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">📧</div>
+        <div class="detail-content">
+          <div class="detail-label">メールアドレス</div>
+          <div class="detail-value"><%= @user.email %></div>
+        </div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">
+          <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon-small" %>
+        </div>
+        <div class="detail-content">
+          <div class="detail-label">登録日</div>
+          <div class="detail-value"><%= @user.created_at.strftime('%Y年%m月%d日') %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 参加中の世帯 -->
+  <div class="mypage-card households-section">
+    <div class="card-header">
+      <h2 class="card-title">
+        <%= image_tag "icons/house.jpeg", alt: "世帯", class: "icon-inline" %>
+        参加中の世帯
+      </h2>
+      <%= link_to "世帯を作成", new_household_path, class: "btn btn-sm btn-primary" %>
+    </div>
+    <div class="households-content">
+      <% if @households.any? %>
+        <% @households.each do |household| %>
+          <div class="household-item">
+            <div class="household-info">
+              <div class="household-name">
+                <span class="household-icon">
+                  <%= image_tag "icons/house.jpeg", alt: "世帯", class: "icon-small" %>
+                </span>
+                <%= household.name %>
+              </div>
+              <div class="household-stats">
+                <div class="household-stat">
+                  <span class="stat-icon">🐾</span>
+                  <%= household.pets.count %>匹
+                </div>
+                <div class="household-stat">
+                  <span class="stat-icon">
+                    <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon-small" %>
+                  </span>
+                  <%= household.events.count %>件
+                </div>
+              </div>
+            </div>
+            <div class="household-actions">
+              <%= link_to "詳細", household, class: "btn btn-sm btn-secondary" %>
+              <%= link_to "編集", edit_household_path(household), class: "btn btn-sm btn-outline" %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="empty-state">
+          <div class="empty-icon">
+            <%= image_tag "icons/house.jpeg", alt: "世帯", class: "icon-large" %>
+          </div>
+          <p>参加中の世帯がありません</p>
+          <%= link_to "世帯を作成", new_household_path, class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- クイックアクション -->
+  <div class="mypage-card quick-actions-section">
+    <div class="card-header">
+      <h2 class="card-title">⚡ クイックアクション</h2>
+    </div>
+    <div class="quick-actions-grid">
+      <%= link_to new_pet_path, class: "quick-action-card" do %>
+        <div class="action-icon">🐾</div>
+        <div class="action-content">
+          <div class="action-title">ペットを追加</div>
+          <div class="action-subtitle">新しいペットを登録</div>
+        </div>
+      <% end %>
+      <%= link_to new_event_path, class: "quick-action-card" do %>
+        <div class="action-icon">
+          <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+        </div>
+        <div class="action-content">
+          <div class="action-title">予定を追加</div>
+          <div class="action-subtitle">新しい予定を作成</div>
+        </div>
+      <% end %>
+      <%= link_to events_path, class: "quick-action-card" do %>
+        <div class="action-icon">📋</div>
+        <div class="action-content">
+          <div class="action-title">予定一覧</div>
+          <div class="action-subtitle">すべての予定を表示</div>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>

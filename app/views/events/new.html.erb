@@ -1,0 +1,103 @@
+<!-- 予定追加ヘッダー -->
+<div class="event-header">
+  <div class="event-header-content">
+    <h1 class="event-title">📅 予定を追加</h1>
+    <p class="event-subtitle">新しい予定を登録してください</p>
+  </div>
+  <div class="event-header-actions">
+    <%= link_to "予定一覧", events_path, class: "btn btn-secondary" %>
+  </div>
+</div>
+
+<!-- 予定追加フォーム -->
+<div class="event-form-container">
+  <div class="event-form-card">
+    <div class="event-form-header">
+      <h2 class="event-form-title">予定の詳細</h2>
+      <p class="event-form-subtitle">必要な情報を入力してください</p>
+    </div>
+      
+    <div class="event-form-content">
+      <%= form_with model: @event, local: true, class: "event-form" do |form| %>
+        <% if @event.errors.any? %>
+          <div class="alert alert-danger">
+            <h4><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h4>
+            <ul>
+              <% @event.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= form.label :subject_id, "ペットを選択", class: "form-label" %>
+          <%= form.select :subject_id, 
+                          options_from_collection_for_select(@pets, :id, :name, @event.subject_id), 
+                          { prompt: "ペットを選択してください" }, 
+                          { class: "form-control" } %>
+          <%= form.hidden_field :subject_type, value: "Pet" %>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <%= form.label :kind, "種類", class: "form-label" %>
+            <%= form.select :kind, 
+                            [["ワクチン", "vaccine"], ["投薬", "medication"], ["健診", "checkup"], ["その他", "other"], ["誕生日", "birthday"]], 
+                            { prompt: "選択してください" }, 
+                            { class: "form-control" } %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :title, "タイトル", class: "form-label" %>
+            <%= form.text_field :title, class: "form-control", placeholder: "例: フィラリア予防薬" %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <%= form.label :scheduled_on, "日付", class: "form-label" %>
+            <%= form.date_field :scheduled_on, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :scheduled_time, "時刻（任意）", class: "form-label" %>
+            <%= form.time_field :scheduled_time, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :remind_before_minutes, "リマインド", class: "form-label" %>
+          <%= form.select :remind_before_minutes, 
+                          [["リマインドなし", 0], 
+                           ["30分前", 30], 
+                           ["1時間前", 60], 
+                           ["2時間前", 120], 
+                           ["6時間前", 360], 
+                           ["12時間前", 720], 
+                           ["1日前", 1440], 
+                           ["2日前", 2880], 
+                           ["1週間前", 10080]], 
+                          { selected: 1440 }, 
+                          { class: "form-control" } %>
+          <div class="form-help">
+            <span class="help-icon">💡</span>
+            予定の何日前に通知を受け取るかを選択してください
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :note, "メモ", class: "form-label" %>
+          <%= form.text_area :note, class: "form-control", rows: 3, placeholder: "特記事項があれば記入してください" %>
+        </div>
+
+        <div class="form-actions">
+          <%= form.submit "予定を登録", class: "btn btn-primary btn-lg btn-full" %>
+          <%= link_to "キャンセル", events_path, class: "btn btn-secondary btn-lg btn-full" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+

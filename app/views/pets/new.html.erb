@@ -1,0 +1,112 @@
+<!-- ペット新規登録ヘッダー -->
+<div class="pet-new-header">
+  <div class="pet-new-content">
+    <h1 class="pet-new-title">🐾 ペットを登録</h1>
+    <p class="pet-new-subtitle">新しいペットの情報を登録してください</p>
+  </div>
+  <div class="pet-new-actions">
+    <%= link_to "戻る", pets_path, class: "btn btn-outline" %>
+  </div>
+</div>
+
+<!-- ペット新規登録フォーム -->
+<div class="pet-new-container">
+  <div class="pet-new-card">
+    <div class="pet-new-header-card">
+      <h2 class="pet-new-card-title">ペットの基本情報</h2>
+      <p class="pet-new-card-subtitle">必要な情報を入力してください</p>
+    </div>
+    
+    <div class="pet-new-form">
+      <%= form_with model: @pet, local: true, multipart: true, class: "pet-form" do |form| %>
+        <% if @pet.errors.any? %>
+          <div class="alert alert-danger">
+            <h4><%= pluralize(@pet.errors.count, "error") %> prohibited this pet from being saved:</h4>
+            <ul>
+              <% @pet.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <!-- プロフィール写真 -->
+        <div class="form-group pet-image-group">
+          <label class="form-label">プロフィール写真</label>
+          <div class="pet-image-container">
+            <div class="pet-image-preview">
+              <img src="https://ui-avatars.com/api/?name=ペット&background=random&color=fff&size=200" alt="プロフィール写真" class="pet-image" id="pet-image-preview">
+            </div>
+            <div class="pet-image-actions">
+              <%= form.file_field :profile_image, class: "form-control-file", id: "pet-image-input", accept: "image/*" %>
+              <label for="pet-image-input" class="btn btn-outline">写真を選択</label>
+              <button type="button" class="btn btn-outline" id="remove-pet-image">削除</button>
+            </div>
+          </div>
+          <div class="form-help">
+            <span class="help-icon">💡</span>
+            JPG、PNG、GIF形式の画像をアップロードできます（最大5MB）
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :name, "名前", class: "form-label" %>
+          <%= form.text_field :name, class: "form-control", placeholder: "例: ポチ" %>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <%= form.label :species, "種類", class: "form-label" %>
+            <%= form.select :species, [["犬", "dog"], ["猫", "cat"], ["その他", "other"]], 
+                            { prompt: "選択してください" }, { class: "form-control" } %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :sex, "性別", class: "form-label" %>
+            <%= form.select :sex, [["オス", "male"], ["メス", "female"], ["不明", "unknown"]], 
+                            { prompt: "選択してください" }, { class: "form-control" } %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :birthday, "誕生日", class: "form-label" %>
+          <%= form.date_field :birthday, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :notes, "メモ", class: "form-label" %>
+          <%= form.text_area :notes, class: "form-control", rows: 3, placeholder: "特記事項があれば記入してください" %>
+        </div>
+
+        <div class="form-actions">
+          <%= form.submit "ペットを登録", class: "btn btn-primary btn-lg btn-full" %>
+          <%= link_to "戻る", pets_path, class: "btn btn-outline btn-lg btn-full" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const petImageInput = document.getElementById('pet-image-input');
+  const petImagePreview = document.getElementById('pet-image-preview');
+  const removePetImageBtn = document.getElementById('remove-pet-image');
+
+  petImageInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        petImagePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  removePetImageBtn.addEventListener('click', function() {
+    petImageInput.value = '';
+    petImagePreview.src = 'https://ui-avatars.com/api/?name=ペット&background=random&color=fff&size=200';
+  });
+});
+</script>

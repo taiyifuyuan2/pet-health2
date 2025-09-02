@@ -1,0 +1,62 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">連絡先一覧</h2>
+        <div class="row">
+          <div class="col-6">
+            <%= link_to "連絡先を追加", new_contact_path, class: "btn btn-primary" %>
+          </div>
+          <div class="col-6">
+            <%= link_to "ダッシュボード", dashboard_path, class: "btn btn-secondary" %>
+          </div>
+        </div>
+      </div>
+      
+      <% if @contacts.any? %>
+        <div class="row">
+          <% @contacts.each do |contact| %>
+            <div class="col-6">
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="card-title"><%= contact.name %></h4>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <p><strong>誕生日:</strong> <%= contact.birthday.strftime('%Y年%m月%d日') %></p>
+                    <% if contact.relation.present? %>
+                      <p><strong>関係:</strong> <%= contact.relation %></p>
+                    <% end %>
+                  </div>
+                  <div class="col-6">
+                    <div class="row">
+                      <div class="col-6">
+                        <%= link_to "詳細", contact, class: "btn btn-sm btn-secondary" %>
+                      </div>
+                      <div class="col-6">
+                        <%= link_to "編集", edit_contact_path(contact), class: "btn btn-sm btn-secondary" %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% if contact.notes.present? %>
+                  <div class="row">
+                    <div class="col-12">
+                      <p><strong>メモ:</strong> <%= contact.notes %></p>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="row">
+          <div class="col-12">
+            <p>連絡先が登録されていません。</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

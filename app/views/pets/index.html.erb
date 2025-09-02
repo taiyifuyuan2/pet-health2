@@ -1,0 +1,121 @@
+<!-- ペット一覧ヘッダー -->
+<div class="pets-header">
+  <div class="pets-header-content">
+    <h1 class="pets-title">
+      <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-inline" %>
+      ペット一覧
+    </h1>
+    <p class="pets-subtitle">あなたの大切なペットたち</p>
+  </div>
+  <div class="pets-header-actions">
+    <%= link_to "ペットを追加", new_pet_path, class: "btn btn-primary" %>
+  </div>
+</div>
+
+<!-- 統計カード -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @pets.count %></div>
+      <div class="stat-label">登録ペット</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/dog.jpg", alt: "犬", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @pets.where(species: 'dog').count %></div>
+      <div class="stat-label">犬</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/dog.jpg", alt: "猫", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @pets.where(species: 'cat').count %></div>
+      <div class="stat-label">猫</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @pets.joins(:events).count %></div>
+      <div class="stat-label">関連予定</div>
+    </div>
+  </div>
+</div>
+
+<!-- ペットグリッド -->
+<% if @pets.any? %>
+  <div class="pets-grid">
+    <% @pets.each do |pet| %>
+      <div class="pet-card">
+        <div class="pet-card-header">
+          <div class="pet-avatar">
+            <img src="<%= pet.profile_image_url %>" alt="<%= pet.name %>の写真" class="pet-avatar-image">
+          </div>
+          <div class="pet-card-actions">
+            <%= link_to "詳細", pet_path(pet), class: "btn btn-sm btn-secondary" %>
+            <%= link_to "編集", edit_pet_path(pet), class: "btn btn-sm btn-outline" %>
+          </div>
+        </div>
+        <div class="pet-card-content">
+          <h3 class="pet-card-name"><%= pet.name %></h3>
+          <div class="pet-card-info">
+            <div class="pet-info-item">
+              <span class="info-icon">🐕</span>
+              <span class="info-text"><%= pet.species %></span>
+            </div>
+            <% if pet.sex.present? %>
+              <div class="pet-info-item">
+                <span class="info-icon">⚥</span>
+                <span class="info-text"><%= pet.sex %></span>
+              </div>
+            <% end %>
+            <% if pet.birthday.present? %>
+              <div class="pet-info-item">
+                <span class="info-icon">
+                  <%= image_tag "icons/birthday.jpg", alt: "誕生日", class: "icon-small" %>
+                </span>
+                <span class="info-text"><%= pet.birthday.strftime("%Y年%m月%d日") %></span>
+              </div>
+            <% end %>
+          </div>
+          <% if pet.notes.present? %>
+            <div class="pet-card-notes">
+              <p><%= truncate(pet.notes, length: 50) %></p>
+            </div>
+          <% end %>
+        </div>
+        <div class="pet-card-footer">
+          <div class="pet-stats">
+            <div class="pet-stat">
+              <span class="stat-icon">
+                <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon-small" %>
+              </span>
+              <span class="stat-text"><%= pet.events.count %>件の予定</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="empty-pets">
+    <div class="empty-pets-content">
+      <div class="empty-icon">
+        <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-large" %>
+      </div>
+      <h2>ペットが登録されていません</h2>
+      <p>最初のペットを登録して、健康管理を始めましょう</p>
+      <%= link_to "ペットを追加", new_pet_path, class: "btn btn-primary btn-lg" %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,48 @@
+<!-- 世帯新規作成ヘッダー -->
+<div class="household-new-header">
+  <div class="household-new-content">
+    <h1 class="household-new-title">
+      <%= image_tag "icons/house.jpeg", alt: "世帯", class: "icon-inline" %>
+      世帯を作成
+    </h1>
+    <p class="household-new-subtitle">新しい世帯を作成してペット管理を始めましょう</p>
+  </div>
+  <div class="household-new-actions">
+    <%= link_to "戻る", dashboard_path, class: "btn btn-outline" %>
+  </div>
+</div>
+
+<!-- 世帯新規作成フォーム -->
+<div class="household-new-container">
+  <div class="household-new-card">
+    <div class="household-new-header-card">
+      <h2 class="household-new-card-title">世帯の基本情報</h2>
+      <p class="household-new-card-subtitle">世帯名を入力してください</p>
+    </div>
+    
+    <div class="household-new-form">
+      <%= form_with model: @household, local: true, class: "household-form" do |form| %>
+        <% if @household.errors.any? %>
+          <div class="alert alert-danger">
+            <h4><%= pluralize(@household.errors.count, "error") %> prohibited this household from being saved:</h4>
+            <ul>
+              <% @household.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= form.label :name, "世帯名", class: "form-label" %>
+          <%= form.text_field :name, class: "form-control", placeholder: "例: 田中家" %>
+        </div>
+
+        <div class="form-actions">
+          <%= form.submit "世帯を作成", class: "btn btn-primary btn-lg btn-full" %>
+          <%= link_to "戻る", dashboard_path, class: "btn btn-outline btn-lg btn-full" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

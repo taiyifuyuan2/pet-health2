@@ -1,0 +1,96 @@
+<!-- プロフィール編集ヘッダー -->
+<div class="profile-edit-header">
+  <div class="profile-edit-content">
+    <h1 class="profile-edit-title">
+      <%= image_tag "icons/user.jpg", alt: "ユーザー", class: "icon-inline" %>
+      プロフィール編集
+    </h1>
+    <p class="profile-edit-subtitle">プロフィール情報を更新してください</p>
+  </div>
+  <div class="profile-edit-actions">
+    <%= link_to "戻る", mypage_path, class: "btn btn-outline" %>
+  </div>
+</div>
+
+<!-- プロフィール編集フォーム -->
+<div class="profile-edit-container">
+  <div class="profile-edit-card">
+    <div class="profile-edit-header-card">
+      <h2 class="profile-edit-card-title">プロフィール情報</h2>
+      <p class="profile-edit-card-subtitle">基本情報とプロフィール写真を設定</p>
+    </div>
+    
+    <div class="profile-edit-form">
+      <%= form_with model: @user, url: mypage_path, method: :patch, local: true, multipart: true, class: "profile-form" do |form| %>
+        <% if @user.errors.any? %>
+          <div class="alert alert-danger">
+            <h4><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h4>
+            <ul>
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <!-- プロフィール写真 -->
+        <div class="form-group profile-image-group">
+          <label class="form-label">プロフィール写真</label>
+          <div class="profile-image-container">
+            <div class="profile-image-preview">
+              <img src="<%= @user.profile_image_url %>" alt="プロフィール写真" class="profile-image" id="profile-image-preview">
+            </div>
+            <div class="profile-image-actions">
+              <%= form.file_field :profile_image, class: "form-control-file", id: "profile-image-input", accept: "image/*" %>
+              <label for="profile-image-input" class="btn btn-outline">写真を選択</label>
+              <button type="button" class="btn btn-outline" id="remove-image">削除</button>
+            </div>
+          </div>
+          <div class="form-help">
+            <span class="help-icon">💡</span>
+            JPG、PNG、GIF形式の画像をアップロードできます（最大5MB）
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :name, "名前", class: "form-label" %>
+          <%= form.text_field :name, class: "form-control", placeholder: "例: 田中太郎" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :email, "メールアドレス", class: "form-label" %>
+          <%= form.email_field :email, class: "form-control" %>
+        </div>
+
+        <div class="form-actions">
+          <%= form.submit "プロフィールを更新", class: "btn btn-primary btn-lg btn-full" %>
+          <%= link_to "戻る", mypage_path, class: "btn btn-outline btn-lg btn-full" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const profileImageInput = document.getElementById('profile-image-input');
+  const profileImagePreview = document.getElementById('profile-image-preview');
+  const removeImageBtn = document.getElementById('remove-image');
+
+  profileImageInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        profileImagePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  removeImageBtn.addEventListener('click', function() {
+    profileImageInput.value = '';
+    profileImagePreview.src = '<%= @user.profile_image_url %>';
+  });
+});
+</script>

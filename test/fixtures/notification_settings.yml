@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  email_enabled: false
+  line_notify_enabled: false
+  daily_digest_time: 2025-09-02 15:29:11
+
+two:
+  user: two
+  email_enabled: false
+  line_notify_enabled: false
+  daily_digest_time: 2025-09-02 15:29:11

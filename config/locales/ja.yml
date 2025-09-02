@@ -1,0 +1,76 @@
+ja:
+  activerecord:
+    models:
+      user: ユーザー
+      household: 世帯
+      pet: ペット
+      contact: 連絡先
+      event: 予定
+      membership: メンバーシップ
+      notification_setting: 通知設定
+    attributes:
+      user:
+        name: 名前
+        username: ユーザー名
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード確認
+        time_zone: タイムゾーン
+        line_notify_token: LINE Notifyトークン
+      household:
+        name: 世帯名
+      pet:
+        name: 名前
+        species: 種類
+        sex: 性別
+        birthday: 誕生日
+        notes: メモ
+      contact:
+        name: 名前
+        birthday: 誕生日
+        relation: 関係
+        notes: メモ
+      event:
+        title: タイトル
+        kind: 種類
+        scheduled_on: 予定日
+        scheduled_time: 予定時間
+        remind_before_minutes: リマインダー
+        note: メモ
+        status: ステータス
+      membership:
+        role: 役割
+      notification_setting:
+        email_enabled: メール通知
+        line_notify_enabled: LINE通知
+        daily_digest_time: 日次ダイジェスト時間
+    enums:
+      membership:
+        role:
+          owner: オーナー
+          editor: 編集者
+          viewer: 閲覧者
+      event:
+        kind:
+          vaccine: ワクチン
+          checkup: 健康診断
+          medication: 投薬
+          grooming: トリミング
+          other: その他
+        status:
+          pending: 未完了
+          completed: 完了
+  helpers:
+    submit:
+      create: 作成
+      update: 更新
+      submit: 送信
+    select:
+      prompt: 選択してください
+  views:
+    pagination:
+      first: "&laquo; 最初"
+      last: "最後 &raquo;"
+      previous: "&lsaquo; 前"
+      next: "次 &rsaquo;"
+      truncate: "..."

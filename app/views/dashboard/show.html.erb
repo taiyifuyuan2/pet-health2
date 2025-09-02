@@ -1,0 +1,205 @@
+<!-- ウェルカムセクション -->
+<div class="welcome-section">
+  <div class="welcome-content">
+    <h1 class="welcome-title">おかえりなさい！</h1>
+    <p class="welcome-subtitle">ペットの健康管理をサポートします</p>
+  </div>
+</div>
+
+<!-- 統計カード -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/calendar.jpg", alt: "カレンダー", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @upcoming_events.count %></div>
+      <div class="stat-label">今月の予定</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/check.svg", alt: "チェック", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @overdue_events.count %></div>
+      <div class="stat-label">未完了</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/check.svg", alt: "完了", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @recent_completed.count %></div>
+      <div class="stat-label">最近完了</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number"><%= current_household&.pets&.count || 0 %></div>
+      <div class="stat-label">登録ペット</div>
+    </div>
+  </div>
+</div>
+
+<!-- メインコンテンツ -->
+<div class="dashboard-grid">
+  <!-- 今月の予定 -->
+  <div class="dashboard-card main-card">
+    <div class="card-header">
+      <h2 class="card-title">今月の予定</h2>
+      <div class="card-actions">
+        <%= link_to "すべて見る", events_path, class: "btn btn-sm btn-secondary" %>
+      </div>
+    </div>
+    <div class="events-list">
+      <% if @upcoming_events.any? %>
+        <% @upcoming_events.each do |event| %>
+          <div class="event-item event-<%= event.kind %>">
+            <div class="event-content">
+              <div class="event-header">
+                <h4 class="event-title"><%= event.title %></h4>
+                <span class="event-status <%= event.pending? ? 'pending' : 'completed' %>">
+                  <%= event.pending? ? '未完了' : '完了済み' %>
+                </span>
+              </div>
+              <div class="event-details">
+                <div class="event-subject">
+                  <span class="subject-icon">
+                    <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-small" %>
+                  </span>
+                  <%= event.subject.name %>
+                </div>
+                <div class="event-datetime">
+                  <span class="date-icon">
+                    <%= image_tag "icons/calendar.jpg", alt: "日付", class: "icon-small" %>
+                  </span>
+                  <%= event.scheduled_on.strftime("%m月%d日") %>
+                  <% if event.scheduled_time %>
+                    <%= event.scheduled_time.strftime("%H:%M") %>
+                  <% end %>
+                </div>
+                <% if event.note.present? %>
+                  <div class="event-note">
+                    <span class="note-icon">
+                      <%= image_tag "icons/edit.svg", alt: "メモ", class: "icon-small" %>
+                    </span>
+                    <%= event.note %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="event-actions">
+              <% if event.pending? %>
+                <%= link_to "完了", complete_event_path(event), data: { turbo_method: :patch }, class: "btn btn-sm btn-success" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="empty-state">
+          <div class="empty-icon">
+            <%= image_tag "icons/calendar.jpg", alt: "カレンダー", class: "icon-large" %>
+          </div>
+          <p>今月の予定はありません</p>
+          <%= link_to "予定を追加", new_event_path, class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- サイドバー -->
+  <div class="sidebar">
+    <!-- 未完了の予定 -->
+    <% if @overdue_events.any? %>
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <%= image_tag "icons/check.svg", alt: "未完了", class: "icon-inline" %>
+            未完了の予定
+          </h3>
+        </div>
+        <div class="overdue-events">
+          <% @overdue_events.each do |event| %>
+            <div class="overdue-item">
+              <div class="overdue-content">
+                <h5><%= event.title %></h5>
+                <p><%= event.subject.name %> - <%= event.scheduled_on.strftime("%m/%d") %></p>
+              </div>
+              <%= link_to "完了", complete_event_path(event), data: { turbo_method: :patch }, class: "btn btn-sm btn-danger" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- 最近完了した予定 -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h3 class="card-title">
+          <%= image_tag "icons/check.svg", alt: "完了", class: "icon-inline" %>
+          最近完了
+        </h3>
+      </div>
+      <div class="completed-events">
+        <% if @recent_completed.any? %>
+          <% @recent_completed.each do |event| %>
+            <div class="completed-item">
+              <div class="completed-content">
+                <h5><%= event.title %></h5>
+                <p><%= event.subject.name %> - <%= event.completed_at.strftime("%m/%d") %></p>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="empty-state-small">
+            <p>最近完了した予定はありません</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- クイックアクション -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h3 class="card-title">
+          <%= image_tag "icons/plus.svg", alt: "アクション", class: "icon-inline" %>
+          クイックアクション
+        </h3>
+      </div>
+      <div class="quick-actions">
+        <%= link_to new_pet_path, class: "quick-action-btn" do %>
+          <div class="action-icon">
+            <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon" %>
+          </div>
+          <div class="action-text">
+            <div class="action-title">ペットを追加</div>
+            <div class="action-subtitle">新しいペットを登録</div>
+          </div>
+        <% end %>
+        <%= link_to new_event_path, class: "quick-action-btn" do %>
+          <div class="action-icon">
+            <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+          </div>
+          <div class="action-text">
+            <div class="action-title">予定を追加</div>
+            <div class="action-subtitle">新しい予定を作成</div>
+          </div>
+        <% end %>
+        <%= link_to events_path, class: "quick-action-btn" do %>
+          <div class="action-icon">
+            <%= image_tag "icons/calendar.jpg", alt: "一覧", class: "icon" %>
+          </div>
+          <div class="action-text">
+            <div class="action-title">予定一覧</div>
+            <div class="action-subtitle">すべての予定を表示</div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

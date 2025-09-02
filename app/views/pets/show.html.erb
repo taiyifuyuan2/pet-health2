@@ -1,0 +1,200 @@
+<!-- ペットヘッダー -->
+<div class="pet-header">
+  <div class="pet-info">
+    <div class="pet-avatar-large">
+      <img src="<%= @pet.profile_image_url %>" alt="<%= @pet.name %>の写真" class="pet-avatar-image">
+    </div>
+    <div class="pet-details">
+      <h1 class="pet-name"><%= @pet.name %></h1>
+      <div class="pet-basic-info">
+        <div class="pet-info-item">
+          <span class="info-icon">🐕</span>
+          <%= @pet.species %>
+        </div>
+        <% if @pet.sex.present? %>
+          <div class="pet-info-item">
+            <span class="info-icon">⚥</span>
+            <%= @pet.sex %>
+          </div>
+        <% end %>
+        <% if @pet.birthday.present? %>
+          <div class="pet-info-item">
+            <span class="info-icon">🎂</span>
+            <%= @pet.birthday.strftime('%Y年%m月%d日') %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="pet-actions">
+    <%= link_to "編集", edit_pet_path(@pet), class: "btn btn-secondary" %>
+    <%= link_to "削除", @pet, data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, 
+                class: "btn btn-danger" %>
+  </div>
+</div>
+
+<!-- 統計カード -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon">📅</div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @events.count %></div>
+      <div class="stat-label">関連予定</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">✅</div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @events.completed.count %></div>
+      <div class="stat-label">完了済み</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">⏳</div>
+    <div class="stat-content">
+      <div class="stat-number"><%= @events.pending.count %></div>
+      <div class="stat-label">未完了</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <%= image_tag "icons/house.jpeg", alt: "世帯", class: "icon" %>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number">1</div>
+      <div class="stat-label">所属世帯</div>
+    </div>
+  </div>
+</div>
+
+<!-- メインコンテンツ -->
+<div class="pet-detail-grid">
+  <!-- ペット詳細情報 -->
+  <div class="pet-detail-card">
+    <div class="card-header">
+      <h2 class="card-title">📋 詳細情報</h2>
+    </div>
+    <div class="pet-detail-content">
+      <div class="detail-section">
+        <h3 class="detail-section-title">基本情報</h3>
+        <div class="detail-items">
+          <div class="detail-item">
+            <div class="detail-icon">🐕</div>
+            <div class="detail-content">
+              <div class="detail-label">種類</div>
+              <div class="detail-value"><%= @pet.species %></div>
+            </div>
+          </div>
+          <% if @pet.sex.present? %>
+            <div class="detail-item">
+              <div class="detail-icon">⚥</div>
+              <div class="detail-content">
+                <div class="detail-label">性別</div>
+                <div class="detail-value"><%= @pet.sex %></div>
+              </div>
+            </div>
+          <% end %>
+          <% if @pet.birthday.present? %>
+            <div class="detail-item">
+              <div class="detail-icon">🎂</div>
+              <div class="detail-content">
+                <div class="detail-label">誕生日</div>
+                <div class="detail-value"><%= @pet.birthday.strftime('%Y年%m月%d日') %></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      
+      <% if @pet.notes.present? %>
+        <div class="detail-section">
+          <h3 class="detail-section-title">メモ</h3>
+          <div class="pet-notes">
+            <p><%= @pet.notes %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 関連予定 -->
+  <div class="pet-detail-card">
+    <div class="card-header">
+      <h2 class="card-title">📅 関連予定</h2>
+      <%= link_to "予定を追加", new_event_path(subject_type: 'Pet', subject_id: @pet.id), class: "btn btn-sm btn-primary" %>
+    </div>
+    <div class="events-content">
+      <% if @events.any? %>
+        <% @events.each do |event| %>
+          <div class="event-item event-<%= event.kind %>">
+            <div class="event-content">
+              <div class="event-header">
+                <h4 class="event-title"><%= event.title %></h4>
+                <span class="event-status <%= event.pending? ? 'pending' : 'completed' %>">
+                  <%= event.pending? ? '未完了' : '完了済み' %>
+                </span>
+              </div>
+              <div class="event-details">
+                <div class="event-datetime">
+                  <span class="date-icon">📅</span>
+                  <%= event.scheduled_on.strftime("%m月%d日") %>
+                  <% if event.scheduled_time %>
+                    <%= event.scheduled_time.strftime("%H:%M") %>
+                  <% end %>
+                </div>
+                <% if event.note.present? %>
+                  <div class="event-note">
+                    <span class="note-icon">📝</span>
+                    <%= event.note %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="event-actions">
+              <%= link_to "詳細", event, class: "btn btn-sm btn-secondary" %>
+              <% if event.pending? %>
+                <%= link_to "完了", complete_event_path(event), data: { turbo_method: :patch }, class: "btn btn-sm btn-success" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="empty-state">
+          <div class="empty-icon">📅</div>
+          <p>関連する予定がありません</p>
+          <%= link_to "予定を追加", new_event_path(subject_type: 'Pet', subject_id: @pet.id), class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- クイックアクション -->
+  <div class="pet-detail-card quick-actions-section">
+    <div class="card-header">
+      <h2 class="card-title">⚡ クイックアクション</h2>
+    </div>
+    <div class="quick-actions-grid">
+      <%= link_to pets_path, class: "quick-action-card" do %>
+        <div class="action-icon">🐾</div>
+        <div class="action-content">
+          <div class="action-title">ペット一覧</div>
+          <div class="action-subtitle">すべてのペットを表示</div>
+        </div>
+      <% end %>
+      <%= link_to dashboard_path, class: "quick-action-card" do %>
+        <div class="action-icon">📊</div>
+        <div class="action-content">
+          <div class="action-title">ダッシュボード</div>
+          <div class="action-subtitle">メインページに戻る</div>
+        </div>
+      <% end %>
+      <%= link_to new_event_path(subject_type: 'Pet', subject_id: @pet.id), class: "quick-action-card" do %>
+        <div class="action-icon">📅</div>
+        <div class="action-content">
+          <div class="action-title">予定を追加</div>
+          <div class="action-subtitle">新しい予定を作成</div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

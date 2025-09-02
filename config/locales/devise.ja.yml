@@ -1,0 +1,31 @@
+ja:
+  devise:
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+      already_signed_out: "既にログアウト済みです。"
+    registrations:
+      signed_up: "アカウント登録が完了しました。"
+      signed_up_but_unconfirmed: "本人確認のためのメールを送信しました。メール内のリンクからアカウントを有効化してください。"
+      updated: "アカウント情報を変更しました。"
+      updated_but_unconfirmed: "アカウント情報を変更しました。本人確認のためのメールを送信したので、メール内のリンクからアカウントを有効化してください。"
+      destroyed: "アカウントを削除しました。またのご利用をお待ちしております。"
+    passwords:
+      send_instructions: "パスワード再設定について数分以内にメールでご連絡いたします。"
+      updated: "パスワードが正しく変更されました。"
+      updated_not_active: "パスワードが正しく変更されました。"
+    confirmations:
+      send_instructions: "アカウントの有効化について数分以内にメールでご連絡いたします。"
+      confirmed: "メールアドレスが確認できました。"
+    unlocks:
+      send_instructions: "アカウントの凍結解除について数分以内にメールでご連絡いたします。"
+      unlocked: "アカウントを凍結解除しました。"
+    failure:
+      already_authenticated: "すでにログインしています。"
+      unauthenticated: "アカウント登録もしくはログインしてください。"
+      unconfirmed: "メールアドレスの本人確認が必要です。"
+      locked: "あなたのアカウントは凍結されています。"
+      invalid: "メールアドレスまたはパスワードが違います。"
+      invalid_token: "認証キーが不正です。"
+      timeout: "セッションがタイムアウトしました。もう一度ログインしてください。"
+      inactive: "アカウントが有効化されていません。"

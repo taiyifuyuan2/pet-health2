@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">連絡先を登録</h2>
+      </div>
+      
+      <%= form_with model: @contact, local: true do |form| %>
+        <% if @contact.errors.any? %>
+          <div class="alert">
+            <h4><%= pluralize(@contact.errors.count, "error") %> prohibited this contact from being saved:</h4>
+            <ul>
+              <% @contact.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= form.label :name, "名前" %>
+          <%= form.text_field :name, class: "form-control", placeholder: "例: 田中太郎" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :birthday, "誕生日" %>
+          <%= form.date_field :birthday, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :relation, "関係" %>
+          <%= form.text_field :relation, class: "form-control", placeholder: "例: 獣医師、ペットシッター" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :notes, "メモ" %>
+          <%= form.text_area :notes, class: "form-control", rows: 3, placeholder: "特記事項があれば記入してください" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.submit "連絡先を登録", class: "btn btn-primary" %>
+          <%= link_to "キャンセル", contacts_path, class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

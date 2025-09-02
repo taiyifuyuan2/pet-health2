@@ -1,0 +1,94 @@
+<div class="row">
+  <div class="col-8">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><%= @contact.name %></h2>
+        <div class="row">
+          <div class="col-6">
+            <%= link_to "編集", edit_contact_path(@contact), class: "btn btn-secondary" %>
+          </div>
+          <div class="col-6">
+            <%= link_to "削除", @contact, data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, 
+                        class: "btn btn-danger" %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-6">
+          <p><strong>誕生日:</strong> <%= @contact.birthday.strftime('%Y年%m月%d日') %></p>
+          <% if @contact.relation.present? %>
+            <p><strong>関係:</strong> <%= @contact.relation %></p>
+          <% end %>
+        </div>
+        <div class="col-6">
+          <% if @contact.notes.present? %>
+            <p><strong>メモ:</strong></p>
+            <p><%= @contact.notes %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    
+    <% if @events.any? %>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">関連する予定</h3>
+        </div>
+        <div class="row">
+          <% @events.each do |event| %>
+            <div class="col-6">
+              <div class="card event-<%= event.kind %>">
+                <div class="card-header">
+                  <h4 class="card-title"><%= event.title %></h4>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <p><strong>日付:</strong> <%= event.scheduled_on.strftime('%m/%d') %></p>
+                    <% if event.scheduled_time %>
+                      <p><strong>時刻:</strong> <%= event.scheduled_time.strftime('%H:%M') %></p>
+                    <% end %>
+                  </div>
+                  <div class="col-6">
+                    <p><strong>ステータス:</strong> <%= event.status %></p>
+                    <div class="row">
+                      <div class="col-6">
+                        <%= link_to "詳細", event, class: "btn btn-sm btn-secondary" %>
+                      </div>
+                      <div class="col-6">
+                        <% if event.pending? %>
+                          <%= link_to "完了", complete_event_path(event), data: { turbo_method: :patch }, class: "btn btn-sm btn-success" %>
+                        <% else %>
+                          <span class="text-success">完了済み</span>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  
+  <div class="col-4">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">アクション</h3>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <%= link_to "連絡先一覧", contacts_path, class: "btn btn-secondary" %>
+        </div>
+        <div class="col-12">
+          <%= link_to "ダッシュボード", dashboard_path, class: "btn btn-secondary" %>
+        </div>
+        <div class="col-12">
+          <%= link_to "予定を追加", new_event_path(subject_type: 'Contact', subject_id: @contact.id), class: "btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+ペット健康管理カレンダー
+
+<% if @phase == :day %>
+本日の予定です
+<% else %>
+予定のお知らせです
+<% end %>
+
+こんにちは、<%= @user.name %>さん
+
+<%= @event.title %>
+対象: <%= @event.subject.name %>
+日時: <%= @event.scheduled_on.strftime('%Y年%m月%d日') %><% if @event.scheduled_time %> <%= @event.scheduled_time.strftime('%H:%M') %><% end %>
+<% if @event.note.present? %>
+メモ: <%= @event.note %>
+<% end %>
+
+完了する: <%= Rails.application.routes.url_helpers.complete_event_url(@event, host: 'localhost:3000') %>
+
+ダッシュボード: <%= Rails.application.routes.url_helpers.dashboard_url(host: 'localhost:3000') %>
+
+---
+このメールは自動送信されています。
+© 2025 ペット健康管理カレンダー

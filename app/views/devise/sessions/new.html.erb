@@ -1,0 +1,48 @@
+<!-- ログインヘッダー -->
+<div class="auth-header">
+  <div class="auth-header-content">
+    <h1 class="auth-title">🐾 ペット健康管理</h1>
+    <p class="auth-subtitle">ログインしてペットの健康管理を始めましょう</p>
+  </div>
+</div>
+
+<!-- ログインフォーム -->
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <h2 class="auth-card-title">ログイン</h2>
+      <p class="auth-card-subtitle">アカウントにログインしてください</p>
+    </div>
+    
+    <div class="auth-form">
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "login-form" }) do |f| %>
+        <div class="form-group">
+          <%= f.label :email, "メールアドレス", class: "form-label" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "メールアドレスを入力" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :password, "パスワード", class: "form-label" %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "form-control", placeholder: "パスワードを入力" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <%= f.check_box :remember_me, class: "checkbox-input" %>
+              <span class="checkbox-text">ログイン状態を保持する</span>
+            </label>
+          </div>
+        <% end %>
+
+        <div class="form-actions">
+          <%= f.submit "ログイン", class: "btn btn-primary btn-lg btn-full" %>
+        </div>
+      <% end %>
+    </div>
+    
+    <div class="auth-links">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>

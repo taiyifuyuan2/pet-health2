@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">世帯情報を編集</h2>
+      </div>
+      
+      <%= form_with model: @household, local: true do |form| %>
+        <% if @household.errors.any? %>
+          <div class="alert">
+            <h4><%= pluralize(@household.errors.count, "error") %> prohibited this household from being saved:</h4>
+            <ul>
+              <% @household.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= form.label :name, "世帯名" %>
+          <%= form.text_field :name, class: "form-control", placeholder: "例: 田中家" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.submit "世帯情報を更新", class: "btn btn-primary" %>
+          <%= link_to "キャンセル", @household, class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<!-- 新規登録ヘッダー -->
+<div class="auth-header">
+  <div class="auth-header-content">
+    <h1 class="auth-title">🐾 ペット健康管理</h1>
+    <p class="auth-subtitle">アカウントを作成してペットの健康管理を始めましょう</p>
+  </div>
+</div>
+
+<!-- 新規登録フォーム -->
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <h2 class="auth-card-title">新規登録</h2>
+      <p class="auth-card-subtitle">新しいアカウントを作成してください</p>
+    </div>
+    
+    <div class="auth-form">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "signup-form" }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <div class="form-group">
+          <%= f.label :name, "名前", class: "form-label" %>
+          <%= f.text_field :name, autofocus: true, autocomplete: "name", class: "form-control", placeholder: "例: 田中太郎" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :email, "メールアドレス", class: "form-label" %>
+          <%= f.email_field :email, autocomplete: "email", class: "form-control", placeholder: "メールアドレスを入力" %>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <%= f.label :password, "パスワード", class: "form-label" %>
+            <%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: "パスワードを入力" %>
+            <% if @minimum_password_length %>
+              <div class="form-help">
+                <span class="help-icon">💡</span>
+                <%= @minimum_password_length %>文字以上で入力してください
+              </div>
+            <% end %>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :password_confirmation, "パスワード確認", class: "form-label" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", placeholder: "パスワードを再入力" %>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <%= f.submit "アカウントを作成", class: "btn btn-primary btn-lg btn-full" %>
+        </div>
+      <% end %>
+    </div>
+    
+    <div class="auth-links">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>
