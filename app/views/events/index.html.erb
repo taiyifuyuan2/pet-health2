@@ -86,7 +86,7 @@
             <% if event.scheduled_at&.strftime('%H:%M') != '00:00' %>
               <div class="event-info-item">
                 <span class="info-icon">
-                  <%= image_tag "icons/clock.jpeg", alt: "時刻", class: "icon-small" %>
+                                          <%= image_tag "icons/clock.svg", alt: "時刻", class: "icon-small" %>
                 </span>
                 <span class="info-text"><%= event.scheduled_at&.strftime('%H:%M') %></span>
               </div>
