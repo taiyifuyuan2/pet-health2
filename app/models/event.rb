@@ -12,6 +12,7 @@ class Event < ApplicationRecord
   validates :event_type, presence: true
 
   after_initialize :set_default_status, if: :new_record?
+  after_find :set_virtual_attributes
 
   # 仮想属性（フォーム用）
   attr_accessor :kind, :note, :scheduled_on, :scheduled_time
@@ -37,6 +38,13 @@ class Event < ApplicationRecord
 
   def set_default_status
     self.status ||= :pending
+  end
+
+  def set_virtual_attributes
+    @kind = event_type if event_type.present?
+    @note = description if description.present?
+    @scheduled_on = scheduled_at&.to_date
+    @scheduled_time = scheduled_at&.to_time
   end
 
   scope :due_between, ->(from, to) { where(scheduled_at: from..to) }
