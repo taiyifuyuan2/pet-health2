@@ -41,8 +41,8 @@
 
         <div class="form-row">
           <div class="form-group">
-            <%= form.label :kind, "種類", class: "form-label" %>
-            <%= form.select :kind, 
+            <%= form.label :event_type, "種類", class: "form-label" %>
+            <%= form.select :event_type, 
                             [["ワクチン", "vaccine"], ["投薬", "medication"], ["健診", "checkup"], ["その他", "other"], ["誕生日", "birthday"]], 
                             { prompt: "選択してください" }, 
                             { class: "form-control" } %>
@@ -56,13 +56,8 @@
 
         <div class="form-row">
           <div class="form-group">
-            <%= form.label :scheduled_on, "日付", class: "form-label" %>
-            <%= form.date_field :scheduled_on, class: "form-control" %>
-          </div>
-
-          <div class="form-group">
-            <%= form.label :scheduled_time, "時刻（任意）", class: "form-label" %>
-            <%= form.time_field :scheduled_time, class: "form-control" %>
+            <%= form.label :scheduled_at, "日付", class: "form-label" %>
+            <%= form.datetime_local_field :scheduled_at, class: "form-control" %>
           </div>
         </div>
 
@@ -87,8 +82,8 @@
         </div>
 
         <div class="form-group">
-          <%= form.label :note, "メモ", class: "form-label" %>
-          <%= form.text_area :note, class: "form-control", rows: 3, placeholder: "特記事項があれば記入してください" %>
+          <%= form.label :description, "メモ", class: "form-label" %>
+          <%= form.text_area :description, class: "form-control", rows: 3, placeholder: "特記事項があれば記入してください" %>
         </div>
 
         <div class="form-actions">

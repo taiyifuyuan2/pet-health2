@@ -14,6 +14,17 @@ ja:
       membership: メンバーシップ
       event: 予定
     
+    errors:
+      models:
+        event:
+          attributes:
+            scheduled_at:
+              blank: を入力してください
+            event_type:
+              blank: を選択してください
+            title:
+              blank: を入力してください
+    
     attributes:
       breed:
         name: 犬種名
