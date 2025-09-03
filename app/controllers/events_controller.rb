@@ -2,7 +2,7 @@
 
 class EventsController < ApplicationController
   before_action :set_event, only: %i[show edit update destroy complete]
-  skip_before_action :ensure_household_exists!, only: [:index]
+  skip_before_action :ensure_household_exists!, only: [:index, :new, :create]
 
   def index
     begin
@@ -33,42 +33,70 @@ class EventsController < ApplicationController
   end
 
   def new
-    Rails.logger.info '=== EventsController#new called ==='
-    Rails.logger.info "params: #{params.inspect}"
+    begin
+      Rails.logger.info '=== EventsController#new called ==='
+      Rails.logger.info "params: #{params.inspect}"
+      Rails.logger.info "current_user: #{current_user.inspect}"
+      Rails.logger.info "current_household: #{current_household.inspect}"
 
-    @event = current_household.events.build
-    @event.subject = find_subject if params[:subject_type] && params[:subject_id]
+      # 世帯がない場合は世帯作成ページにリダイレクト
+      unless current_household
+        redirect_to new_household_path, alert: '予定を追加する前に、まず世帯を作成してください。'
+        return
+      end
 
-    # 対象選択用のデータ
-    @pets = current_household.pets.order(:name)
-    
-    # ペットが登録されていない場合はペット登録ページにリダイレクト
-    if @pets.empty?
-      redirect_to new_pet_path, alert: '予定を追加する前に、まずペットを登録してください。'
-      return
+      @event = current_household.events.build
+      @event.subject = find_subject if params[:subject_type] && params[:subject_id]
+
+      # 対象選択用のデータ
+      @pets = current_household.pets.order(:name)
+      
+      # ペットが登録されていない場合はペット登録ページにリダイレクト
+      if @pets.empty?
+        redirect_to new_pet_path, alert: '予定を追加する前に、まずペットを登録してください。'
+        return
+      end
+
+      Rails.logger.info '=== Rendering events/new ==='
+    rescue => e
+      Rails.logger.error "Error in EventsController#new: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      redirect_to events_path, alert: 'エラーが発生しました。'
     end
-
-    Rails.logger.info '=== Rendering events/new ==='
   end
 
   def create
-    Rails.logger.info "=== EventsController#create called ==="
-    Rails.logger.info "params: #{params.inspect}"
-    
-    @event = current_household.events.build(event_params)
-    
-    # 対象選択用のデータ（エラー時の再表示用）
-    @pets = current_household.pets.order(:name)
+    begin
+      Rails.logger.info "=== EventsController#create called ==="
+      Rails.logger.info "params: #{params.inspect}"
+      Rails.logger.info "current_user: #{current_user.inspect}"
+      Rails.logger.info "current_household: #{current_household.inspect}"
+      
+      # 世帯がない場合は世帯作成ページにリダイレクト
+      unless current_household
+        redirect_to new_household_path, alert: '予定を追加する前に、まず世帯を作成してください。'
+        return
+      end
+      
+      @event = current_household.events.build(event_params)
+      
+      # 対象選択用のデータ（エラー時の再表示用）
+      @pets = current_household.pets.order(:name)
 
-    Rails.logger.info "@event before save: #{@event.inspect}"
-    Rails.logger.info "@event.errors: #{@event.errors.full_messages}" unless @event.valid?
+      Rails.logger.info "@event before save: #{@event.inspect}"
+      Rails.logger.info "@event.errors: #{@event.errors.full_messages}" unless @event.valid?
 
-    if @event.save
-      Rails.logger.info "Event saved successfully: #{@event.id}"
-      redirect_to @event, notice: '予定を登録しました'
-    else
-      Rails.logger.error "Event save failed: #{@event.errors.full_messages}"
-      render :new
+      if @event.save
+        Rails.logger.info "Event saved successfully: #{@event.id}"
+        redirect_to @event, notice: '予定を登録しました'
+      else
+        Rails.logger.error "Event save failed: #{@event.errors.full_messages}"
+        render :new
+      end
+    rescue => e
+      Rails.logger.error "Error in EventsController#create: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      redirect_to events_path, alert: 'エラーが発生しました。'
     end
   end
 
