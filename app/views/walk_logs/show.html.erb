@@ -1,0 +1,184 @@
+<div class="container">
+  <div class="walk-log-detail">
+    <div class="detail-header">
+      <h1><%= @pet.name %>の散歩ログ詳細</h1>
+      <div class="header-actions">
+        <%= link_to "編集", edit_pet_walk_log_path(@pet, @walk_log), class: "btn btn-primary" %>
+        <%= link_to "削除", pet_walk_log_path(@pet, @walk_log), 
+                    data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, 
+                    class: "btn btn-danger" %>
+        <%= link_to "一覧に戻る", pet_walk_logs_path(@pet), class: "btn btn-secondary" %>
+      </div>
+    </div>
+
+    <div class="detail-content">
+      <div class="detail-card">
+        <div class="detail-item">
+          <label>記録日</label>
+          <span><%= @walk_log.date.strftime('%Y年%m月%d日') %></span>
+        </div>
+        
+        <div class="detail-item">
+          <label>距離</label>
+          <span class="distance-value"><%= @walk_log.distance_km %>km</span>
+        </div>
+        
+        <div class="detail-item">
+          <label>時間</label>
+          <span class="duration-value"><%= @walk_log.duration_minutes %>分</span>
+        </div>
+        
+        <div class="detail-item">
+          <label>ペース</label>
+          <span class="pace-value"><%= @walk_log.pace_per_km %>分/km</span>
+        </div>
+        
+        <% if @walk_log.note.present? %>
+          <div class="detail-item">
+            <label>メモ</label>
+            <span><%= @walk_log.note %></span>
+          </div>
+        <% end %>
+        
+        <div class="detail-item">
+          <label>記録日時</label>
+          <span><%= @walk_log.created_at.strftime('%Y年%m月%d日 %H:%M') %></span>
+        </div>
+      </div>
+
+      <!-- 前後の記録へのリンク -->
+      <div class="navigation-links">
+        <% previous_log = @pet.walk_logs.where('date < ?', @walk_log.date).order(date: :desc).first %>
+        <% next_log = @pet.walk_logs.where('date > ?', @walk_log.date).order(date: :asc).first %>
+        
+        <div class="nav-links">
+          <% if previous_log %>
+            <%= link_to "← 前の記録 (#{previous_log.date.strftime('%m/%d')})", 
+                        pet_walk_log_path(@pet, previous_log), 
+                        class: "btn btn-outline-secondary" %>
+          <% end %>
+          
+          <% if next_log %>
+            <%= link_to "次の記録 (#{next_log.date.strftime('%m/%d')}) →", 
+                        pet_walk_log_path(@pet, next_log), 
+                        class: "btn btn-outline-secondary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.walk-log-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.detail-header h1 {
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.detail-card {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-item label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 120px;
+}
+
+.detail-item span {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.distance-value {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  color: var(--success-color) !important;
+}
+
+.duration-value {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  color: var(--info-color) !important;
+}
+
+.pace-value {
+  font-size: 1.3rem !important;
+  font-weight: 600;
+  color: var(--warning-color) !important;
+}
+
+.navigation-links {
+  text-align: center;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .detail-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .header-actions {
+    justify-content: center;
+  }
+  
+  .detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .nav-links {
+    flex-direction: column;
+  }
+}
+</style>

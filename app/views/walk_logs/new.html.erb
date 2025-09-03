@@ -1,0 +1,46 @@
+<div class="page-header">
+  <h1>新しい散歩ログ</h1>
+  <%= link_to "戻る", pet_walk_logs_path(@pet), class: "btn btn-secondary" %>
+</div>
+
+<div class="form-container">
+  <%= form_with model: [@pet, @walk_log], local: true, class: "form" do |form| %>
+    <% if @walk_log.errors.any? %>
+      <div class="error-messages">
+        <h2><%= pluralize(@walk_log.errors.count, "error") %> prohibited this walk log from being saved:</h2>
+        <ul>
+          <% @walk_log.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :date, "散歩日", class: "form-label" %>
+      <%= form.date_field :date, class: "form-control" %>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= form.label :distance_km, "距離 (km)", class: "form-label" %>
+        <%= form.number_field :distance_km, class: "form-control", step: 0.1, placeholder: "例: 2.5" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :duration_minutes, "時間 (分)", class: "form-label" %>
+        <%= form.number_field :duration_minutes, class: "form-control", placeholder: "例: 30" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :note, "メモ", class: "form-label" %>
+      <%= form.text_area :note, class: "form-control", rows: 3, placeholder: "散歩の様子や気づいたことなど" %>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "記録を保存", class: "btn btn-primary" %>
+      <%= link_to "キャンセル", pet_walk_logs_path(@pet), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
