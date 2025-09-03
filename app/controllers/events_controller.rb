@@ -20,7 +20,13 @@ class EventsController < ApplicationController
     @month_range = @month.beginning_of_month..@month.end_of_month
     @events = @events.due_between(@month.beginning_of_month, @month.end_of_month)
     
-    # 仮想属性は after_find コールバックで自動設定される
+    # 各イベントの仮想属性を設定
+    @events.each do |event|
+      event.kind = event.event_type if event.event_type.present?
+      event.note = event.description if event.description.present?
+      event.scheduled_on = event.scheduled_at.to_date if event.scheduled_at.present?
+      event.scheduled_time = event.scheduled_at.to_time if event.scheduled_at.present?
+    end
     
     Rails.logger.info "Loaded #{@events.count} events"
   end
@@ -30,7 +36,11 @@ class EventsController < ApplicationController
     Rails.logger.info "params: #{params.inspect}"
     Rails.logger.info "@event: #{@event.inspect}"
     
-    # 仮想属性は after_find コールバックで自動設定される
+    # 既存のデータを新しいフィールドにマッピング（表示用）
+    @event.kind = @event.event_type if @event.event_type.present?
+    @event.note = @event.description if @event.description.present?
+    @event.scheduled_on = @event.scheduled_at.to_date if @event.scheduled_at.present?
+    @event.scheduled_time = @event.scheduled_at.to_time if @event.scheduled_at.present?
     
     Rails.logger.info "@event after mapping: #{@event.inspect}"
   end
@@ -91,7 +101,6 @@ class EventsController < ApplicationController
 
     if @event.save
       Rails.logger.info "Event saved successfully: #{@event.id}"
-      # 仮想属性は after_find コールバックで自動設定される
       redirect_to @event, notice: '予定を登録しました'
     else
       Rails.logger.error "Event save failed: #{@event.errors.full_messages}"
@@ -107,7 +116,11 @@ class EventsController < ApplicationController
     # 対象選択用のデータ
     @pets = current_household.pets.order(:name)
     
-    # 仮想属性は after_find コールバックで自動設定される
+    # 既存のデータを新しいフィールドにマッピング
+    @event.kind = @event.event_type if @event.event_type.present?
+    @event.note = @event.description if @event.description.present?
+    @event.scheduled_on = @event.scheduled_at.to_date if @event.scheduled_at.present?
+    @event.scheduled_time = @event.scheduled_at.to_time if @event.scheduled_at.present?
     
     Rails.logger.info "@event after mapping: #{@event.inspect}"
   end
@@ -154,7 +167,6 @@ class EventsController < ApplicationController
     
     if @event.update(update_params)
       Rails.logger.info "Event updated successfully: #{@event.id}"
-      # 仮想属性は after_find コールバックで自動設定される
       redirect_to @event, notice: '予定を更新しました'
     else
       Rails.logger.error "Event update failed: #{@event.errors.full_messages}"
