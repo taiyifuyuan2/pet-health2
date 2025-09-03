@@ -2,7 +2,6 @@
 
 class HouseholdsController < ApplicationController
   before_action :set_household, only: %i[show edit update destroy]
-  skip_before_action :ensure_household_exists!, only: %i[new create]
 
   def show; end
 

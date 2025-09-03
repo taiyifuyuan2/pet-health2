@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :ensure_household_exists!, unless: :skip_household_check?
 
   # ログイン後のリダイレクト先を設定
   def after_sign_in_path_for(resource)
@@ -30,5 +31,10 @@ class ApplicationController < ActionController::Base
     return if current_household
 
     redirect_to new_household_path, alert: '世帯を作成してください。'
+  end
+
+  def skip_household_check?
+    # HouseholdsControllerのnewとcreateアクションでは世帯チェックをスキップ
+    controller_name == 'households' && action_name.in?(%w[new create])
   end
 end
