@@ -35,6 +35,8 @@ class ApplicationController < ActionController::Base
 
   def skip_household_check?
     # HouseholdsControllerのnewとcreateアクションでは世帯チェックをスキップ
-    controller_name == 'households' && action_name.in?(%w[new create])
+    # Deviseのコントローラーでも世帯チェックをスキップ
+    (controller_name == 'households' && action_name.in?(%w[new create])) ||
+    devise_controller?
   end
 end
