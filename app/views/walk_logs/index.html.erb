@@ -1,0 +1,78 @@
+<div class="page-header">
+  <h1><%= @pet.name %>の散歩ログ</h1>
+  <%= link_to "新しい記録", new_pet_walk_log_path(@pet), class: "btn btn-primary" %>
+  <%= link_to "ペット詳細", pet_path(@pet), class: "btn btn-secondary" %>
+</div>
+
+<!-- 散歩統計 -->
+<% if @pet.walk_logs.any? %>
+  <div class="summary-section">
+    <h2>散歩統計</h2>
+    <div class="summary-cards">
+      <div class="summary-card">
+        <h3>今週の合計距離</h3>
+        <div class="summary-value"><%= @weekly_total_distance %>km</div>
+      </div>
+      <div class="summary-card">
+        <h3>今週の合計時間</h3>
+        <div class="summary-value"><%= @weekly_total_duration %>分</div>
+      </div>
+      <div class="summary-card">
+        <h3>今月の合計距離</h3>
+        <div class="summary-value"><%= @monthly_total_distance %>km</div>
+      </div>
+      <div class="summary-card">
+        <h3>今月の合計時間</h3>
+        <div class="summary-value"><%= @monthly_total_duration %>分</div>
+      </div>
+      <div class="summary-card">
+        <h3>今週の平均距離</h3>
+        <div class="summary-value"><%= @average_distance %>km</div>
+      </div>
+      <div class="summary-card">
+        <h3>今週の平均時間</h3>
+        <div class="summary-value"><%= @average_duration %>分</div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!-- 散歩ログ一覧 -->
+<div class="records-section">
+  <h2>散歩記録一覧</h2>
+  <% if @walk_logs.any? %>
+    <div class="table-container">
+      <table class="records-table">
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>距離</th>
+            <th>時間</th>
+            <th>ペース</th>
+            <th>メモ</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @walk_logs.each do |log| %>
+            <tr>
+              <td><%= log.date.strftime('%Y年%m月%d日') %></td>
+              <td><%= log.distance_km %>km</td>
+              <td><%= log.duration_minutes %>分</td>
+              <td><%= log.pace_per_km %>分/km</td>
+              <td><%= log.note.present? ? log.note : '-' %></td>
+              <td>
+                <%= link_to "編集", edit_pet_walk_log_path(@pet, log), class: "btn btn-sm btn-secondary" %>
+                <%= link_to "削除", pet_walk_log_path(@pet, log), method: :delete, 
+                            data: { turbo_confirm: "本当に削除しますか？" }, 
+                            class: "btn btn-sm btn-danger" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="no-data">散歩ログがありません</p>
+  <% end %>
+</div>

@@ -1,0 +1,39 @@
+<div class="page-header">
+  <h1>体重記録を編集</h1>
+  <%= link_to "戻る", pet_weight_records_path(@pet), class: "btn btn-secondary" %>
+</div>
+
+<div class="form-container">
+  <%= form_with model: [@pet, @weight_record], local: true, class: "form" do |form| %>
+    <% if @weight_record.errors.any? %>
+      <div class="error-messages">
+        <h2><%= pluralize(@weight_record.errors.count, "error") %> prohibited this weight record from being saved:</h2>
+        <ul>
+          <% @weight_record.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :date, "記録日", class: "form-label" %>
+      <%= form.date_field :date, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :weight_kg, "体重 (kg)", class: "form-label" %>
+      <%= form.number_field :weight_kg, class: "form-control", step: 0.1, placeholder: "例: 5.5" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :note, "メモ", class: "form-label" %>
+      <%= form.text_area :note, class: "form-control", rows: 3, placeholder: "任意のメモを入力してください" %>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "記録を更新", class: "btn btn-primary" %>
+      <%= link_to "キャンセル", pet_weight_records_path(@pet), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>

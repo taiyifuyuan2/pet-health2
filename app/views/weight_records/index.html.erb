@@ -1,0 +1,81 @@
+<div class="page-header">
+  <h1><%= @pet.name %>の体重記録</h1>
+  <%= link_to "新しい記録", new_pet_weight_record_path(@pet), class: "btn btn-primary" %>
+  <%= link_to "ペット詳細", pet_path(@pet), class: "btn btn-secondary" %>
+</div>
+
+<!-- 体重グラフ -->
+<div class="chart-section">
+  <h2>体重推移グラフ</h2>
+  <div class="chart-controls">
+    <%= link_to "過去30日", pet_weight_records_path(@pet, period: :last_30_days), 
+                class: "btn btn-sm #{'btn-primary' if params[:period] == 'last_30_days' || params[:period].nil?}" %>
+    <%= link_to "過去6ヶ月", pet_weight_records_path(@pet, period: :last_6_months), 
+                class: "btn btn-sm #{'btn-primary' if params[:period] == 'last_6_months'}" %>
+  </div>
+  
+  <% if @chart_data.any? %>
+    <%= line_chart @chart_data, 
+                   title: "#{@pet.name}の体重推移", 
+                   ytitle: "体重 (kg)",
+                   colors: ["#3B82F6"] %>
+  <% else %>
+    <p class="no-data">体重記録がありません</p>
+  <% end %>
+</div>
+
+<!-- 体重サマリー -->
+<% if @latest_weight %>
+  <div class="summary-section">
+    <div class="summary-cards">
+      <div class="summary-card">
+        <h3>最新体重</h3>
+        <div class="summary-value"><%= @latest_weight %>kg</div>
+      </div>
+      <% if @weight_change %>
+        <div class="summary-card">
+          <h3>30日間の変化</h3>
+          <div class="summary-value <%= @weight_change > 0 ? 'positive' : 'negative' %>">
+            <%= @weight_change > 0 ? '+' : '' %><%= @weight_change %>kg
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<!-- 体重記録一覧 -->
+<div class="records-section">
+  <h2>記録一覧</h2>
+  <% if @weight_records.any? %>
+    <div class="table-container">
+      <table class="records-table">
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>体重</th>
+            <th>メモ</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @weight_records.each do |record| %>
+            <tr>
+              <td><%= record.date.strftime('%Y年%m月%d日') %></td>
+              <td><%= record.weight_kg %>kg</td>
+              <td><%= record.note.present? ? record.note : '-' %></td>
+              <td>
+                <%= link_to "編集", edit_pet_weight_record_path(@pet, record), class: "btn btn-sm btn-secondary" %>
+                <%= link_to "削除", pet_weight_record_path(@pet, record), 
+                            data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, 
+                            class: "btn btn-sm btn-danger" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="no-data">体重記録がありません</p>
+  <% end %>
+</div>
