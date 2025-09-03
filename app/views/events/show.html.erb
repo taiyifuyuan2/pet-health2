@@ -20,9 +20,9 @@
         <span class="meta-icon">
           <%= image_tag "icons/calendar.jpeg", alt: "日付", class: "icon-small" %>
         </span>
-        <%= @event.scheduled_on.strftime('%Y年%m月%d日') %>
-        <% if @event.scheduled_time %>
-          <%= @event.scheduled_time.strftime('%H:%M') %>
+        <%= @event.scheduled_at&.strftime('%Y年%m月%d日') || '日付未設定' %>
+        <% if @event.scheduled_at&.strftime('%H:%M') != '00:00' %>
+          <%= @event.scheduled_at.strftime('%H:%M') %>
         <% end %>
       </div>
     </div>
@@ -66,7 +66,7 @@
             </div>
             <div class="detail-content">
               <div class="detail-label">種類</div>
-              <div class="detail-value"><%= @event.kind %></div>
+              <div class="detail-value"><%= @event.event_type || '未設定' %></div>
             </div>
           </div>
           <div class="detail-item">
@@ -75,17 +75,17 @@
             </div>
             <div class="detail-content">
               <div class="detail-label">日付</div>
-              <div class="detail-value"><%= @event.scheduled_on.strftime('%Y年%m月%d日') %></div>
+              <div class="detail-value"><%= @event.scheduled_at&.strftime('%Y年%m月%d日') || '日付未設定' %></div>
             </div>
           </div>
-          <% if @event.scheduled_time %>
+          <% if @event.scheduled_at&.strftime('%H:%M') != '00:00' %>
             <div class="detail-item">
               <div class="detail-icon">
                 <%= image_tag "icons/clock.jpeg", alt: "時刻", class: "icon-small" %>
               </div>
               <div class="detail-content">
                 <div class="detail-label">時刻</div>
-                <div class="detail-value"><%= @event.scheduled_time.strftime('%H:%M') %></div>
+                <div class="detail-value"><%= @event.scheduled_at.strftime('%H:%M') %></div>
               </div>
             </div>
           <% end %>
@@ -150,11 +150,11 @@
         </div>
       </div>
 
-      <% if @event.note.present? %>
+      <% if @event.description.present? %>
         <div class="detail-section">
           <h3 class="detail-section-title">メモ</h3>
           <div class="event-notes">
-            <p><%= @event.note %></p>
+            <p><%= @event.description %></p>
           </div>
         </div>
       <% end %>
