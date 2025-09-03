@@ -1,8 +1,9 @@
-class HouseholdsController < ApplicationController
-  before_action :set_household, only: [:show, :edit, :update, :destroy]
+# frozen_string_literal: true
 
-  def show
-  end
+class HouseholdsController < ApplicationController
+  before_action :set_household, only: %i[show edit update destroy]
+
+  def show; end
 
   def new
     @household = Household.new
@@ -10,7 +11,7 @@ class HouseholdsController < ApplicationController
 
   def create
     @household = Household.new(household_params)
-    
+
     if @household.save
       # 作成者をownerとして追加
       @household.memberships.create!(user: current_user, role: 'owner')
@@ -20,8 +21,7 @@ class HouseholdsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @household.update(household_params)

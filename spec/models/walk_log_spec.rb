@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe WalkLog, type: :model do
@@ -12,12 +14,12 @@ RSpec.describe WalkLog, type: :model do
     it { should validate_numericality_of(:distance_km).is_greater_than(0) }
     it { should validate_numericality_of(:duration_minutes).is_greater_than(0) }
     it { should validate_length_of(:note).is_at_most(1000) }
-    
+
     it 'validates uniqueness of date scoped to pet' do
       pet = create(:pet)
       create(:walk_log, pet: pet, date: Date.current)
       duplicate_log = build(:walk_log, pet: pet, date: Date.current)
-      
+
       expect(duplicate_log).not_to be_valid
       expect(duplicate_log.errors[:date]).to include('has already been taken')
     end
@@ -25,7 +27,7 @@ RSpec.describe WalkLog, type: :model do
 
   describe 'scopes' do
     let(:pet) { create(:pet) }
-    
+
     before do
       create(:walk_log, pet: pet, date: 10.days.ago.to_date)
       create(:walk_log, pet: pet, date: 5.days.ago.to_date)
@@ -50,7 +52,7 @@ RSpec.describe WalkLog, type: :model do
 
   describe '.total_distance' do
     let(:pet) { create(:pet) }
-    
+
     before do
       create(:walk_log, pet: pet, date: 5.days.ago.to_date, distance_km: 2.0)
       create(:walk_log, pet: pet, date: Date.current, distance_km: 3.0)
@@ -68,7 +70,7 @@ RSpec.describe WalkLog, type: :model do
 
   describe '.total_duration' do
     let(:pet) { create(:pet) }
-    
+
     before do
       create(:walk_log, pet: pet, date: 5.days.ago.to_date, duration_minutes: 30)
       create(:walk_log, pet: pet, date: Date.current, duration_minutes: 45)
@@ -86,7 +88,7 @@ RSpec.describe WalkLog, type: :model do
 
   describe '.average_distance' do
     let(:pet) { create(:pet) }
-    
+
     before do
       create(:walk_log, pet: pet, date: 5.days.ago.to_date, distance_km: 2.0)
       create(:walk_log, pet: pet, date: Date.current, distance_km: 4.0)

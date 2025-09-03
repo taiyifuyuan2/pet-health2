@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Contact < ApplicationRecord
   belongs_to :household
   has_many :events, as: :subject, dependent: :destroy

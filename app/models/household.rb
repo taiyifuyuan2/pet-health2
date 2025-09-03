@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Household < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateVaccineScheduleRules < ActiveRecord::Migration[7.1]
   def change
     create_table :vaccine_schedule_rules do |t|

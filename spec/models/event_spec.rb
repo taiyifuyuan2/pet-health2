@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Event, type: :model do
@@ -13,8 +15,14 @@ RSpec.describe Event, type: :model do
   end
 
   describe 'enums' do
-    it { should define_enum_for(:event_type).with_values(vaccine: 0, medication: 1, checkup: 2, other: 3, birthday: 4).backed_by_column_of_type(:string) }
-    it { should define_enum_for(:status).with_values(pending: 0, completed: 1, skipped: 2).backed_by_column_of_type(:string) }
+    it {
+      should define_enum_for(:event_type).with_values(vaccine: 0, medication: 1, checkup: 2, other: 3,
+                                                      birthday: 4).backed_by_column_of_type(:string)
+    }
+    it {
+      should define_enum_for(:status).with_values(pending: 0, completed: 1,
+                                                  skipped: 2).backed_by_column_of_type(:string)
+    }
   end
 
   describe 'scopes' do
@@ -37,6 +45,4 @@ RSpec.describe Event, type: :model do
       end
     end
   end
-
-
 end

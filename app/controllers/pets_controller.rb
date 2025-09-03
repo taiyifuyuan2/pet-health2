@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class PetsController < ApplicationController
   before_action :ensure_household_exists!
-  before_action :set_pet, only: [:show, :edit, :update, :destroy]
+  before_action :set_pet, only: %i[show edit update destroy]
 
   def index
     @pets = current_household.pets.order(:name)
-    
+
     respond_to do |format|
       format.html
       format.json { render json: @pets }
@@ -15,12 +17,12 @@ class PetsController < ApplicationController
     @events = @pet.events.order(:scheduled_at)
     @vaccinations = @pet.vaccinations.includes(:vaccine).order(:due_on)
     @notifications = @pet.notifications.order(:scheduled_for)
-    
+
     # 健康アドバイスを取得
     @health_advisor = HealthAdvisor.new(@pet)
     @todays_advice = @health_advisor.get_todays_advice
     @weekly_advice = @health_advisor.get_weekly_advice
-    
+
     # 今日の予定を取得
     @todays_schedule = @pet.todays_schedule
     @this_weeks_schedule = @pet.this_weeks_schedule
@@ -32,7 +34,7 @@ class PetsController < ApplicationController
 
   def create
     @pet = current_household.pets.build(pet_params)
-    
+
     if @pet.save
       redirect_to @pet, notice: 'ペットを登録しました'
     else
@@ -40,8 +42,7 @@ class PetsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @pet.update(pet_params)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe WeightRecordsController, type: :controller do
@@ -44,26 +46,26 @@ RSpec.describe WeightRecordsController, type: :controller do
   describe 'POST #create' do
     context 'with valid parameters' do
       it 'creates a new weight record' do
-        expect {
-          post :create, params: { 
-            pet_id: pet.id, 
-            weight_record: { 
-              date: Date.current, 
-              weight_kg: 10.5, 
-              note: 'Test note' 
-            } 
+        expect do
+          post :create, params: {
+            pet_id: pet.id,
+            weight_record: {
+              date: Date.current,
+              weight_kg: 10.5,
+              note: 'Test note'
+            }
           }
-        }.to change(WeightRecord, :count).by(1)
+        end.to change(WeightRecord, :count).by(1)
       end
 
       it 'redirects to weight records index' do
-        post :create, params: { 
-          pet_id: pet.id, 
-          weight_record: { 
-            date: Date.current, 
-            weight_kg: 10.5, 
-            note: 'Test note' 
-          } 
+        post :create, params: {
+          pet_id: pet.id,
+          weight_record: {
+            date: Date.current,
+            weight_kg: 10.5,
+            note: 'Test note'
+          }
         }
         expect(response).to redirect_to(pet_weight_records_path(pet))
       end
@@ -71,24 +73,24 @@ RSpec.describe WeightRecordsController, type: :controller do
 
     context 'with invalid parameters' do
       it 'does not create a new weight record' do
-        expect {
-          post :create, params: { 
-            pet_id: pet.id, 
-            weight_record: { 
-              date: Date.current, 
-              weight_kg: nil 
-            } 
+        expect do
+          post :create, params: {
+            pet_id: pet.id,
+            weight_record: {
+              date: Date.current,
+              weight_kg: nil
+            }
           }
-        }.not_to change(WeightRecord, :count)
+        end.not_to change(WeightRecord, :count)
       end
 
       it 'renders new template' do
-        post :create, params: { 
-          pet_id: pet.id, 
-          weight_record: { 
-            date: Date.current, 
-            weight_kg: nil 
-          } 
+        post :create, params: {
+          pet_id: pet.id,
+          weight_record: {
+            date: Date.current,
+            weight_kg: nil
+          }
         }
         expect(response).to render_template(:new)
       end
@@ -110,20 +112,20 @@ RSpec.describe WeightRecordsController, type: :controller do
   describe 'PATCH #update' do
     context 'with valid parameters' do
       it 'updates the weight record' do
-        patch :update, params: { 
-          pet_id: pet.id, 
-          id: weight_record.id, 
-          weight_record: { weight_kg: 11.0 } 
+        patch :update, params: {
+          pet_id: pet.id,
+          id: weight_record.id,
+          weight_record: { weight_kg: 11.0 }
         }
         weight_record.reload
         expect(weight_record.weight_kg).to eq(11.0)
       end
 
       it 'redirects to weight records index' do
-        patch :update, params: { 
-          pet_id: pet.id, 
-          id: weight_record.id, 
-          weight_record: { weight_kg: 11.0 } 
+        patch :update, params: {
+          pet_id: pet.id,
+          id: weight_record.id,
+          weight_record: { weight_kg: 11.0 }
         }
         expect(response).to redirect_to(pet_weight_records_path(pet))
       end
@@ -132,20 +134,20 @@ RSpec.describe WeightRecordsController, type: :controller do
     context 'with invalid parameters' do
       it 'does not update the weight record' do
         original_weight = weight_record.weight_kg
-        patch :update, params: { 
-          pet_id: pet.id, 
-          id: weight_record.id, 
-          weight_record: { weight_kg: nil } 
+        patch :update, params: {
+          pet_id: pet.id,
+          id: weight_record.id,
+          weight_record: { weight_kg: nil }
         }
         weight_record.reload
         expect(weight_record.weight_kg).to eq(original_weight)
       end
 
       it 'renders edit template' do
-        patch :update, params: { 
-          pet_id: pet.id, 
-          id: weight_record.id, 
-          weight_record: { weight_kg: nil } 
+        patch :update, params: {
+          pet_id: pet.id,
+          id: weight_record.id,
+          weight_record: { weight_kg: nil }
         }
         expect(response).to render_template(:edit)
       end
@@ -155,9 +157,9 @@ RSpec.describe WeightRecordsController, type: :controller do
   describe 'DELETE #destroy' do
     it 'deletes the weight record' do
       weight_record # create the record
-      expect {
+      expect do
         delete :destroy, params: { pet_id: pet.id, id: weight_record.id }
-      }.to change(WeightRecord, :count).by(-1)
+      end.to change(WeightRecord, :count).by(-1)
     end
 
     it 'redirects to weight records index' do

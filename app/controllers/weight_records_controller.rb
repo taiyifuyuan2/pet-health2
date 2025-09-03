@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class WeightRecordsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_pet
-  before_action :set_weight_record, only: [:show, :edit, :update, :destroy]
+  before_action :set_weight_record, only: %i[show edit update destroy]
 
   def index
     @weight_records = @pet.weight_records.recent
@@ -10,8 +12,7 @@ class WeightRecordsController < ApplicationController
     @weight_change = WeightRecord.weight_change(@pet, 30)
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @weight_record = @pet.weight_records.build(date: Date.current)
@@ -27,8 +28,7 @@ class WeightRecordsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @weight_record.update(weight_record_params)

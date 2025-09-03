@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateHealthRiskRules < ActiveRecord::Migration[7.1]
   def change
     create_table :health_risk_rules do |t|
