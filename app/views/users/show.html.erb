@@ -35,7 +35,7 @@
   </div>
   <div class="stat-card">
     <div class="stat-icon">
-      <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+      <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= @events_count %></div>
@@ -44,7 +44,7 @@
   </div>
   <div class="stat-card">
     <div class="stat-icon">
-      <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+      <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= @user.created_at.strftime('%m/%d') %></div>
@@ -59,14 +59,14 @@
   <div class="mypage-card profile-details">
     <div class="card-header">
       <h2 class="card-title">
-        <%= image_tag "icons/user.jpg", alt: "ユーザー", class: "icon-inline" %>
+        <%= image_tag "icons/user.jpeg", alt: "ユーザー", class: "icon-inline" %>
         プロフィール詳細
       </h2>
     </div>
     <div class="profile-details-content">
       <div class="detail-item">
         <div class="detail-icon">
-          <%= image_tag "icons/user.jpg", alt: "ユーザー", class: "icon-small" %>
+          <%= image_tag "icons/user.jpeg", alt: "ユーザー", class: "icon-small" %>
         </div>
         <div class="detail-content">
           <div class="detail-label">名前</div>
@@ -82,7 +82,7 @@
       </div>
       <div class="detail-item">
         <div class="detail-icon">
-          <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon-small" %>
+          <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon-small" %>
         </div>
         <div class="detail-content">
           <div class="detail-label">登録日</div>
@@ -119,7 +119,7 @@
                 </div>
                 <div class="household-stat">
                   <span class="stat-icon">
-                    <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon-small" %>
+                    <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon-small" %>
                   </span>
                   <%= household.events.count %>件
                 </div>
@@ -158,7 +158,7 @@
       <% end %>
       <%= link_to new_event_path, class: "quick-action-card" do %>
         <div class="action-icon">
-          <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+          <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon" %>
         </div>
         <div class="action-content">
           <div class="action-title">予定を追加</div>

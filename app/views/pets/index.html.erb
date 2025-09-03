@@ -2,7 +2,7 @@
 <div class="pets-header">
   <div class="pets-header-content">
     <h1 class="pets-title">
-      <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-inline" %>
+      <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon-inline" %>
       ペット一覧
     </h1>
     <p class="pets-subtitle">あなたの大切なペットたち</p>
@@ -16,7 +16,7 @@
 <div class="stats-grid">
   <div class="stat-card">
     <div class="stat-icon">
-      <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon" %>
+      <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= @pets.count %></div>
@@ -25,7 +25,7 @@
   </div>
   <div class="stat-card">
     <div class="stat-icon">
-      <%= image_tag "icons/dog.jpg", alt: "犬", class: "icon" %>
+      <%= image_tag "icons/dog.jpeg", alt: "犬", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= @pets.where(species: 'dog').count %></div>
@@ -34,7 +34,7 @@
   </div>
   <div class="stat-card">
     <div class="stat-icon">
-      <%= image_tag "icons/dog.jpg", alt: "猫", class: "icon" %>
+      <%= image_tag "icons/dog.jpeg", alt: "猫", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= @pets.where(species: 'cat').count %></div>
@@ -43,7 +43,7 @@
   </div>
   <div class="stat-card">
     <div class="stat-icon">
-      <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+      <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= @pets.joins(:events).count %></div>
@@ -82,7 +82,7 @@
             <% if pet.birthdate.present? %>
               <div class="pet-info-item">
                 <span class="info-icon">
-                  <%= image_tag "icons/birthday.jpg", alt: "誕生日", class: "icon-small" %>
+                  <%= image_tag "icons/birthday.jpeg", alt: "誕生日", class: "icon-small" %>
                 </span>
                 <span class="info-text"><%= pet.birthdate.strftime("%Y年%m月%d日") %></span>
               </div>
@@ -98,7 +98,7 @@
           <div class="pet-stats">
             <div class="pet-stat">
               <span class="stat-icon">
-                <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon-small" %>
+                <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon-small" %>
               </span>
               <span class="stat-text"><%= pet.events.count %>件の予定</span>
             </div>
@@ -111,7 +111,7 @@
   <div class="empty-pets">
     <div class="empty-pets-content">
       <div class="empty-icon">
-        <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-large" %>
+        <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon-large" %>
       </div>
       <h2>ペットが登録されていません</h2>
       <p>最初のペットを登録して、健康管理を始めましょう</p>

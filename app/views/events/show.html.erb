@@ -12,13 +12,13 @@
     <div class="event-detail-meta">
       <div class="event-meta-item">
         <span class="meta-icon">
-          <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-small" %>
+          <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon-small" %>
         </span>
         <%= @event.subject.name %>
       </div>
       <div class="event-meta-item">
         <span class="meta-icon">
-          <%= image_tag "icons/calendar.jpg", alt: "日付", class: "icon-small" %>
+          <%= image_tag "icons/calendar.jpeg", alt: "日付", class: "icon-small" %>
         </span>
         <%= @event.scheduled_on.strftime('%Y年%m月%d日') %>
         <% if @event.scheduled_time %>
@@ -53,7 +53,7 @@
         <div class="detail-items">
           <div class="detail-item">
             <div class="detail-icon">
-              <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-small" %>
+              <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon-small" %>
             </div>
             <div class="detail-content">
               <div class="detail-label">対象</div>
@@ -71,7 +71,7 @@
           </div>
           <div class="detail-item">
             <div class="detail-icon">
-              <%= image_tag "icons/calendar.jpg", alt: "日付", class: "icon-small" %>
+              <%= image_tag "icons/calendar.jpeg", alt: "日付", class: "icon-small" %>
             </div>
             <div class="detail-content">
               <div class="detail-label">日付</div>
@@ -81,7 +81,7 @@
           <% if @event.scheduled_time %>
             <div class="detail-item">
               <div class="detail-icon">
-                <%= image_tag "icons/clock.jpg", alt: "時刻", class: "icon-small" %>
+                <%= image_tag "icons/clock.jpeg", alt: "時刻", class: "icon-small" %>
               </div>
               <div class="detail-content">
                 <div class="detail-label">時刻</div>
@@ -172,7 +172,7 @@
     <div class="actions-content">
       <%= link_to events_path, class: "action-btn" do %>
         <div class="action-icon">
-          <%= image_tag "icons/calendar.jpg", alt: "一覧", class: "icon" %>
+          <%= image_tag "icons/calendar.jpeg", alt: "一覧", class: "icon" %>
         </div>
         <div class="action-text">
           <div class="action-title">予定一覧</div>

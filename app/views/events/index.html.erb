@@ -2,7 +2,7 @@
 <div class="events-header">
   <div class="events-header-content">
     <h1 class="events-title">
-      <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon-inline" %>
+      <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon-inline" %>
       予定一覧
     </h1>
     <p class="events-subtitle">ペットの健康管理スケジュール</p>
@@ -17,7 +17,7 @@
 <div class="stats-grid">
   <div class="stat-card">
     <div class="stat-icon">
-      <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+      <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= @events.count %></div>
@@ -73,20 +73,20 @@
           <div class="event-card-info">
             <div class="event-info-item">
               <span class="info-icon">
-                <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-small" %>
+                <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon-small" %>
               </span>
               <span class="info-text"><%= event.subject.name %></span>
             </div>
             <div class="event-info-item">
               <span class="info-icon">
-                <%= image_tag "icons/calendar.jpg", alt: "日付", class: "icon-small" %>
+                <%= image_tag "icons/calendar.jpeg", alt: "日付", class: "icon-small" %>
               </span>
               <span class="info-text"><%= event.scheduled_on.strftime('%m月%d日') %></span>
             </div>
             <% if event.scheduled_time %>
               <div class="event-info-item">
                 <span class="info-icon">
-                  <%= image_tag "icons/clock.jpg", alt: "時刻", class: "icon-small" %>
+                  <%= image_tag "icons/clock.jpeg", alt: "時刻", class: "icon-small" %>
                 </span>
                 <span class="info-text"><%= event.scheduled_time.strftime('%H:%M') %></span>
               </div>
@@ -122,7 +122,7 @@
   <div class="empty-events">
     <div class="empty-events-content">
       <div class="empty-icon">
-        <%= image_tag "icons/calendar.jpg", alt: "カレンダー", class: "icon-large" %>
+        <%= image_tag "icons/calendar.jpeg", alt: "カレンダー", class: "icon-large" %>
       </div>
       <h2>この月の予定はありません</h2>
       <p>新しい予定を追加して、ペットの健康管理を始めましょう</p>
