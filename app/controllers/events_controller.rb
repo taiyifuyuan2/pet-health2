@@ -48,8 +48,14 @@ class EventsController < ApplicationController
       @event = current_household.events.build
       @event.subject = find_subject if params[:subject_type] && params[:subject_id]
 
-      # 対象選択用のデータ
-      @pets = current_household.pets.order(:name)
+      # 対象選択用のデータ（安全に取得）
+      begin
+        @pets = current_household.pets.order(:name)
+        Rails.logger.info "Loaded #{@pets.count} pets"
+      rescue => e
+        Rails.logger.error "Error loading pets: #{e.message}"
+        @pets = []
+      end
       
       # ペットが登録されていない場合はペット登録ページにリダイレクト
       if @pets.empty?
@@ -80,8 +86,14 @@ class EventsController < ApplicationController
       
       @event = current_household.events.build(event_params)
       
-      # 対象選択用のデータ（エラー時の再表示用）
-      @pets = current_household.pets.order(:name)
+      # 対象選択用のデータ（エラー時の再表示用、安全に取得）
+      begin
+        @pets = current_household.pets.order(:name)
+        Rails.logger.info "Loaded #{@pets.count} pets for form re-render"
+      rescue => e
+        Rails.logger.error "Error loading pets in create: #{e.message}"
+        @pets = []
+      end
 
       Rails.logger.info "@event before save: #{@event.inspect}"
       Rails.logger.info "@event.errors: #{@event.errors.full_messages}" unless @event.valid?
@@ -101,12 +113,24 @@ class EventsController < ApplicationController
   end
 
   def edit
-    Rails.logger.info '=== EventsController#edit called ==='
-    Rails.logger.info "params: #{params.inspect}"
-    Rails.logger.info "@event: #{@event.inspect}"
-    
-    # 対象選択用のデータ
-    @pets = current_household.pets.order(:name)
+    begin
+      Rails.logger.info '=== EventsController#edit called ==='
+      Rails.logger.info "params: #{params.inspect}"
+      Rails.logger.info "@event: #{@event.inspect}"
+      
+      # 対象選択用のデータ（安全に取得）
+      begin
+        @pets = current_household.pets.order(:name)
+        Rails.logger.info "Loaded #{@pets.count} pets for edit"
+      rescue => e
+        Rails.logger.error "Error loading pets in edit: #{e.message}"
+        @pets = []
+      end
+    rescue => e
+      Rails.logger.error "Error in EventsController#edit: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      redirect_to events_path, alert: 'エラーが発生しました。'
+    end
   end
 
   def update
