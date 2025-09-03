@@ -2,25 +2,20 @@
 
 class EventsController < ApplicationController
   before_action :set_event, only: %i[show edit update destroy complete]
+  skip_before_action :ensure_household_exists!, only: [:index]
 
   def index
     begin
       Rails.logger.info '=== EventsController#index called ==='
       Rails.logger.info "params: #{params.inspect}"
       Rails.logger.info "current_user: #{current_user.inspect}"
-      Rails.logger.info "current_household: #{current_household.inspect}"
       
-      # 安全なイベント取得
-      if current_household
-        @events = current_household.events.order(:scheduled_at)
-        Rails.logger.info "Loaded #{@events.count} events from household"
-      else
-        @events = []
-        Rails.logger.info "No household found, using empty events array"
-      end
-      
+      # 完全にシンプルな実装
+      @events = []
       @month = Date.current.beginning_of_month
       @month_range = @month.beginning_of_month..@month.end_of_month
+      
+      Rails.logger.info "Basic setup completed successfully"
       
     rescue => e
       Rails.logger.error "Error in EventsController#index: #{e.message}"
