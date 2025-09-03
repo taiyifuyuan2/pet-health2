@@ -10,7 +10,7 @@
 <div class="stats-grid">
   <div class="stat-card">
     <div class="stat-icon">
-      <%= image_tag "icons/calendar.jpg", alt: "カレンダー", class: "icon" %>
+      <%= image_tag "icons/calendar.jpeg", alt: "カレンダー", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= @upcoming_events.count %></div>
@@ -37,7 +37,7 @@
   </div>
   <div class="stat-card">
     <div class="stat-icon">
-      <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon" %>
+      <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= current_household&.pets&.count || 0 %></div>
@@ -70,13 +70,13 @@
               <div class="event-details">
                 <div class="event-subject">
                   <span class="subject-icon">
-                    <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon-small" %>
+                    <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon-small" %>
                   </span>
                   <%= event.subject.name %>
                 </div>
                 <div class="event-datetime">
                   <span class="date-icon">
-                    <%= image_tag "icons/calendar.jpg", alt: "日付", class: "icon-small" %>
+                    <%= image_tag "icons/calendar.jpeg", alt: "日付", class: "icon-small" %>
                   </span>
                   <%= event.scheduled_at.strftime("%m月%d日") %>
                   <%= event.scheduled_at.strftime("%H:%M") %>
@@ -101,7 +101,7 @@
       <% else %>
         <div class="empty-state">
           <div class="empty-icon">
-            <%= image_tag "icons/calendar.jpg", alt: "カレンダー", class: "icon-large" %>
+            <%= image_tag "icons/calendar.jpeg", alt: "カレンダー", class: "icon-large" %>
           </div>
           <p>今月の予定はありません</p>
           <%= link_to "予定を追加", new_event_path, class: "btn btn-primary" %>
@@ -172,7 +172,7 @@
       <div class="quick-actions">
         <%= link_to new_pet_path, class: "quick-action-btn" do %>
           <div class="action-icon">
-            <%= image_tag "icons/dog.jpg", alt: "ペット", class: "icon" %>
+            <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon" %>
           </div>
           <div class="action-text">
             <div class="action-title">ペットを追加</div>
@@ -181,7 +181,7 @@
         <% end %>
         <%= link_to new_event_path, class: "quick-action-btn" do %>
           <div class="action-icon">
-            <%= image_tag "icons/calendar.jpg", alt: "予定", class: "icon" %>
+            <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon" %>
           </div>
           <div class="action-text">
             <div class="action-title">予定を追加</div>
@@ -190,7 +190,7 @@
         <% end %>
         <%= link_to events_path, class: "quick-action-btn" do %>
           <div class="action-icon">
-            <%= image_tag "icons/calendar.jpg", alt: "一覧", class: "icon" %>
+            <%= image_tag "icons/calendar.jpeg", alt: "一覧", class: "icon" %>
           </div>
           <div class="action-text">
             <div class="action-title">予定一覧</div>
