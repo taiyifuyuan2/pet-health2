@@ -268,7 +268,7 @@ body {
 
 /* ヘッダー */
 header {
-  background: var(--surface);
+  background: var(--primary-color);
   border-bottom: 1px solid var(--border);
   padding: 1rem 0;
   position: sticky;
@@ -290,17 +290,17 @@ header {
   margin: 0;
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: white;
 }
 
 .nav-container h1 a {
   text-decoration: none;
-  color: var(--primary-color);
+  color: white;
   transition: var(--transition);
 }
 
 .nav-container h1 a:hover {
-  color: var(--primary-hover);
+  color: #e0e7ff;
 }
 
 .nav-links {
@@ -311,7 +311,7 @@ header {
 
 .nav-links a {
   text-decoration: none;
-  color: var(--text-secondary);
+  color: white;
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
   transition: var(--transition);
@@ -320,8 +320,8 @@ header {
 }
 
 .nav-links a:hover {
-  color: var(--primary-color);
-  background: var(--surface-hover);
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* メインコンテンツ */

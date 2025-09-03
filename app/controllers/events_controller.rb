@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class EventsController < ApplicationController
-  before_action :ensure_household_exists!
   before_action :set_event, only: %i[show edit update destroy complete]
 
   def index
@@ -34,12 +33,21 @@ class EventsController < ApplicationController
 
     # 対象選択用のデータ
     @pets = current_household.pets.order(:name)
+    
+    # ペットが登録されていない場合はペット登録ページにリダイレクト
+    if @pets.empty?
+      redirect_to new_pet_path, alert: '予定を追加する前に、まずペットを登録してください。'
+      return
+    end
 
     Rails.logger.info '=== Rendering events/new ==='
   end
 
   def create
     @event = current_household.events.build(event_params)
+    
+    # 対象選択用のデータ（エラー時の再表示用）
+    @pets = current_household.pets.order(:name)
 
     if @event.save
       redirect_to @event, notice: '予定を登録しました'
