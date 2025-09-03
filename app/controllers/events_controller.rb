@@ -10,12 +10,27 @@ class EventsController < ApplicationController
       Rails.logger.info "params: #{params.inspect}"
       Rails.logger.info "current_user: #{current_user.inspect}"
       
-      # 完全にシンプルな実装
-      @events = []
-      @month = Date.current.beginning_of_month
+      # 月間フィルタリング
+      @month = if params[:month]
+                 Date.parse("#{params[:month]}-01")
+               else
+                 Date.current.beginning_of_month
+               end
+
       @month_range = @month.beginning_of_month..@month.end_of_month
       
-      Rails.logger.info "Basic setup completed successfully"
+      # 実際のイベントデータを取得
+      if current_household
+        @events = current_household.events
+                                 .where(scheduled_at: @month_range)
+                                 .order(:scheduled_at)
+        Rails.logger.info "Loaded #{@events.count} events from household for #{@month.strftime('%Y年%m月')}"
+      else
+        @events = []
+        Rails.logger.info "No household found, using empty events array"
+      end
+      
+      Rails.logger.info "Events setup completed successfully"
       
     rescue => e
       Rails.logger.error "Error in EventsController#index: #{e.message}"
