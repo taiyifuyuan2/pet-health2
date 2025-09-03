@@ -22,6 +22,14 @@ class EventsController < ApplicationController
     Rails.logger.info '=== EventsController#show called ==='
     Rails.logger.info "params: #{params.inspect}"
     Rails.logger.info "@event: #{@event.inspect}"
+    
+    # 既存のデータを新しいフィールドにマッピング（表示用）
+    @event.kind = @event.event_type if @event.event_type.present?
+    @event.note = @event.description if @event.description.present?
+    @event.scheduled_on = @event.scheduled_at.to_date if @event.scheduled_at.present?
+    @event.scheduled_time = @event.scheduled_at.to_time if @event.scheduled_at.present?
+    
+    Rails.logger.info "@event after mapping: #{@event.inspect}"
   end
 
   def new
@@ -146,6 +154,12 @@ class EventsController < ApplicationController
     
     if @event.update(update_params)
       Rails.logger.info "Event updated successfully: #{@event.id}"
+      # 更新後にデータを再読み込みしてマッピング
+      @event.reload
+      @event.kind = @event.event_type if @event.event_type.present?
+      @event.note = @event.description if @event.description.present?
+      @event.scheduled_on = @event.scheduled_at.to_date if @event.scheduled_at.present?
+      @event.scheduled_time = @event.scheduled_at.to_time if @event.scheduled_at.present?
       redirect_to @event, notice: '予定を更新しました'
     else
       Rails.logger.error "Event update failed: #{@event.errors.full_messages}"

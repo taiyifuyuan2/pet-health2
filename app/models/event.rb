@@ -11,6 +11,34 @@ class Event < ApplicationRecord
   validates :scheduled_at, presence: true
   validates :event_type, presence: true
 
+  after_initialize :set_default_status, if: :new_record?
+
+  # 仮想属性（フォーム用）
+  attr_accessor :kind, :note, :scheduled_on, :scheduled_time
+
+  # 仮想属性のゲッター
+  def kind
+    @kind || event_type
+  end
+
+  def note
+    @note || description
+  end
+
+  def scheduled_on
+    @scheduled_on || (scheduled_at&.to_date)
+  end
+
+  def scheduled_time
+    @scheduled_time || (scheduled_at&.to_time)
+  end
+
+  private
+
+  def set_default_status
+    self.status ||= :pending
+  end
+
   scope :due_between, ->(from, to) { where(scheduled_at: from..to) }
   scope :pending, -> { where(status: :pending) }
   scope :completed, -> { where(status: :completed) }
