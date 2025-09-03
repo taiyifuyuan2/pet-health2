@@ -4,31 +4,52 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[show edit update destroy complete]
 
   def index
-    Rails.logger.info '=== EventsController#index called ==='
-    Rails.logger.info "params: #{params.inspect}"
-    
-    @events = current_household.events
-                               .includes(:subject)
-                               .order(:scheduled_at)
+    begin
+      Rails.logger.info '=== EventsController#index called ==='
+      Rails.logger.info "params: #{params.inspect}"
+      
+      Rails.logger.info "current_household: #{current_household.inspect}"
+      
+      @events = current_household.events
+                                 .includes(:subject)
+                                 .order(:scheduled_at)
 
-    @month = if params[:month]
-               Date.parse("#{params[:month]}-01")
-             else
-               Date.current.beginning_of_month
-             end
+      Rails.logger.info "Initial events count: #{@events.count}"
 
-    @month_range = @month.beginning_of_month..@month.end_of_month
-    @events = @events.due_between(@month.beginning_of_month, @month.end_of_month)
-    
-    # 各イベントの仮想属性を設定
-    @events.each do |event|
-      event.kind = event.event_type if event.event_type.present?
-      event.note = event.description if event.description.present?
-      event.scheduled_on = event.scheduled_at.to_date if event.scheduled_at.present?
-      event.scheduled_time = event.scheduled_at.to_time if event.scheduled_at.present?
+      @month = if params[:month]
+                 Date.parse("#{params[:month]}-01")
+               else
+                 Date.current.beginning_of_month
+               end
+
+      Rails.logger.info "Selected month: #{@month}"
+
+      @month_range = @month.beginning_of_month..@month.end_of_month
+      @events = @events.due_between(@month.beginning_of_month, @month.end_of_month)
+      
+      Rails.logger.info "Filtered events count: #{@events.count}"
+      
+      # 各イベントの仮想属性を設定
+      @events.each_with_index do |event, index|
+        Rails.logger.info "Processing event #{index + 1}: #{event.id}"
+        begin
+          event.kind = event.event_type if event.event_type.present?
+          event.note = event.description if event.description.present?
+          event.scheduled_on = event.scheduled_at.to_date if event.scheduled_at.present?
+          event.scheduled_time = event.scheduled_at.to_time if event.scheduled_at.present?
+          Rails.logger.info "Event #{index + 1} processed successfully"
+        rescue => e
+          Rails.logger.error "Error processing event #{index + 1}: #{e.message}"
+          Rails.logger.error e.backtrace.join("\n")
+        end
+      end
+      
+      Rails.logger.info "Successfully loaded #{@events.count} events"
+    rescue => e
+      Rails.logger.error "Error in EventsController#index: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      raise e
     end
-    
-    Rails.logger.info "Loaded #{@events.count} events"
   end
 
   def show

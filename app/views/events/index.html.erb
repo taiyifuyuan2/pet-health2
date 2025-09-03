@@ -67,7 +67,7 @@
 <% if @events.any? %>
   <div class="events-list">
     <% @events.each do |event| %>
-      <div class="event-card event-<%= event.kind %>">
+      <div class="event-card event-<%= event.kind || 'other' %>">
         <div class="event-card-content">
           <h3 class="event-card-title"><%= event.title %></h3>
           <div class="event-card-info">
@@ -81,14 +81,14 @@
               <span class="info-icon">
                 <%= image_tag "icons/calendar.jpeg", alt: "日付", class: "icon-small" %>
               </span>
-              <span class="info-text"><%= event.scheduled_on.strftime('%m月%d日') %></span>
+              <span class="info-text"><%= event.scheduled_on&.strftime('%m月%d日') || '日付未設定' %></span>
             </div>
             <% if event.scheduled_time %>
               <div class="event-info-item">
                 <span class="info-icon">
                   <%= image_tag "icons/clock.jpeg", alt: "時刻", class: "icon-small" %>
                 </span>
-                <span class="info-text"><%= event.scheduled_time.strftime('%H:%M') %></span>
+                <span class="info-text"><%= event.scheduled_time&.strftime('%H:%M') || '時刻未設定' %></span>
               </div>
             <% end %>
           </div>

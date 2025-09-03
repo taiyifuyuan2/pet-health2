@@ -19,18 +19,30 @@ class Event < ApplicationRecord
   # 仮想属性のゲッター
   def kind
     @kind || event_type
+  rescue => e
+    Rails.logger.error "Error getting kind for event #{id}: #{e.message}"
+    nil
   end
 
   def note
     @note || description
+  rescue => e
+    Rails.logger.error "Error getting note for event #{id}: #{e.message}"
+    nil
   end
 
   def scheduled_on
     @scheduled_on || (scheduled_at&.to_date)
+  rescue => e
+    Rails.logger.error "Error getting scheduled_on for event #{id}: #{e.message}"
+    nil
   end
 
   def scheduled_time
     @scheduled_time || (scheduled_at&.to_time)
+  rescue => e
+    Rails.logger.error "Error getting scheduled_time for event #{id}: #{e.message}"
+    nil
   end
 
   private
