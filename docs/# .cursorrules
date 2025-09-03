@@ -1,0 +1,36 @@
+# .cursorrules
+
+## Tech & Scope (MVP)
+- Framework: Ruby on Rails 7.2+, Ruby 3.3+
+- DB: MySQL 8, charset/collation: utf8mb4 / utf8mb4_0900_ai_ci
+- Frontend: Vanilla JS + CSS + HTML (CSSフレームワーク禁止)
+- Timezone: Asia/Tokyo, i18n: ja
+- Auth: Devise (email/password)
+- Jobs: Active Job + Sidekiq (Redis)
+- Mail: Action Mailer (dev: letter_opener, prod: SMTP)
+- MVP機能: Household(世帯)共有 / Pet & Contact / Event(予定+履歴) / メール通知（前日・当日9:00） / カレンダー表示 / 完了記録
+- Nice-to-have(後回し): LINE Notify, Web Push, 画像添付, iCal出力, RRULE本実装
+
+## Source of Truth
+- 仕様は必ず `docs/requirements.md` を最優先で参照し、差分があれば質問ではなくPRで反映提案する。
+
+## Rails Conventions
+- Models: User, Household, Membership, Pet, Contact, Event, NotificationSetting
+- Enums: Event.kind (vaccine/medication/checkup/other/birthday), Event.status (pending/completed/skipped)
+- Associations: Event belongs_to :subject, polymorphic (Pet or Contact)
+- Routesは requirements.md の雛形に準拠
+- テーブル/マイグレーションはutf8mb4、主要カラムに必要なindex追加
+- Time.zone.nowで運用、日付/時刻は日本の運用を前提
+
+## Jobs & Notifications
+- Sidekiq + cron(scheduler)想定。前日/当日9:00のメール通知を実装
+- householdの全メンバーへ送信
+- Event完了でstatus/completed_at更新
+
+## UI
+- 素のCSS/JSで最小限の操作性（44px以上のタップ領域、種類ごとの色分け）
+- 最初は月次テーブル型の簡易カレンダーでOK
+
+## Quality
+- 生成コードは動くことを最優先。READMEにセットアップ手順と.env.exampleを必ず書く
+- コミットは「計画 → 実装 → 動作確認 → ドキュメント」単位で小さく

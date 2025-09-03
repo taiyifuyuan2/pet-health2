@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: pet-health2
+    env: ruby
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        generateValue: true
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: DB_HOST
+        fromDatabase:
+          name: pet-health2-db
+          property: host
+      - key: DB_NAME
+        fromDatabase:
+          name: pet-health2-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: pet-health2-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: pet-health2-db
+          property: password
+      - key: DB_PORT
+        fromDatabase:
+          name: pet-health2-db
+          property: port
+
+databases:
+  - name: pet-health2-db
+    plan: free

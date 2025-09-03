@@ -8,7 +8,7 @@
 
 <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
   <%= link_to "パスワードを忘れましたか？", new_password_path(resource_name), class: "auth-link auth-link-small" %>
-<% end %>
+  <% end %>
 
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
   <%= link_to "確認メールが届いていませんか？", new_confirmation_path(resource_name) %><br />

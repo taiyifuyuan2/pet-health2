@@ -28,7 +28,7 @@ module PetHealth2
     config.i18n.available_locales = %i[ja en]
 
     # Active Job configuration
-    config.active_job.queue_adapter = :sidekiq
+    config.active_job.queue_adapter = Rails.env.production? ? :async : :sidekiq
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end
