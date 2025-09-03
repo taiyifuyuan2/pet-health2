@@ -7,17 +7,27 @@ class EventsController < ApplicationController
     begin
       Rails.logger.info '=== EventsController#index called ==='
       Rails.logger.info "params: #{params.inspect}"
+      Rails.logger.info "current_user: #{current_user.inspect}"
+      Rails.logger.info "current_household: #{current_household.inspect}"
       
-      # 基本的なイベント取得
-      @events = current_household.events.order(:scheduled_at)
+      # 安全なイベント取得
+      if current_household
+        @events = current_household.events.order(:scheduled_at)
+        Rails.logger.info "Loaded #{@events.count} events from household"
+      else
+        @events = []
+        Rails.logger.info "No household found, using empty events array"
+      end
+      
       @month = Date.current.beginning_of_month
       @month_range = @month.beginning_of_month..@month.end_of_month
       
-      Rails.logger.info "Loaded #{@events.count} events"
     rescue => e
       Rails.logger.error "Error in EventsController#index: #{e.message}"
       Rails.logger.error e.backtrace.join("\n")
-      raise e
+      @events = []
+      @month = Date.current.beginning_of_month
+      @month_range = @month.beginning_of_month..@month.end_of_month
     end
   end
 

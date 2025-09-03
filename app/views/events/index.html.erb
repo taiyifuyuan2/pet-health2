@@ -20,7 +20,7 @@
       <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon" %>
     </div>
     <div class="stat-content">
-      <div class="stat-number"><%= @events.count %></div>
+      <div class="stat-number"><%= @events&.count || 0 %></div>
       <div class="stat-label">今月の予定</div>
     </div>
   </div>
@@ -29,14 +29,14 @@
       <%= image_tag "icons/check.svg", alt: "完了", class: "icon" %>
     </div>
     <div class="stat-content">
-      <div class="stat-number"><%= @events.select(&:completed?).count %></div>
+      <div class="stat-number"><%= @events&.select(&:completed?)&.count || 0 %></div>
       <div class="stat-label">完了済み</div>
     </div>
   </div>
   <div class="stat-card">
     <div class="stat-icon">⏳</div>
     <div class="stat-content">
-      <div class="stat-number"><%= @events.select(&:pending?).count %></div>
+      <div class="stat-number"><%= @events&.select(&:pending?)&.count || 0 %></div>
       <div class="stat-label">未完了</div>
     </div>
   </div>
@@ -45,7 +45,7 @@
       <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon" %>
     </div>
     <div class="stat-content">
-      <div class="stat-number"><%= @events.select { |event| event.subject_type == 'Pet' }.count %></div>
+      <div class="stat-number"><%= @events&.select { |event| event.subject_type == 'Pet' }&.count || 0 %></div>
       <div class="stat-label">ペット関連</div>
     </div>
   </div>
@@ -55,7 +55,7 @@
 <div class="month-navigation">
   <div class="month-info">
     <h2 class="month-title"><%= @month.strftime('%Y年%m月') %></h2>
-    <p class="month-subtitle"><%= @events.count %>件の予定</p>
+    <p class="month-subtitle"><%= @events&.count || 0 %>件の予定</p>
   </div>
   <div class="month-actions">
     <%= link_to "前月", events_path(month: @month.prev_month.strftime('%Y-%m')), class: "btn btn-outline" %>
@@ -64,7 +64,7 @@
 </div>
 
 <!-- 予定リスト -->
-<% if @events.any? %>
+<% if @events&.any? %>
   <div class="events-list">
     <% @events.each do |event| %>
       <div class="event-card event-<%= event.event_type || 'other' %>">
