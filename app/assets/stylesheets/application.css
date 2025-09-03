@@ -444,7 +444,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1.5rem;
 }
@@ -579,7 +579,7 @@ main {
 }
 
 .dashboard-card .card-header {
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
   margin-bottom: 1rem;
 }
 
@@ -773,7 +773,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1.5rem;
 }
@@ -1060,7 +1060,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1.5rem;
 }
@@ -1310,7 +1310,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1.5rem;
 }
@@ -1480,7 +1480,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
   margin-bottom: 1rem;
 }
 
@@ -1721,7 +1721,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1rem 0 1rem;
+  padding: 1rem;
   margin-bottom: 0.75rem;
 }
 
@@ -1930,7 +1930,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1.5rem;
 }
@@ -2113,7 +2113,7 @@ main {
 }
 
 .auth-card-header {
-  padding: 2rem 2rem 1rem 2rem;
+  padding: 2rem;
   text-align: center;
   border-bottom: 1px solid var(--border);
   background: var(--background);
@@ -2357,7 +2357,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1.5rem;
 }
@@ -2841,7 +2841,7 @@ footer {
   }
   
   .dashboard-card .card-header {
-    padding: 1rem 1rem 0 1rem;
+    padding: 1rem;
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
@@ -3344,7 +3344,7 @@ footer {
   }
   
   .event-card-header {
-    padding: 0.75rem 0.75rem 0 0.75rem;
+    padding: 0.75rem;
     margin-bottom: 0.5rem;
   }
   
@@ -3410,7 +3410,7 @@ footer {
   }
   
   .auth-card-header {
-    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    padding: 1.5rem;
   }
   
   .auth-card-title {
