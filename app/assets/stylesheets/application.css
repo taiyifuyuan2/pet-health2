@@ -244,6 +244,7 @@
   --border: #e2e8f0;
   --border-hover: #cbd5e1;
   --text-primary: white;
+  --text-primary-on-light: #2563EB;
   --text-secondary: #64748b;
   --text-muted: #94a3b8;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -262,7 +263,7 @@ body {
   margin: 0;
   padding: 0;
   background: var(--background);
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   min-height: 100vh;
 }
 
@@ -346,7 +347,7 @@ main {
 .welcome-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
   background: var(--primary-color);
   -webkit-background-clip: text;
@@ -489,7 +490,7 @@ main {
 .event-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0;
 }
 
@@ -606,7 +607,7 @@ main {
 .overdue-content h5 {
   margin: 0 0 0.25rem 0;
   font-size: 0.95rem;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
 }
 
 .overdue-content p {
@@ -631,7 +632,7 @@ main {
 .completed-content h5 {
   margin: 0 0 0.25rem 0;
   font-size: 0.95rem;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
 }
 
 .completed-content p {
@@ -655,7 +656,7 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--border-radius);
   text-decoration: none;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   transition: var(--transition);
 }
 
@@ -663,7 +664,7 @@ main {
   background: var(--surface-hover);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
 }
 
 .action-icon {
@@ -734,7 +735,7 @@ main {
 .profile-name {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -829,7 +830,7 @@ main {
 
 .detail-value {
   font-size: 1rem;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   font-weight: 600;
 }
 
@@ -882,7 +883,7 @@ main {
   gap: 0.75rem;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin-bottom: 0.75rem;
 }
 
@@ -930,7 +931,7 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--border-radius);
   text-decoration: none;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   transition: var(--transition);
 }
 
@@ -938,7 +939,7 @@ main {
   background: var(--surface-hover);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
 }
 
 .quick-action-card .action-icon {
@@ -1008,7 +1009,7 @@ main {
 .household-name {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 1rem 0;
   line-height: 1.2;
 }
@@ -1121,7 +1122,7 @@ main {
 .pet-name {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin-bottom: 0.25rem;
 }
 
@@ -1194,7 +1195,7 @@ main {
 .contact-name {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin-bottom: 0.25rem;
 }
 
@@ -1257,7 +1258,7 @@ main {
 .pet-name {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 1rem 0;
   line-height: 1.2;
 }
@@ -1335,7 +1336,7 @@ main {
 .detail-section-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 1rem 0;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border);
@@ -1385,7 +1386,7 @@ main {
 
 .detail-value {
   font-size: 1rem;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   font-weight: 600;
 }
 
@@ -1398,7 +1399,7 @@ main {
 
 .pet-notes p {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   line-height: 1.6;
 }
 
@@ -1439,7 +1440,7 @@ main {
 .pets-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -1511,7 +1512,7 @@ main {
 .pet-card-name {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 1rem 0;
 }
 
@@ -1605,7 +1606,7 @@ main {
 .empty-pets h2 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 1rem 0;
 }
 
@@ -1642,7 +1643,7 @@ main {
 .events-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -1677,7 +1678,7 @@ main {
 .month-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.25rem 0;
 }
 
@@ -1750,7 +1751,7 @@ main {
 .event-card-title {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.75rem 0;
   line-height: 1.3;
   word-wrap: break-word;
@@ -1860,7 +1861,7 @@ main {
 .empty-events h2 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 1rem 0;
 }
 
@@ -1891,7 +1892,7 @@ main {
 .settings-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -1959,7 +1960,7 @@ main {
 .form-label {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin-bottom: 0.25rem;
 }
 
@@ -1971,7 +1972,7 @@ main {
   font-size: 0.95rem;
   min-height: 44px;
   background: var(--surface);
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   transition: var(--transition);
   box-shadow: var(--shadow-sm);
 }
@@ -2068,7 +2069,7 @@ main {
   margin-bottom: 3rem;
   padding: 3rem 2rem;
   background: var(--surface);
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   border: 1px solid var(--border);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow);
@@ -2121,7 +2122,7 @@ main {
 .auth-card-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -2158,7 +2159,7 @@ main {
   gap: 0.75rem;
   cursor: pointer;
   font-size: 0.95rem;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
 }
 
 .checkbox-input {
@@ -2221,7 +2222,7 @@ main {
 .event-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -2265,7 +2266,7 @@ main {
 .event-form-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -2305,7 +2306,7 @@ main {
 .event-detail-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 1rem 0;
 }
 
@@ -2381,7 +2382,7 @@ main {
 .detail-section-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 1rem 0;
 }
 
@@ -2426,7 +2427,7 @@ main {
 
 .detail-value {
   font-size: 1rem;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
 }
 
 .event-notes {
@@ -2463,7 +2464,7 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--border-radius);
   text-decoration: none;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   transition: var(--transition);
 }
 
@@ -2612,7 +2613,7 @@ main {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   font-size: 0.95rem;
 }
 
@@ -2624,7 +2625,7 @@ main {
   font-size: 0.95rem;
   min-height: 44px;
   background: var(--surface);
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   transition: var(--transition);
   box-shadow: var(--shadow-sm);
 }
@@ -2665,7 +2666,7 @@ main {
 .card-title {
   margin: 0;
   font-size: 1.25rem;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   font-weight: 600;
 }
 
@@ -3558,7 +3559,7 @@ footer {
 .profile-edit-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -3602,7 +3603,7 @@ footer {
 .profile-edit-card-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -3669,7 +3670,7 @@ footer {
 .btn-outline {
   background: transparent;
   border: 1px solid var(--border);
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
   text-decoration: none;
@@ -3731,7 +3732,7 @@ footer {
 .pet-edit-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -3775,7 +3776,7 @@ footer {
 .pet-edit-card-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -3822,7 +3823,7 @@ footer {
 .pet-new-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -3866,7 +3867,7 @@ footer {
 .pet-new-card-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -3900,7 +3901,7 @@ footer {
 .household-new-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
@@ -3944,7 +3945,7 @@ footer {
 .household-new-card-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary-on-light);
   margin: 0 0 0.5rem 0;
 }
 
