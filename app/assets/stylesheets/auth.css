@@ -1,0 +1,229 @@
+/* 認証画面用スタイル */
+
+/* 認証ヘッダー */
+.auth-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 3rem 0;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-header-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.auth-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.auth-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+/* 認証コンテナ */
+.auth-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.auth-card-header {
+  background: #f8f9fa;
+  padding: 2rem;
+  text-align: center;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.auth-card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.auth-card-subtitle {
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* 認証フォーム */
+.auth-form {
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-control::placeholder {
+  color: #999;
+}
+
+/* チェックボックス */
+.checkbox-group {
+  margin-bottom: 1.5rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.checkbox-input {
+  margin-right: 0.5rem;
+  transform: scale(1.1);
+}
+
+.checkbox-text {
+  user-select: none;
+}
+
+/* フォーム行 */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* フォームヘルプ */
+.form-help {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.help-icon {
+  margin-right: 0.25rem;
+}
+
+/* フォームアクション */
+.form-actions {
+  margin-top: 2rem;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* 認証リンク */
+.auth-links {
+  padding: 1.5rem 2rem;
+  background: #f8f9fa;
+  text-align: center;
+  border-top: 1px solid #e9ecef;
+}
+
+.auth-link {
+  display: inline-block;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0.25rem;
+}
+
+.auth-link:hover {
+  background-color: #667eea;
+  color: white;
+  text-decoration: none;
+}
+
+.auth-link-small {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.auth-link-small:hover {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* エラーメッセージ */
+.field_with_errors .form-control {
+  border-color: #dc3545;
+}
+
+.field_with_errors .form-control:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* レスポンシブ */
+@media (max-width: 640px) {
+  .auth-header {
+    padding: 2rem 0;
+  }
+  
+  .auth-title {
+    font-size: 2rem;
+  }
+  
+  .auth-subtitle {
+    font-size: 1rem;
+  }
+  
+  .auth-form {
+    padding: 1.5rem;
+  }
+  
+  .auth-card-header {
+    padding: 1.5rem;
+  }
+  
+  .auth-links {
+    padding: 1rem 1.5rem;
+  }
+}
