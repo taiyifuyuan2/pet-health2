@@ -13,37 +13,7 @@ class Event < ApplicationRecord
 
   after_initialize :set_default_status, if: :new_record?
 
-  # 仮想属性（フォーム用）
-  attr_accessor :kind, :note, :scheduled_on, :scheduled_time
 
-  # 仮想属性のゲッター
-  def kind
-    @kind || event_type
-  rescue => e
-    Rails.logger.error "Error getting kind for event #{id}: #{e.message}"
-    nil
-  end
-
-  def note
-    @note || description
-  rescue => e
-    Rails.logger.error "Error getting note for event #{id}: #{e.message}"
-    nil
-  end
-
-  def scheduled_on
-    @scheduled_on || (scheduled_at&.to_date)
-  rescue => e
-    Rails.logger.error "Error getting scheduled_on for event #{id}: #{e.message}"
-    nil
-  end
-
-  def scheduled_time
-    @scheduled_time || (scheduled_at&.to_time)
-  rescue => e
-    Rails.logger.error "Error getting scheduled_time for event #{id}: #{e.message}"
-    nil
-  end
 
   private
 
