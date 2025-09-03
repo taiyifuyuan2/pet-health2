@@ -4,23 +4,21 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[show edit update destroy complete]
 
   def index
-    Rails.logger.info '=== EventsController#index called ==='
-    Rails.logger.info "params: #{params.inspect}"
-    
-    @events = current_household.events
-                               .includes(:subject)
-                               .order(:scheduled_at)
-
-    @month = if params[:month]
-               Date.parse("#{params[:month]}-01")
-             else
-               Date.current.beginning_of_month
-             end
-
-    @month_range = @month.beginning_of_month..@month.end_of_month
-    @events = @events.due_between(@month.beginning_of_month, @month.end_of_month)
-    
-    Rails.logger.info "Loaded #{@events.count} events"
+    begin
+      Rails.logger.info '=== EventsController#index called ==='
+      Rails.logger.info "params: #{params.inspect}"
+      
+      # 最小限のテスト
+      @events = []
+      @month = Date.current.beginning_of_month
+      @month_range = @month.beginning_of_month..@month.end_of_month
+      
+      Rails.logger.info "Basic setup completed"
+    rescue => e
+      Rails.logger.error "Error in EventsController#index: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      raise e
+    end
   end
 
   def show
