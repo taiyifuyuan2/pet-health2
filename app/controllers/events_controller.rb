@@ -44,6 +44,9 @@ class EventsController < ApplicationController
   end
 
   def create
+    Rails.logger.info "=== EventsController#create called ==="
+    Rails.logger.info "params: #{params.inspect}"
+    
     @event = current_household.events.build(event_params)
     
     # 対象選択用のデータ（エラー時の再表示用）
@@ -51,7 +54,12 @@ class EventsController < ApplicationController
     
     # scheduled_onとscheduled_timeを組み合わせてscheduled_atを作成
     if @event.scheduled_on.present?
-      scheduled_time = @event.scheduled_time || Time.parse("12:00")
+      if @event.scheduled_time.present?
+        scheduled_time = @event.scheduled_time
+      else
+        scheduled_time = Time.parse("12:00")
+      end
+      
       @event.scheduled_at = DateTime.new(
         @event.scheduled_on.year,
         @event.scheduled_on.month,
@@ -67,19 +75,80 @@ class EventsController < ApplicationController
     # noteをdescriptionにマッピング
     @event.description = @event.note if @event.note.present?
 
+    Rails.logger.info "@event before save: #{@event.inspect}"
+    Rails.logger.info "@event.errors: #{@event.errors.full_messages}" unless @event.valid?
+
     if @event.save
+      Rails.logger.info "Event saved successfully: #{@event.id}"
       redirect_to @event, notice: '予定を登録しました'
     else
+      Rails.logger.error "Event save failed: #{@event.errors.full_messages}"
       render :new
     end
   end
 
-  def edit; end
+  def edit
+    Rails.logger.info '=== EventsController#edit called ==='
+    Rails.logger.info "params: #{params.inspect}"
+    Rails.logger.info "@event: #{@event.inspect}"
+    
+    # 対象選択用のデータ
+    @pets = current_household.pets.order(:name)
+    
+    # 既存のデータを新しいフィールドにマッピング
+    @event.kind = @event.event_type if @event.event_type.present?
+    @event.note = @event.description if @event.description.present?
+    @event.scheduled_on = @event.scheduled_at.to_date if @event.scheduled_at.present?
+    @event.scheduled_time = @event.scheduled_at.to_time if @event.scheduled_at.present?
+    
+    Rails.logger.info "@event after mapping: #{@event.inspect}"
+  end
 
   def update
-    if @event.update(event_params)
+    Rails.logger.info "=== EventsController#update called ==="
+    Rails.logger.info "params: #{params.inspect}"
+    
+    # 対象選択用のデータ（エラー時の再表示用）
+    @pets = current_household.pets.order(:name)
+    
+    # パラメータを更新
+    update_params = event_params.dup
+    
+    # scheduled_onとscheduled_timeを組み合わせてscheduled_atを作成
+    if update_params[:scheduled_on].present?
+      if update_params[:scheduled_time].present?
+        scheduled_time = Time.parse(update_params[:scheduled_time])
+      else
+        scheduled_time = Time.parse("12:00")
+      end
+      
+      scheduled_date = Date.parse(update_params[:scheduled_on])
+      update_params[:scheduled_at] = DateTime.new(
+        scheduled_date.year,
+        scheduled_date.month,
+        scheduled_date.day,
+        scheduled_time.hour,
+        scheduled_time.min
+      )
+    end
+    
+    # kindをevent_typeにマッピング
+    if update_params[:kind].present?
+      update_params[:event_type] = update_params[:kind]
+    end
+    
+    # noteをdescriptionにマッピング
+    if update_params[:note].present?
+      update_params[:description] = update_params[:note]
+    end
+    
+    Rails.logger.info "update_params: #{update_params.inspect}"
+    
+    if @event.update(update_params)
+      Rails.logger.info "Event updated successfully: #{@event.id}"
       redirect_to @event, notice: '予定を更新しました'
     else
+      Rails.logger.error "Event update failed: #{@event.errors.full_messages}"
       render :edit
     end
   end
