@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_02_141644) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_03_055351) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,6 +33,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_02_141644) do
     t.bigint "household_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "kind"
+    t.date "scheduled_on"
+    t.time "scheduled_time"
+    t.integer "remind_before_minutes"
+    t.text "note"
     t.index ["household_id"], name: "index_events_on_household_id"
     t.index ["subject_type", "subject_id"], name: "index_events_on_subject"
   end

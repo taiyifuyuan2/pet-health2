@@ -48,6 +48,24 @@ class EventsController < ApplicationController
     
     # 対象選択用のデータ（エラー時の再表示用）
     @pets = current_household.pets.order(:name)
+    
+    # scheduled_onとscheduled_timeを組み合わせてscheduled_atを作成
+    if @event.scheduled_on.present?
+      scheduled_time = @event.scheduled_time || Time.parse("12:00")
+      @event.scheduled_at = DateTime.new(
+        @event.scheduled_on.year,
+        @event.scheduled_on.month,
+        @event.scheduled_on.day,
+        scheduled_time.hour,
+        scheduled_time.min
+      )
+    end
+    
+    # kindをevent_typeにマッピング
+    @event.event_type = @event.kind if @event.kind.present?
+    
+    # noteをdescriptionにマッピング
+    @event.description = @event.note if @event.note.present?
 
     if @event.save
       redirect_to @event, notice: '予定を登録しました'
@@ -92,7 +110,7 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:subject_type, :subject_id, :event_type, :title,
-                                  :scheduled_at, :description)
+    params.require(:event).permit(:subject_type, :subject_id, :kind, :title,
+                                  :scheduled_on, :scheduled_time, :remind_before_minutes, :note)
   end
 end
