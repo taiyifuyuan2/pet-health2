@@ -19,7 +19,7 @@
   --secondary-400: #94a3b8;
   --secondary-500: #64748b;
   --secondary-600: #475569;
-  --secondary-700: #334155;
+  --secondary-700: white;
   --secondary-800: #1e293b;
   --secondary-900: #0f172a;
 
@@ -68,7 +68,7 @@
 
   /* 背景とテキスト */
   --bg-primary: #1e293b;
-  --bg-secondary: #334155;
+  --bg-secondary: white;
   --bg-tertiary: #475569;
   --bg-dark: #0f172a;
   --text-primary: #ffffff;
@@ -78,7 +78,7 @@
 
   /* ボーダー */
   --border-color: #475569;
-  --border-light: #334155;
+  --border-light: white;
   --border-dark: #64748b;
 
   /* シャドウ */
@@ -703,13 +703,13 @@ a:hover {
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-primary: #1e293b;
-    --bg-secondary: #334155;
+    --bg-secondary: white;
     --bg-tertiary: #475569;
     --text-primary: #f1f5f9;
     --text-secondary: #cbd5e1;
     --text-muted: #94a3b8;
     --border-color: #475569;
-    --border-light: #334155;
+    --border-light: white;
     --border-dark: #64748b;
   }
 }
