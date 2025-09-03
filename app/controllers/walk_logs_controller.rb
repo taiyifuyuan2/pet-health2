@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class WalkLogsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_pet
-  before_action :set_walk_log, only: [:show, :edit, :update, :destroy]
+  before_action :set_walk_log, only: %i[show edit update destroy]
 
   def index
     @walk_logs = @pet.walk_logs.recent
@@ -13,8 +15,7 @@ class WalkLogsController < ApplicationController
     @average_duration = WalkLog.average_duration(@pet, :this_week)
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @walk_log = @pet.walk_logs.build(date: Date.current)
@@ -30,8 +31,7 @@ class WalkLogsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @walk_log.update(walk_log_params)

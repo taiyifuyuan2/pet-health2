@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Pet, type: :model do
@@ -33,7 +35,7 @@ RSpec.describe Pet, type: :model do
     describe '#profile_image_url' do
       context 'when profile_image is present' do
         let(:pet_with_image) { create(:pet, profile_image: 'https://example.com/image.jpg') }
-        
+
         it 'returns the profile image URL' do
           expect(pet_with_image.profile_image_url).to eq('https://example.com/image.jpg')
         end

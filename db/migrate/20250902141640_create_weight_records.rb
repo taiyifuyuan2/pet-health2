@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateWeightRecords < ActiveRecord::Migration[7.1]
   def change
     create_table :weight_records do |t|
@@ -9,6 +11,6 @@ class CreateWeightRecords < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :weight_records, [:pet_id, :date], unique: true
+    add_index :weight_records, %i[pet_id date], unique: true
   end
 end

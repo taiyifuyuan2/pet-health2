@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -6,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :profile_image])
+    devise_parameter_sanitizer.permit(:account_update, keys: %i[name profile_image])
   end
 
   def current_household
@@ -15,8 +17,8 @@ class ApplicationController < ActionController::Base
   helper_method :current_household
 
   def ensure_household_exists!
-    unless current_household
-      redirect_to new_household_path, alert: '世帯を作成してください。'
-    end
+    return if current_household
+
+    redirect_to new_household_path, alert: '世帯を作成してください。'
   end
 end

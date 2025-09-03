@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReminderDeliverJob < ApplicationJob
   queue_as :mailers
 
@@ -6,9 +8,7 @@ class ReminderDeliverJob < ApplicationJob
     event.household.memberships.includes(:user).each do |membership|
       user = membership.user
       setting = user.notification_setting || NotificationSetting.new(email_enabled: true)
-      if setting.email_enabled?
-        EventMailer.with(user: user, event: event, phase: phase).notify.deliver_now
-      end
+      EventMailer.with(user: user, event: event, phase: phase).notify.deliver_now if setting.email_enabled?
       # PostMVP: LINE Notify / Web Push
     end
   end

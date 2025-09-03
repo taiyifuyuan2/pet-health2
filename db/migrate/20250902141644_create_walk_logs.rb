@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateWalkLogs < ActiveRecord::Migration[7.1]
   def change
     create_table :walk_logs do |t|
@@ -10,6 +12,6 @@ class CreateWalkLogs < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :walk_logs, [:pet_id, :date], unique: true
+    add_index :walk_logs, %i[pet_id date], unique: true
   end
 end

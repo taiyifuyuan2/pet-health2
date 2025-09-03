@@ -1,46 +1,48 @@
+# frozen_string_literal: true
+
 class HealthAdvisor
   def initialize(pet)
     @pet = pet
   end
-  
+
   # ペットの健康アドバイスを取得
   def get_health_advice
     advice = []
-    
+
     # 犬種固有のアドバイス
     advice.concat(breed_specific_advice)
-    
+
     # 年齢に基づくアドバイス
     advice.concat(age_based_advice)
-    
+
     # 体重に基づくアドバイス
     advice.concat(weight_based_advice)
-    
+
     # 季節に基づくアドバイス
     advice.concat(seasonal_advice)
-    
+
     advice.uniq
   end
-  
+
   # 今日の重要なアドバイスを取得
   def get_todays_advice
     get_health_advice.select { |advice| advice[:priority] == 'high' }
   end
-  
+
   # 今週のアドバイスを取得
   def get_weekly_advice
     get_health_advice.select { |advice| advice[:priority] == 'medium' }
   end
-  
+
   private
-  
+
   def breed_specific_advice
     return [] unless @pet.breed.present?
-    
+
     advice = []
     breed_name = @pet.breed.name.downcase
     age_months = @pet.age_in_months
-    
+
     # ダックスフンド・コーギーの腰・関節トラブル注意
     if (breed_name.include?('ダックスフンド') || breed_name.include?('コーギー')) && age_months >= 6
       advice << {
@@ -51,9 +53,9 @@ class HealthAdvisor
         category: 'breed_specific'
       }
     end
-    
+
     # 大型犬の股関節形成不全注意
-    if (breed_name.include?('ゴールデンレトリバー') || breed_name.include?('ラブラドールレトリバー') || 
+    if (breed_name.include?('ゴールデンレトリバー') || breed_name.include?('ラブラドールレトリバー') ||
         breed_name.include?('ジャーマンシェパード') || breed_name.include?('ボーダーコリー')) && age_months >= 4
       advice << {
         type: 'health_risk',
@@ -63,10 +65,10 @@ class HealthAdvisor
         category: 'breed_specific'
       }
     end
-    
+
     # 小型犬の膝蓋骨脱臼注意
-    if (breed_name.include?('トイプードル') || breed_name.include?('チワワ') || 
-        breed_name.include?('ポメラニアン') || breed_name.include?('マルチーズ') || 
+    if (breed_name.include?('トイプードル') || breed_name.include?('チワワ') ||
+        breed_name.include?('ポメラニアン') || breed_name.include?('マルチーズ') ||
         breed_name.include?('ヨークシャーテリア')) && age_months >= 0
       advice << {
         type: 'health_risk',
@@ -76,9 +78,9 @@ class HealthAdvisor
         category: 'breed_specific'
       }
     end
-    
+
     # 短頭種の呼吸器疾患注意
-    if (breed_name.include?('フレンチブルドッグ') || breed_name.include?('パグ') || 
+    if (breed_name.include?('フレンチブルドッグ') || breed_name.include?('パグ') ||
         breed_name.include?('シーズー')) && age_months >= 0
       advice << {
         type: 'health_risk',
@@ -88,7 +90,7 @@ class HealthAdvisor
         category: 'breed_specific'
       }
     end
-    
+
     # ビーグルの肥満注意
     if breed_name.include?('ビーグル') && age_months >= 0
       advice << {
@@ -99,7 +101,7 @@ class HealthAdvisor
         category: 'breed_specific'
       }
     end
-    
+
     # ハスキーの眼疾患注意
     if breed_name.include?('ハスキー') && age_months >= 0
       advice << {
@@ -110,14 +112,14 @@ class HealthAdvisor
         category: 'breed_specific'
       }
     end
-    
+
     advice
   end
-  
+
   def age_based_advice
     advice = []
     age_months = @pet.age_in_months
-    
+
     # 子犬期（0-6か月）
     if age_months <= 6
       advice << {
@@ -128,7 +130,7 @@ class HealthAdvisor
         category: 'age_based'
       }
     end
-    
+
     # 成犬期（6か月-7歳）
     if age_months > 6 && age_months < 84
       advice << {
@@ -139,7 +141,7 @@ class HealthAdvisor
         category: 'age_based'
       }
     end
-    
+
     # シニア期（7歳以上）
     if age_months >= 84
       advice << {
@@ -150,15 +152,15 @@ class HealthAdvisor
         category: 'age_based'
       }
     end
-    
+
     advice
   end
-  
+
   def weight_based_advice
     return [] unless @pet.weight_kg.present?
-    
+
     advice = []
-    
+
     # 肥満注意
     if @pet.weight_kg > 30
       advice << {
@@ -169,7 +171,7 @@ class HealthAdvisor
         category: 'weight_based'
       }
     end
-    
+
     # 痩せすぎ注意
     if @pet.weight_kg < 5
       advice << {
@@ -180,14 +182,14 @@ class HealthAdvisor
         category: 'weight_based'
       }
     end
-    
+
     advice
   end
-  
+
   def seasonal_advice
     advice = []
     current_month = Date.current.month
-    
+
     # 春（3-5月）
     if current_month >= 3 && current_month <= 5
       advice << {
@@ -198,7 +200,7 @@ class HealthAdvisor
         category: 'seasonal'
       }
     end
-    
+
     # 夏（6-8月）
     if current_month >= 6 && current_month <= 8
       advice << {
@@ -209,7 +211,7 @@ class HealthAdvisor
         category: 'seasonal'
       }
     end
-    
+
     # 秋（9-11月）
     if current_month >= 9 && current_month <= 11
       advice << {
@@ -220,7 +222,7 @@ class HealthAdvisor
         category: 'seasonal'
       }
     end
-    
+
     # 冬（12-2月）
     if current_month == 12 || current_month <= 2
       advice << {
@@ -231,7 +233,7 @@ class HealthAdvisor
         category: 'seasonal'
       }
     end
-    
+
     advice
   end
 end

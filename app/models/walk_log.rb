@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WalkLog < ApplicationRecord
   belongs_to :pet
 
@@ -50,7 +52,7 @@ class WalkLog < ApplicationRecord
             else
               pet.walk_logs.count
             end
-    count > 0 ? (total / count).round(1) : 0
+    count.positive? ? (total / count).round(1) : 0
   end
 
   def self.average_duration(pet, period = :this_week)
@@ -65,7 +67,7 @@ class WalkLog < ApplicationRecord
             else
               pet.walk_logs.count
             end
-    count > 0 ? (total / count).round(0) : 0
+    count.positive? ? (total / count).round(0) : 0
   end
 
   def duration_hours
@@ -74,6 +76,7 @@ class WalkLog < ApplicationRecord
 
   def pace_per_km
     return 0 if distance_km.zero?
+
     (duration_minutes / distance_km).round(1)
   end
 end

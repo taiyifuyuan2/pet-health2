@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe WalkLogsController, type: :controller do
@@ -47,28 +49,28 @@ RSpec.describe WalkLogsController, type: :controller do
   describe 'POST #create' do
     context 'with valid parameters' do
       it 'creates a new walk log' do
-        expect {
-          post :create, params: { 
-            pet_id: pet.id, 
-            walk_log: { 
-              date: Date.current, 
-              distance_km: 2.5, 
+        expect do
+          post :create, params: {
+            pet_id: pet.id,
+            walk_log: {
+              date: Date.current,
+              distance_km: 2.5,
               duration_minutes: 30,
-              note: 'Test walk' 
-            } 
+              note: 'Test walk'
+            }
           }
-        }.to change(WalkLog, :count).by(1)
+        end.to change(WalkLog, :count).by(1)
       end
 
       it 'redirects to walk logs index' do
-        post :create, params: { 
-          pet_id: pet.id, 
-          walk_log: { 
-            date: Date.current, 
-            distance_km: 2.5, 
+        post :create, params: {
+          pet_id: pet.id,
+          walk_log: {
+            date: Date.current,
+            distance_km: 2.5,
             duration_minutes: 30,
-            note: 'Test walk' 
-          } 
+            note: 'Test walk'
+          }
         }
         expect(response).to redirect_to(pet_walk_logs_path(pet))
       end
@@ -76,26 +78,26 @@ RSpec.describe WalkLogsController, type: :controller do
 
     context 'with invalid parameters' do
       it 'does not create a new walk log' do
-        expect {
-          post :create, params: { 
-            pet_id: pet.id, 
-            walk_log: { 
-              date: Date.current, 
-              distance_km: nil, 
-              duration_minutes: 30 
-            } 
+        expect do
+          post :create, params: {
+            pet_id: pet.id,
+            walk_log: {
+              date: Date.current,
+              distance_km: nil,
+              duration_minutes: 30
+            }
           }
-        }.not_to change(WalkLog, :count)
+        end.not_to change(WalkLog, :count)
       end
 
       it 'renders new template' do
-        post :create, params: { 
-          pet_id: pet.id, 
-          walk_log: { 
-            date: Date.current, 
-            distance_km: nil, 
-            duration_minutes: 30 
-          } 
+        post :create, params: {
+          pet_id: pet.id,
+          walk_log: {
+            date: Date.current,
+            distance_km: nil,
+            duration_minutes: 30
+          }
         }
         expect(response).to render_template(:new)
       end
@@ -117,20 +119,20 @@ RSpec.describe WalkLogsController, type: :controller do
   describe 'PATCH #update' do
     context 'with valid parameters' do
       it 'updates the walk log' do
-        patch :update, params: { 
-          pet_id: pet.id, 
-          id: walk_log.id, 
-          walk_log: { distance_km: 3.0 } 
+        patch :update, params: {
+          pet_id: pet.id,
+          id: walk_log.id,
+          walk_log: { distance_km: 3.0 }
         }
         walk_log.reload
         expect(walk_log.distance_km).to eq(3.0)
       end
 
       it 'redirects to walk logs index' do
-        patch :update, params: { 
-          pet_id: pet.id, 
-          id: walk_log.id, 
-          walk_log: { distance_km: 3.0 } 
+        patch :update, params: {
+          pet_id: pet.id,
+          id: walk_log.id,
+          walk_log: { distance_km: 3.0 }
         }
         expect(response).to redirect_to(pet_walk_logs_path(pet))
       end
@@ -139,20 +141,20 @@ RSpec.describe WalkLogsController, type: :controller do
     context 'with invalid parameters' do
       it 'does not update the walk log' do
         original_distance = walk_log.distance_km
-        patch :update, params: { 
-          pet_id: pet.id, 
-          id: walk_log.id, 
-          walk_log: { distance_km: nil } 
+        patch :update, params: {
+          pet_id: pet.id,
+          id: walk_log.id,
+          walk_log: { distance_km: nil }
         }
         walk_log.reload
         expect(walk_log.distance_km).to eq(original_distance)
       end
 
       it 'renders edit template' do
-        patch :update, params: { 
-          pet_id: pet.id, 
-          id: walk_log.id, 
-          walk_log: { distance_km: nil } 
+        patch :update, params: {
+          pet_id: pet.id,
+          id: walk_log.id,
+          walk_log: { distance_km: nil }
         }
         expect(response).to render_template(:edit)
       end
@@ -162,9 +164,9 @@ RSpec.describe WalkLogsController, type: :controller do
   describe 'DELETE #destroy' do
     it 'deletes the walk log' do
       walk_log # create the record
-      expect {
+      expect do
         delete :destroy, params: { pet_id: pet.id, id: walk_log.id }
-      }.to change(WalkLog, :count).by(-1)
+      end.to change(WalkLog, :count).by(-1)
     end
 
     it 'redirects to walk logs index' do

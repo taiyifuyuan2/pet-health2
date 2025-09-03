@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WeightRecord < ApplicationRecord
   belongs_to :pet
 

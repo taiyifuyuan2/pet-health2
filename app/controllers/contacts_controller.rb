@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class ContactsController < ApplicationController
-  before_action :set_contact, only: [:show, :edit, :update, :destroy]
+  before_action :set_contact, only: %i[show edit update destroy]
 
   def index
     @contacts = current_household.contacts.order(:name)
-    
+
     respond_to do |format|
       format.html
       format.json { render json: @contacts }
@@ -20,7 +22,7 @@ class ContactsController < ApplicationController
 
   def create
     @contact = current_household.contacts.build(contact_params)
-    
+
     if @contact.save
       redirect_to @contact, notice: '連絡先を登録しました'
     else
@@ -28,8 +30,7 @@ class ContactsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @contact.update(contact_params)

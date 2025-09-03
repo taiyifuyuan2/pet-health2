@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe WeightRecord, type: :model do
@@ -10,12 +12,12 @@ RSpec.describe WeightRecord, type: :model do
     it { should validate_presence_of(:weight_kg) }
     it { should validate_numericality_of(:weight_kg).is_greater_than(0) }
     it { should validate_length_of(:note).is_at_most(1000) }
-    
+
     it 'validates uniqueness of date scoped to pet' do
       pet = create(:pet)
       create(:weight_record, pet: pet, date: Date.current)
       duplicate_record = build(:weight_record, pet: pet, date: Date.current)
-      
+
       expect(duplicate_record).not_to be_valid
       expect(duplicate_record.errors[:date]).to include('has already been taken')
     end
@@ -23,7 +25,7 @@ RSpec.describe WeightRecord, type: :model do
 
   describe 'scopes' do
     let(:pet) { create(:pet) }
-    
+
     before do
       create(:weight_record, pet: pet, date: 10.days.ago)
       create(:weight_record, pet: pet, date: 5.days.ago)
@@ -49,7 +51,7 @@ RSpec.describe WeightRecord, type: :model do
 
   describe '.chart_data' do
     let(:pet) { create(:pet) }
-    
+
     before do
       create(:weight_record, pet: pet, date: 5.days.ago, weight_kg: 10.0)
       create(:weight_record, pet: pet, date: Date.current, weight_kg: 10.5)
@@ -65,11 +67,11 @@ RSpec.describe WeightRecord, type: :model do
 
   describe '.latest_weight' do
     let(:pet) { create(:pet) }
-    
+
     it 'returns the most recent weight' do
       create(:weight_record, pet: pet, date: 5.days.ago, weight_kg: 10.0)
       create(:weight_record, pet: pet, date: Date.current, weight_kg: 10.5)
-      
+
       expect(WeightRecord.latest_weight(pet)).to eq(10.5)
     end
 
@@ -80,17 +82,17 @@ RSpec.describe WeightRecord, type: :model do
 
   describe '.weight_change' do
     let(:pet) { create(:pet) }
-    
+
     it 'calculates weight change over specified period' do
       create(:weight_record, pet: pet, date: 30.days.ago, weight_kg: 10.0)
       create(:weight_record, pet: pet, date: Date.current, weight_kg: 10.5)
-      
+
       expect(WeightRecord.weight_change(pet, 30)).to eq(0.5)
     end
 
     it 'returns nil if insufficient data' do
       create(:weight_record, pet: pet, date: Date.current, weight_kg: 10.5)
-      
+
       expect(WeightRecord.weight_change(pet, 30)).to be_nil
     end
   end

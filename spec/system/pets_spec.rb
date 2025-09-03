@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Pets', type: :system do
@@ -46,12 +48,12 @@ RSpec.describe 'Pets', type: :system do
     it '新しいペットを作成できる' do
       # 世帯を作成
       create(:membership, user: user, household: household)
-      
+
       # 犬種を作成
-      breed = create(:breed, name: 'ダックスフンド')
-      
+      create(:breed, name: 'ダックスフンド')
+
       visit new_pet_path
-      
+
       fill_in '名前', with: 'テストペット'
       select '犬', from: '種類'
       select 'オス', from: '性別'
@@ -59,9 +61,9 @@ RSpec.describe 'Pets', type: :system do
       fill_in '体重 (kg)', with: '5.5'
       select 'ダックスフンド', from: '犬種'
       fill_in 'メモ', with: 'テスト用のペットです'
-      
+
       click_button 'ペットを登録'
-      
+
       # ページの内容を確認
       expect(page).to have_content('テストペット')
     end
@@ -69,11 +71,11 @@ RSpec.describe 'Pets', type: :system do
     it 'バリデーションエラーが表示される' do
       # 世帯を作成
       create(:membership, user: user, household: household)
-      
+
       visit new_pet_path
-      
+
       click_button 'ペットを登録'
-      
+
       # 同じページに留まることを確認
       expect(current_path).to eq(new_pet_path)
     end
@@ -82,11 +84,11 @@ RSpec.describe 'Pets', type: :system do
   describe 'ペット編集' do
     it 'ペット情報を更新できる' do
       visit edit_pet_path(pet)
-      
+
       fill_in '名前', with: '更新された名前'
       fill_in '体重 (kg)', with: '6.0'
       click_button 'ペット情報を更新'
-      
+
       expect(page).to have_content('ペット情報を更新しました')
       expect(page).to have_content('更新された名前')
     end
@@ -95,11 +97,11 @@ RSpec.describe 'Pets', type: :system do
   describe 'ペット削除' do
     it 'ペットを削除できる' do
       visit pet_path(pet)
-      
+
       accept_confirm do
         click_link '削除'
       end
-      
+
       expect(page).to have_content('ペットを削除しました')
       expect(page).not_to have_content(pet.name)
     end

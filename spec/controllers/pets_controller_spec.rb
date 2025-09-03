@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe PetsController, type: :controller do
@@ -77,9 +79,9 @@ RSpec.describe PetsController, type: :controller do
 
     context 'with valid parameters' do
       it 'creates a new pet' do
-        expect {
+        expect do
           post :create, params: { pet: valid_attributes }
-        }.to change(Pet, :count).by(1)
+        end.to change(Pet, :count).by(1)
       end
 
       it 'redirects to the created pet' do
@@ -92,9 +94,9 @@ RSpec.describe PetsController, type: :controller do
       let(:invalid_attributes) { { name: '' } }
 
       it 'does not create a new pet' do
-        expect {
+        expect do
           post :create, params: { pet: invalid_attributes }
-        }.not_to change(Pet, :count)
+        end.not_to change(Pet, :count)
       end
 
       it 'renders the new template' do
@@ -151,9 +153,9 @@ RSpec.describe PetsController, type: :controller do
 
   describe 'DELETE #destroy' do
     it 'destroys the pet' do
-      expect {
+      expect do
         delete :destroy, params: { id: pet.id }
-      }.to change(Pet, :count).by(-1)
+      end.to change(Pet, :count).by(-1)
     end
 
     it 'redirects to pets index' do
