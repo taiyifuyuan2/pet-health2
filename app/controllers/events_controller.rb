@@ -8,12 +8,12 @@ class EventsController < ApplicationController
       Rails.logger.info '=== EventsController#index called ==='
       Rails.logger.info "params: #{params.inspect}"
       
-      # 最小限のテスト
-      @events = []
+      # 基本的なイベント取得
+      @events = current_household.events.order(:scheduled_at)
       @month = Date.current.beginning_of_month
       @month_range = @month.beginning_of_month..@month.end_of_month
       
-      Rails.logger.info "Basic setup completed"
+      Rails.logger.info "Loaded #{@events.count} events"
     rescue => e
       Rails.logger.error "Error in EventsController#index: #{e.message}"
       Rails.logger.error e.backtrace.join("\n")
