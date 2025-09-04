@@ -511,6 +511,15 @@ a:hover {
   color: var(--text-primary);
 }
 
+.alert-success {
+  background: #f0fdf4;
+  border: 1px solid #22c55e;
+  color: #166534;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .alert-info {
   background: var(--primary-50);
   border-color: var(--primary-200);
