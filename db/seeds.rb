@@ -289,12 +289,13 @@ if Rails.env.production?
   
   # サンプルペットを作成（既存の場合は取得）
   breed = Breed.first
-  pet = Pet.find_or_create_by(user: user, name: 'ラム') do |p|
+  household = user.households.first || user.households.create!(name: 'デモハウス')
+  pet = Pet.find_or_create_by(household: household, name: 'ラム') do |p|
     p.breed = breed
-    p.birth_date = 2.years.ago.to_date
+    p.birthdate = 2.years.ago.to_date
     p.weight_kg = 7.6
-    p.gender = 'male'
-    p.neutered = false
+    p.sex = 'male'
+    p.species = 'dog'
   end
   
   # 体重記録を作成（過去30日分）
