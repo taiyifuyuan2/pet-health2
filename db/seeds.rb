@@ -277,28 +277,25 @@ health_risk_rules.each do |rule_data|
 end
 
 # サンプルユーザーとペットを作成（本番環境用）
-if Rails.env.production? && User.count == 0
+if Rails.env.production?
   puts '本番環境用のサンプルデータを作成中...'
   
-  # サンプルユーザーを作成
-  user = User.create!(
-    email: 'demo@example.com',
-    password: 'password123',
-    password_confirmation: 'password123',
-    name: 'デモユーザー'
-  )
+  # サンプルユーザーを作成（既存の場合は取得）
+  user = User.find_or_create_by(email: 'demo@example.com') do |u|
+    u.password = 'password123'
+    u.password_confirmation = 'password123'
+    u.name = 'デモユーザー'
+  end
   
-  # サンプルペットを作成
+  # サンプルペットを作成（既存の場合は取得）
   breed = Breed.first
-  pet = Pet.create!(
-    user: user,
-    name: 'ラム',
-    breed: breed,
-    birth_date: 2.years.ago.to_date,
-    weight_kg: 7.6,
-    gender: 'male',
-    neutered: false
-  )
+  pet = Pet.find_or_create_by(user: user, name: 'ラム') do |p|
+    p.breed = breed
+    p.birth_date = 2.years.ago.to_date
+    p.weight_kg = 7.6
+    p.gender = 'male'
+    p.neutered = false
+  end
   
   # 体重記録を作成（過去30日分）
   (0..29).each do |i|
