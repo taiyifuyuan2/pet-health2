@@ -280,12 +280,13 @@ end
 if Rails.env.production?
   puts '本番環境用のサンプルデータを作成中...'
   
-  # サンプルユーザーを作成（既存の場合は取得）
-  user = User.find_or_create_by(email: 'demo@example.com') do |u|
-    u.password = 'password123'
-    u.password_confirmation = 'password123'
-    u.name = 'デモユーザー'
-  end
+  begin
+    # サンプルユーザーを作成（既存の場合は取得）
+    user = User.find_or_create_by(email: 'demo@example.com') do |u|
+      u.password = 'password123'
+      u.password_confirmation = 'password123'
+      u.name = 'デモユーザー'
+    end
   
   # サンプルペットを作成（既存の場合は取得）
   breed = Breed.first
@@ -306,12 +307,10 @@ if Rails.env.production?
     weight = (base_weight + weight_variation).round(1)
     
     if rand < 0.8  # 80%の確率で記録を作成
-      WeightRecord.create!(
-        pet: pet,
-        date: date,
-        weight_kg: weight,
-        note: ['元気に過ごしています', '食欲良好', '少し疲れ気味'].sample
-      )
+      WeightRecord.find_or_create_by(pet: pet, date: date) do |record|
+        record.weight_kg = weight
+        record.note = ['元気に過ごしています', '食欲良好', '少し疲れ気味'].sample
+      end
     end
     
     # 散歩ログを作成（過去30日分）
@@ -324,21 +323,23 @@ if Rails.env.production?
       
       duration = (distance * rand(15..25)).round(0)
       
-      WalkLog.create!(
-        pet: pet,
-        date: date,
-        distance_km: distance,
-        duration_minutes: duration,
-        note: ['公園でたくさん遊びました', '他の犬と仲良くできました', '雨の日は短めに', '新しい散歩コースを発見'].sample
-      )
+      WalkLog.find_or_create_by(pet: pet, date: date) do |log|
+        log.distance_km = distance
+        log.duration_minutes = duration
+        log.note = ['公園でたくさん遊びました', '他の犬と仲良くできました', '雨の日は短めに', '新しい散歩コースを発見'].sample
+      end
     end
   end
   
-  puts "サンプルデータ作成完了！"
-  puts "- ユーザー: #{User.count}件"
-  puts "- ペット: #{Pet.count}件"
-  puts "- 体重記録: #{WeightRecord.count}件"
-  puts "- 散歩ログ: #{WalkLog.count}件"
+    puts "サンプルデータ作成完了！"
+    puts "- ユーザー: #{User.count}件"
+    puts "- ペット: #{Pet.count}件"
+    puts "- 体重記録: #{WeightRecord.count}件"
+    puts "- 散歩ログ: #{WalkLog.count}件"
+  rescue => e
+    puts "サンプルデータ作成中にエラーが発生しました: #{e.message}"
+    puts "既存のデータを使用します。"
+  end
 end
 
 puts 'シードデータの作成が完了しました！'
