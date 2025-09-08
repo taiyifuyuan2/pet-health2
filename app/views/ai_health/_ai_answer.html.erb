@@ -1,0 +1,65 @@
+<div class="ai-answer-content">
+  <div class="ai-answer-header">
+    <h4>AIの回答</h4>
+    <span class="ai-badge">AI生成</span>
+  </div>
+  
+  <div class="ai-answer-text">
+    <%= simple_format(answer) %>
+  </div>
+  
+  <div class="ai-answer-meta">
+    <small class="ai-answer-timestamp">
+      回答時刻: <%= Time.current.strftime("%Y年%m月%d日 %H:%M") %>
+    </small>
+  </div>
+</div>
+
+<style>
+.ai-answer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.ai-answer-header h4 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.ai-badge {
+  background: #4F46E5;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.ai-answer-text {
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.ai-answer-text p {
+  margin-bottom: 8px;
+}
+
+.ai-answer-text p:last-child {
+  margin-bottom: 0;
+}
+
+.ai-answer-meta {
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.ai-answer-timestamp {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+</style>

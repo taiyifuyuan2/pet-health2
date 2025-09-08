@@ -266,12 +266,83 @@
     </div>
   </div>
 
-  <!-- 健康アドバイス -->
+  <!-- AI健康アドバイス -->
+  <div class="pet-detail-card">
+    <div class="card-header">
+      <h2 class="card-title">
+        <%= image_tag "icons/check.svg", alt: "AI健康アドバイス", class: "icon-inline" %>
+        AI健康アドバイス
+      </h2>
+      <div class="card-actions">
+        <button class="btn btn-sm btn-primary" onclick="loadAiAdvice()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+          </svg>
+          AIアドバイスを取得
+        </button>
+      </div>
+    </div>
+    <div id="ai-advice-container" class="advice-content">
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="#4F46E5"/>
+          </svg>
+        </div>
+        <p>AIによる個別化された健康アドバイスを取得できます</p>
+        <button class="btn btn-primary" onclick="loadAiAdvice()">AIアドバイスを取得</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI健康相談 -->
+  <div class="pet-detail-card">
+    <div class="card-header">
+      <h2 class="card-title">
+        <%= image_tag "icons/check.svg", alt: "AI健康相談", class: "icon-inline" %>
+        AI健康相談
+      </h2>
+    </div>
+    <div class="ai-question-container">
+      <%= render 'ai_health/ai_question_form' %>
+    </div>
+  </div>
+
+  <!-- AI健康分析 -->
+  <div class="pet-detail-card">
+    <div class="card-header">
+      <h2 class="card-title">
+        <%= image_tag "icons/check.svg", alt: "AI健康分析", class: "icon-inline" %>
+        AI健康分析
+      </h2>
+      <div class="card-actions">
+        <button class="btn btn-sm btn-success" onclick="loadAiAnalysis()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 19C-1 5 5 -3 19 9C12 16 12 16 9 19Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          健康分析を実行
+        </button>
+      </div>
+    </div>
+    <div id="ai-analysis-container" class="analysis-content">
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 19C-1 5 5 -3 19 9C12 16 12 16 9 19Z" fill="#10b981"/>
+          </svg>
+        </div>
+        <p>AIによる健康状態の総合分析を実行できます</p>
+        <button class="btn btn-success" onclick="loadAiAnalysis()">健康分析を実行</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 従来の健康アドバイス -->
   <div class="pet-detail-card">
     <div class="card-header">
       <h2 class="card-title">
         <%= image_tag "icons/check.svg", alt: "健康アドバイス", class: "icon-inline" %>
-        健康アドバイス
+        基本健康アドバイス
       </h2>
     </div>
     <div class="advice-content">
@@ -342,3 +413,98 @@
     </div>
   </div>
 </div>
+
+<script>
+// グローバルスコープに関数を定義
+window.loadAiAdvice = function() {
+  const petId = <%= @pet.id %>;
+  const container = document.getElementById('ai-advice-container');
+  const button = event.target;
+  const originalText = button.innerHTML;
+  
+  button.innerHTML = '<div class="loading-spinner"></div>AIが分析中...';
+  button.disabled = true;
+  
+  fetch(`/pets/${petId}/ai_advice`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'text/html',
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.text())
+  .then(html => {
+    container.innerHTML = html;
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    container.innerHTML = '<div class="empty-state"><p>AIアドバイスの取得に失敗しました。もう一度お試しください。</p></div>';
+  })
+  .finally(() => {
+    button.innerHTML = originalText;
+    button.disabled = false;
+  });
+};
+
+window.loadAiAnalysis = function() {
+  const petId = <%= @pet.id %>;
+  const container = document.getElementById('ai-analysis-container');
+  const button = event.target;
+  const originalText = button.innerHTML;
+  
+  button.innerHTML = '<div class="loading-spinner"></div>AIが分析中...';
+  button.disabled = true;
+  
+  fetch(`/pets/${petId}/ai_analysis`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'text/html',
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.text())
+  .then(html => {
+    container.innerHTML = html;
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    container.innerHTML = '<div class="empty-state"><p>AI分析の取得に失敗しました。もう一度お試しください。</p></div>';
+  })
+  .finally(() => {
+    button.innerHTML = originalText;
+    button.disabled = false;
+  });
+};
+</script>
+
+<style>
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #4F46E5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 6px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ai-question-container {
+  padding: 0;
+}
+
+.analysis-content {
+  min-height: 200px;
+}
+</style>

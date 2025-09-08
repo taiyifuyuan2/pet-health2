@@ -1,0 +1,234 @@
+<div class="ai-question-card">
+  <div class="ai-question-header">
+    <div class="ai-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+        <path d="M9.09 9A3 3 0 0 1 15 9C15 10.5 12 12 12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3 class="ai-question-title">AI健康相談</h3>
+  </div>
+  
+  <form id="ai-question-form" class="ai-question-form">
+    <div class="form-group">
+      <label for="health-question" class="form-label">ペットの健康について質問してください</label>
+      <textarea 
+        id="health-question" 
+        name="question" 
+        class="form-control" 
+        rows="4" 
+        placeholder="例: 最近食欲がないのですが、何か問題がありますか？"
+        required
+      ></textarea>
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" id="submit-question">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        AIに質問する
+      </button>
+    </div>
+  </form>
+  
+  <div id="ai-answer-container" class="ai-answer-container" style="display: none;">
+    <!-- AIの回答がここに表示されます -->
+  </div>
+</div>
+
+<style>
+.ai-question-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 16px 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.ai-question-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.ai-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #f3f4f6;
+  border-radius: 50%;
+  color: #4F46E5;
+}
+
+.ai-question-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  color: #1f2937;
+}
+
+.ai-question-form {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background: #4F46E5;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #4338ca;
+}
+
+.btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.btn svg {
+  margin-right: 6px;
+}
+
+.ai-answer-container {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border-left: 4px solid #4F46E5;
+}
+
+.ai-answer-content {
+  color: #374151;
+  line-height: 1.6;
+}
+
+.ai-answer-meta {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.ai-answer-timestamp {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #4F46E5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 6px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('ai-question-form');
+  const submitButton = document.getElementById('submit-question');
+  const answerContainer = document.getElementById('ai-answer-container');
+  
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const question = document.getElementById('health-question').value.trim();
+    if (!question) {
+      alert('質問を入力してください。');
+      return;
+    }
+    
+    // ボタンを無効化してローディング状態に
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<div class="loading-spinner"></div>AIが回答中...';
+    
+    // 回答コンテナを表示
+    answerContainer.style.display = 'block';
+    answerContainer.innerHTML = '<div class="loading-spinner"></div>AIが回答を生成しています...';
+    
+    // AIに質問を送信
+    fetch(`/pets/<%= @pet.id %>/ai_question`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'text/html',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({ question: question })
+    })
+    .then(response => response.text())
+    .then(html => {
+      answerContainer.innerHTML = html;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      answerContainer.innerHTML = '<div class="ai-answer-content">申し訳ございません。エラーが発生しました。もう一度お試しください。</div>';
+    })
+    .finally(() => {
+      // ボタンを元に戻す
+      submitButton.disabled = false;
+      submitButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>AIに質問する';
+    });
+  });
+});
+</script>

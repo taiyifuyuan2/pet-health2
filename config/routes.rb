@@ -21,6 +21,11 @@ Rails.application.routes.draw do
     resources :events, shallow: true
     resources :weight_records
     resources :walk_logs
+    
+    # AI健康アドバイス機能
+    get :ai_advice, to: 'ai_health#advice'
+    post :ai_question, to: 'ai_health#question'
+    get :ai_analysis, to: 'ai_health#analysis'
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

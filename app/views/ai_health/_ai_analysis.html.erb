@@ -1,0 +1,160 @@
+<div class="ai-analysis-card">
+  <div class="ai-analysis-header">
+    <div class="ai-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 19C-1 5 5 -3 19 9C12 16 12 16 9 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 9H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 9H15.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 15H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3 class="ai-analysis-title">AI健康分析</h3>
+    <span class="ai-badge">AI分析</span>
+  </div>
+  
+  <div class="ai-analysis-content">
+    <div class="ai-analysis-text">
+      <%= simple_format(analysis[:content]) %>
+    </div>
+    
+    <div class="ai-analysis-meta">
+      <small class="ai-timestamp">
+        分析時刻: <%= analysis[:generated_at].strftime("%Y年%m月%d日 %H:%M") %>
+      </small>
+    </div>
+  </div>
+  
+  <div class="ai-analysis-actions">
+    <button class="btn btn-sm btn-outline-primary" onclick="refreshAiAnalysis()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14L18.36 18.36A9 9 0 0 1 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      再分析
+    </button>
+  </div>
+</div>
+
+<style>
+.ai-analysis-card {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.ai-analysis-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.ai-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.ai-analysis-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+.ai-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.ai-analysis-content {
+  margin-bottom: 16px;
+}
+
+.ai-analysis-text {
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.ai-analysis-text p {
+  margin-bottom: 12px;
+}
+
+.ai-analysis-text p:last-child {
+  margin-bottom: 0;
+}
+
+.ai-analysis-meta {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ai-timestamp {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+}
+
+.ai-analysis-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-outline-primary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  transition: all 0.2s;
+}
+
+.btn-outline-primary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+.btn-outline-primary svg {
+  margin-right: 4px;
+}
+</style>
+
+<script>
+// グローバルスコープに関数を定義
+window.refreshAiAnalysis = function() {
+  const petId = <%= @pet.id %>;
+  const button = event.target.closest('button');
+  const originalText = button.innerHTML;
+  
+  button.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 分析中...';
+  button.disabled = true;
+  
+  fetch(`/pets/${petId}/ai_analysis`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'text/html',
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.text())
+  .then(html => {
+    document.querySelector('.ai-analysis-card').outerHTML = html;
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    button.innerHTML = originalText;
+    button.disabled = false;
+    alert('AI分析の取得に失敗しました。');
+  });
+};
+</script>
