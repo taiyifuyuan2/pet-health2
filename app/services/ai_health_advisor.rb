@@ -113,7 +113,7 @@ class AiHealthAdvisor
     }
 
     # 最近の体重記録を取得
-    recent_weights = @pet.weight_records.order(recorded_at: :desc).limit(5).pluck(:weight_kg)
+    recent_weights = @pet.weight_records.order(date: :desc).limit(5).pluck(:weight_kg)
     weight_trend = calculate_weight_trend(recent_weights)
 
     # 最近の散歩記録を取得

@@ -75,7 +75,7 @@ RSpec.describe AiHealthAdvisor, type: :service do
     before do
       # 体重記録と散歩記録のモック
       weight_records_relation = double('weight_records_relation')
-      allow(weight_records_relation).to receive(:order).with(recorded_at: :desc).and_return(weight_records_relation)
+      allow(weight_records_relation).to receive(:order).with(date: :desc).and_return(weight_records_relation)
       allow(weight_records_relation).to receive(:limit).with(5).and_return(weight_records_relation)
       allow(weight_records_relation).to receive(:pluck).with(:weight_kg).and_return([25.0, 24.5, 24.0])
       allow(pet).to receive(:weight_records).and_return(weight_records_relation)
