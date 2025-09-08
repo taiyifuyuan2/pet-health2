@@ -2081,9 +2081,10 @@ main {
 }
 
 .auth-title {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 800;
   margin: 0 0 1rem 0;
+  white-space: nowrap;
 }
 
 .auth-subtitle {
@@ -3091,7 +3092,8 @@ footer {
   }
   
   .auth-title {
-    font-size: 2.75rem;
+    font-size: 2.25rem;
+    white-space: nowrap;
   }
   
   .auth-subtitle {
@@ -3398,7 +3400,8 @@ footer {
   }
   
   .auth-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    white-space: nowrap;
   }
   
   .auth-subtitle {
