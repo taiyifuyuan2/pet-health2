@@ -3,7 +3,7 @@
 class AiHealthAdvisor
   def initialize(pet)
     @pet = pet
-    @client = OpenAI::Client.new(access_token: Rails.application.credentials.openai_api_key)
+    @client = OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
   end
 
   # AIによる個別化された健康アドバイスを生成
