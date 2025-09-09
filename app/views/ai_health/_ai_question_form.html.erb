@@ -192,6 +192,8 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
     
     const question = document.getElementById('health-question').value.trim();
+    console.log('Question submitted:', question);
+    
     if (!question) {
       alert('質問を入力してください。');
       return;
@@ -205,24 +207,43 @@ document.addEventListener('DOMContentLoaded', function() {
     answerContainer.style.display = 'block';
     answerContainer.innerHTML = '<div class="loading-spinner"></div>AIが回答を生成しています...';
     
+    // CSRFトークンを取得
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    console.log('CSRF Token:', csrfToken);
+    
     // AIに質問を送信
-    fetch(`/pets/<%= @pet.id %>/ai_question`, {
+    const url = `/pets/<%= @pet.id %>/ai_question`;
+    console.log('Sending request to:', url);
+    
+    fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'text/html',
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'X-CSRF-Token': csrfToken,
         'X-Requested-With': 'XMLHttpRequest'
       },
       body: JSON.stringify({ question: question })
     })
-    .then(response => response.text())
+    .then(response => {
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+      if (!response.ok) {
+        return response.text().then(text => {
+          console.error('Error response body:', text);
+          throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+        });
+      }
+      return response.text();
+    })
     .then(html => {
+      console.log('Received HTML length:', html.length);
+      console.log('Received HTML preview:', html.substring(0, 200));
       answerContainer.innerHTML = html;
     })
     .catch(error => {
-      console.error('Error:', error);
-      answerContainer.innerHTML = '<div class="ai-answer-content">申し訳ございません。エラーが発生しました。もう一度お試しください。</div>';
+      console.error('Error details:', error);
+      answerContainer.innerHTML = '<div class="ai-answer-content">申し訳ございません。エラーが発生しました。もう一度お試しください。<br>エラー詳細: ' + error.message + '</div>';
     })
     .finally(() => {
       // ボタンを元に戻す
