@@ -165,6 +165,36 @@
   font-size: 0.8rem;
 }
 
+/* タイピングアニメーション */
+.typing-animation {
+  min-height: 1.5em;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.typing-cursor {
+  animation: blink 1s infinite;
+  font-weight: bold;
+  color: #4F46E5;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.static-content {
+  display: none;
+}
+
+.typing-complete .static-content {
+  display: block;
+}
+
+.typing-complete .typing-animation {
+  display: none;
+}
+
 .loading-spinner {
   display: inline-block;
   width: 16px;
@@ -183,6 +213,46 @@
 </style>
 
 <script>
+// タイピングアニメーション関数
+function startTypingAnimation() {
+  const typingContent = document.getElementById('typing-content');
+  const staticContent = document.getElementById('static-content');
+  const answerText = document.getElementById('ai-answer-text');
+  
+  if (typingContent && staticContent && answerText) {
+    // 静的コンテンツを非表示にして、タイピングアニメーションを開始
+    staticContent.style.display = 'none';
+    typingContent.style.display = 'block';
+    
+    // 元のテキストを取得
+    const originalText = staticContent.innerHTML;
+    
+    // HTMLタグを除去してプレーンテキストを取得
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = originalText;
+    const plainText = tempDiv.textContent || tempDiv.innerText || '';
+    
+    // タイピングアニメーションを実行
+    let currentIndex = 0;
+    const typingSpeed = 30; // ミリ秒
+    
+    function typeText() {
+      if (currentIndex < plainText.length) {
+        const currentText = plainText.substring(0, currentIndex + 1);
+        typingContent.innerHTML = currentText + '<span class="typing-cursor">|</span>';
+        currentIndex++;
+        setTimeout(typeText, typingSpeed);
+      } else {
+        // タイピング完了
+        answerText.classList.add('typing-complete');
+      }
+    }
+    
+    // 少し遅延してからタイピング開始
+    setTimeout(typeText, 500);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('ai-question-form');
   const submitButton = document.getElementById('submit-question');
@@ -240,6 +310,11 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Received HTML length:', html.length);
       console.log('Received HTML preview:', html.substring(0, 200));
       answerContainer.innerHTML = html;
+      
+      // タイピングアニメーションを開始
+      setTimeout(() => {
+        startTypingAnimation();
+      }, 100);
     })
     .catch(error => {
       console.error('Error details:', error);

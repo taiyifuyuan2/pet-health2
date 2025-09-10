@@ -13,8 +13,13 @@
   </div>
   
   <div class="ai-analysis-content">
-    <div class="ai-analysis-text">
-      <%= simple_format(analysis[:content]) %>
+    <div class="ai-analysis-text" id="ai-analysis-text">
+      <div class="typing-animation" id="typing-content" style="display: none;">
+        <span class="typing-cursor">|</span>
+      </div>
+      <div class="static-content" id="static-content">
+        <%= simple_format(analysis[:content]) %>
+      </div>
     </div>
     
     <div class="ai-analysis-meta">
@@ -146,34 +151,80 @@
 .btn-outline-primary svg {
   margin-right: 4px;
 }
+
+/* タイピングアニメーション */
+.typing-animation {
+  min-height: 1.5em;
+  line-height: 1.6;
+  color: #000000;
+}
+
+.typing-cursor {
+  animation: blink 1s infinite;
+  font-weight: bold;
+  color: #4F46E5;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.static-content {
+  display: none;
+}
+
+.typing-complete .static-content {
+  display: block;
+}
+
+.typing-complete .typing-animation {
+  display: none;
+}
 </style>
 
 <script>
-// グローバルスコープに関数を定義
-window.refreshAiAnalysis = function() {
-  const petId = <%= @pet.id %>;
-  const button = event.target.closest('button');
-  const originalText = button.innerHTML;
+// タイピングアニメーション関数
+function startTypingAnimation() {
+  const typingContent = document.getElementById('typing-content');
+  const staticContent = document.getElementById('static-content');
+  const analysisText = document.getElementById('ai-analysis-text');
   
-  button.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 分析中...';
-  button.disabled = true;
-  
-  fetch(`/pets/${petId}/ai_analysis`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'text/html',
-      'X-Requested-With': 'XMLHttpRequest'
+  if (typingContent && staticContent && analysisText) {
+    // 静的コンテンツを非表示にして、タイピングアニメーションを開始
+    staticContent.style.display = 'none';
+    typingContent.style.display = 'block';
+    
+    // 元のテキストを取得
+    const originalText = staticContent.innerHTML;
+    
+    // HTMLタグを除去してプレーンテキストを取得
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = originalText;
+    const plainText = tempDiv.textContent || tempDiv.innerText || '';
+    
+    // タイピングアニメーションを実行
+    let currentIndex = 0;
+    const typingSpeed = 30; // ミリ秒
+    
+    function typeText() {
+      if (currentIndex < plainText.length) {
+        const currentText = plainText.substring(0, currentIndex + 1);
+        typingContent.innerHTML = currentText + '<span class="typing-cursor">|</span>';
+        currentIndex++;
+        setTimeout(typeText, typingSpeed);
+      } else {
+        // タイピング完了
+        analysisText.classList.add('typing-complete');
+      }
     }
-  })
-  .then(response => response.text())
-  .then(html => {
-    document.querySelector('.ai-analysis-card').outerHTML = html;
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    button.innerHTML = originalText;
-    button.disabled = false;
-    alert('AI分析の取得に失敗しました。');
-  });
-};
+    
+    // 少し遅延してからタイピング開始
+    setTimeout(typeText, 500);
+  }
+}
+
+// ページ読み込み時にタイピングアニメーションを開始
+document.addEventListener('DOMContentLoaded', startTypingAnimation);
+
 </script>

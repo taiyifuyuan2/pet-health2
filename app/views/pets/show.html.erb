@@ -508,3 +508,92 @@ window.loadAiAnalysis = function() {
   min-height: 200px;
 }
 </style>
+
+<script>
+window.loadAiAnalysis = function() {
+  const petId = <%= @pet.id %>;
+  const container = document.getElementById('ai-analysis-container');
+  const button = event.target;
+  const originalText = button.innerHTML;
+
+  button.innerHTML = '<div class="loading-spinner"></div>AIが分析中...';
+  button.disabled = true;
+
+  fetch(`/pets/${petId}/ai_analysis`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'text/html',
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.text())
+  .then(html => {
+    container.innerHTML = html;
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    container.innerHTML = '<div class="empty-state"><p>AI分析の取得に失敗しました。もう一度お試しください。</p></div>';
+  })
+  .finally(() => {
+    button.innerHTML = originalText;
+    button.disabled = false;
+  });
+};
+
+// グローバル関数を定義
+window.refreshAiAdvice = function() {
+  const petId = <%= @pet.id %>;
+  const button = event.target.closest('button');
+  const originalText = button.innerHTML;
+  
+  button.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 生成中...';
+  button.disabled = true;
+  
+  fetch(`/pets/${petId}/ai_advice`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'text/html',
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.text())
+  .then(html => {
+    document.querySelector('.ai-advice-card').outerHTML = html;
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    button.innerHTML = originalText;
+    button.disabled = false;
+    alert('AIアドバイスの取得に失敗しました。');
+  });
+};
+
+window.refreshAiAnalysis = function() {
+  const petId = <%= @pet.id %>;
+  const button = event.target.closest('button');
+  const originalText = button.innerHTML;
+  
+  button.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 分析中...';
+  button.disabled = true;
+  
+  fetch(`/pets/${petId}/ai_analysis`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'text/html',
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.text())
+  .then(html => {
+    document.querySelector('.ai-analysis-card').outerHTML = html;
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    button.innerHTML = originalText;
+    button.disabled = false;
+    alert('AI分析の取得に失敗しました。');
+  });
+};
+
+
+</script>

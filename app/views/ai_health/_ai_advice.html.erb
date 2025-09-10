@@ -12,8 +12,13 @@
   </div>
   
   <div class="ai-advice-content">
-    <div class="ai-advice-text">
-      <%= simple_format(advice[:content]) %>
+    <div class="ai-advice-text" id="ai-advice-text">
+      <div class="typing-animation" id="typing-content" style="display: none;">
+        <span class="typing-cursor">|</span>
+      </div>
+      <div class="static-content" id="static-content">
+        <%= simple_format(advice[:content]) %>
+      </div>
     </div>
     
     <div class="ai-advice-meta">
@@ -128,6 +133,38 @@
   font-weight: 600;
 }
 
+/* タイピングアニメーション */
+.typing-animation {
+  min-height: 1.5em;
+  line-height: 1.6;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.typing-cursor {
+  animation: blink 1s infinite;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.static-content {
+  display: none;
+}
+
+.typing-complete .static-content {
+  display: block;
+}
+
+.typing-complete .typing-animation {
+  display: none;
+}
+
 .ai-advice-meta {
   margin-top: 12px;
   padding-top: 12px;
@@ -163,31 +200,47 @@
 </style>
 
 <script>
-// グローバルスコープに関数を定義
-window.refreshAiAdvice = function() {
-  const petId = <%= @pet.id %>;
-  const button = event.target.closest('button');
-  const originalText = button.innerHTML;
+// タイピングアニメーション関数
+function startTypingAnimation() {
+  const typingContent = document.getElementById('typing-content');
+  const staticContent = document.getElementById('static-content');
+  const adviceText = document.getElementById('ai-advice-text');
   
-  button.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 生成中...';
-  button.disabled = true;
-  
-  fetch(`/pets/${petId}/ai_advice`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'text/html',
-      'X-Requested-With': 'XMLHttpRequest'
+  if (typingContent && staticContent && adviceText) {
+    // 静的コンテンツを非表示にして、タイピングアニメーションを開始
+    staticContent.style.display = 'none';
+    typingContent.style.display = 'block';
+    
+    // 元のテキストを取得
+    const originalText = staticContent.innerHTML;
+    
+    // HTMLタグを除去してプレーンテキストを取得
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = originalText;
+    const plainText = tempDiv.textContent || tempDiv.innerText || '';
+    
+    // タイピングアニメーションを実行
+    let currentIndex = 0;
+    const typingSpeed = 30; // ミリ秒
+    
+    function typeText() {
+      if (currentIndex < plainText.length) {
+        const currentText = plainText.substring(0, currentIndex + 1);
+        typingContent.innerHTML = currentText + '<span class="typing-cursor">|</span>';
+        currentIndex++;
+        setTimeout(typeText, typingSpeed);
+      } else {
+        // タイピング完了
+        adviceText.classList.add('typing-complete');
+      }
     }
-  })
-  .then(response => response.text())
-  .then(html => {
-    document.querySelector('.ai-advice-card').outerHTML = html;
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    button.innerHTML = originalText;
-    button.disabled = false;
-    alert('AIアドバイスの取得に失敗しました。');
-  });
-};
+    
+    // 少し遅延してからタイピング開始
+    setTimeout(typeText, 500);
+  }
+}
+
+// ページ読み込み時にタイピングアニメーションを開始
+document.addEventListener('DOMContentLoaded', startTypingAnimation);
+
 </script>

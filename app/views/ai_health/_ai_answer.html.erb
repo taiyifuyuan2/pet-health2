@@ -4,8 +4,13 @@
     <span class="ai-badge">AI生成</span>
   </div>
   
-  <div class="ai-answer-text">
-    <%= simple_format(answer) %>
+  <div class="ai-answer-text" id="ai-answer-text">
+    <div class="typing-animation" id="typing-content" style="display: none;">
+      <span class="typing-cursor">|</span>
+    </div>
+    <div class="static-content" id="static-content">
+      <%= simple_format(answer) %>
+    </div>
   </div>
   
   <div class="ai-answer-meta">
@@ -79,4 +84,74 @@
   color: #6b7280;
   font-size: 0.8rem;
 }
+
+/* タイピングアニメーション */
+.typing-animation {
+  min-height: 1.5em;
+  line-height: 1.6;
+}
+
+.typing-cursor {
+  animation: blink 1s infinite;
+  font-weight: bold;
+  color: #4F46E5;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.static-content {
+  display: none;
+}
+
+.typing-complete .static-content {
+  display: block;
+}
+
+.typing-complete .typing-animation {
+  display: none;
+}
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const typingContent = document.getElementById('typing-content');
+  const staticContent = document.getElementById('static-content');
+  const answerText = document.getElementById('ai-answer-text');
+  
+  if (typingContent && staticContent && answerText) {
+    // 静的コンテンツを非表示にして、タイピングアニメーションを開始
+    staticContent.style.display = 'none';
+    typingContent.style.display = 'block';
+    
+    // 元のテキストを取得
+    const originalText = staticContent.innerHTML;
+    
+    // HTMLタグを除去してプレーンテキストを取得
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = originalText;
+    const plainText = tempDiv.textContent || tempDiv.innerText || '';
+    
+    // タイピングアニメーションを実行
+    let currentIndex = 0;
+    const typingSpeed = 30; // ミリ秒
+    
+    function typeText() {
+      if (currentIndex < plainText.length) {
+        const currentText = plainText.substring(0, currentIndex + 1);
+        typingContent.innerHTML = currentText + '<span class="typing-cursor">|</span>';
+        currentIndex++;
+        setTimeout(typeText, typingSpeed);
+      } else {
+        // タイピング完了
+        answerText.classList.add('typing-complete');
+      }
+    }
+    
+    // 少し遅延してからタイピング開始
+    setTimeout(typeText, 500);
+  }
+});
+</script>

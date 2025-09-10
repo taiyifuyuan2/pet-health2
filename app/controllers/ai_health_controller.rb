@@ -11,7 +11,7 @@ class AiHealthController < ApplicationController
     @ai_advice = @ai_advisor.generate_personalized_advice
 
     respond_to do |format|
-      format.html { render partial: 'ai_advice', locals: { advice: @ai_advice } }
+      format.html { render partial: 'ai_health/ai_advice', locals: { advice: @ai_advice, pet: @pet } }
       format.json { render json: @ai_advice }
     end
   end
@@ -35,7 +35,7 @@ class AiHealthController < ApplicationController
       Rails.logger.info "AI Answer generated: #{@answer[0..100]}..."
 
       respond_to do |format|
-        format.html { render partial: 'ai_answer', locals: { question: question_text, answer: @answer } }
+        format.html { render partial: 'ai_health/ai_answer', locals: { question: question_text, answer: @answer } }
         format.json { render json: { question: question_text, answer: @answer } }
       end
     rescue => e
@@ -44,7 +44,7 @@ class AiHealthController < ApplicationController
       
       error_message = "申し訳ございません。AIサービスでエラーが発生しました。"
       respond_to do |format|
-        format.html { render partial: 'ai_answer', locals: { question: question_text, answer: error_message } }
+        format.html { render partial: 'ai_health/ai_answer', locals: { question: question_text, answer: error_message } }
         format.json { render json: { error: error_message }, status: :internal_server_error }
       end
     end
@@ -56,7 +56,7 @@ class AiHealthController < ApplicationController
     @analysis = @ai_advisor.analyze_health_condition
 
     respond_to do |format|
-      format.html { render partial: 'ai_analysis', locals: { analysis: @analysis } }
+      format.html { render partial: 'ai_health/ai_analysis', locals: { analysis: @analysis, pet: @pet } }
       format.json { render json: @analysis }
     end
   end
