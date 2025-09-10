@@ -19,14 +19,31 @@ class EventsController < ApplicationController
 
       @month_range = @month.beginning_of_month..@month.end_of_month
       
+      # ステータスフィルタリング
+      @status_filter = params[:status]
+      
       # 実際のイベントデータを取得
       if current_household
         @events = current_household.events
                                  .where(scheduled_at: @month_range)
                                  .order(:scheduled_at)
-        Rails.logger.info "Loaded #{@events.count} events from household for #{@month.strftime('%Y年%m月')}"
+        
+        # ステータスフィルタリングを適用
+        case @status_filter
+        when 'overdue'
+          @events = @events.where(status: 'pending').where('scheduled_at < ?', Time.current)
+          @page_title = '未完了の予定'
+        when 'completed'
+          @events = @events.where(status: 'completed')
+          @page_title = '完了した予定'
+        else
+          @page_title = '今月の予定'
+        end
+        
+        Rails.logger.info "Loaded #{@events.count} events from household for #{@month.strftime('%Y年%m月')} with status: #{@status_filter}"
       else
         @events = []
+        @page_title = '今月の予定'
         Rails.logger.info "No household found, using empty events array"
       end
       
@@ -38,6 +55,7 @@ class EventsController < ApplicationController
       @events = []
       @month = Date.current.beginning_of_month
       @month_range = @month.beginning_of_month..@month.end_of_month
+      @page_title = '今月の予定'
     end
   end
 

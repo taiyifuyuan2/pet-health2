@@ -3,9 +3,17 @@
   <div class="events-header-content">
     <h1 class="events-title">
       <%= image_tag "icons/calendar.jpeg", alt: "予定", class: "icon-inline" %>
-      予定一覧
+      <%= @page_title || '予定一覧' %>
     </h1>
-    <p class="events-subtitle">ペットの健康管理スケジュール</p>
+    <p class="events-subtitle">
+      <% if @status_filter == 'overdue' %>
+        期限を過ぎた未完了の予定
+      <% elsif @status_filter == 'completed' %>
+        完了した予定の一覧
+      <% else %>
+        ペットの健康管理スケジュール
+      <% end %>
+    </p>
   </div>
   <div class="events-header-actions">
     <%= link_to "予定を追加", new_event_path, class: "btn btn-primary" %>

@@ -8,7 +8,7 @@
 
 <!-- 統計カード -->
 <div class="stats-grid">
-  <div class="stat-card">
+  <div class="stat-card clickable-card" onclick="window.location.href='<%= events_path %>'">
     <div class="stat-icon">
       <%= image_tag "icons/calendar.jpeg", alt: "カレンダー", class: "icon" %>
     </div>
@@ -16,17 +16,29 @@
       <div class="stat-number"><%= @upcoming_events.count %></div>
       <div class="stat-label">今月の予定</div>
     </div>
+    <div class="card-arrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
   </div>
-  <div class="stat-card">
+  
+  <div class="stat-card clickable-card" onclick="window.location.href='<%= events_path(status: 'overdue') %>'">
     <div class="stat-icon">
       <%= image_tag "icons/check.svg", alt: "チェック", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= @overdue_events.count %></div>
-     <div class="stat-label">未完了</div>
+      <div class="stat-label">未完了</div>
+    </div>
+    <div class="card-arrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
   </div>
-  <div class="stat-card">
+  
+  <div class="stat-card clickable-card" onclick="window.location.href='<%= events_path(status: 'completed') %>'">
     <div class="stat-icon">
       <%= image_tag "icons/check.svg", alt: "完了", class: "icon" %>
     </div>
@@ -34,14 +46,25 @@
       <div class="stat-number"><%= @recent_completed.count %></div>
       <div class="stat-label">最近完了</div>
     </div>
+    <div class="card-arrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
   </div>
-  <div class="stat-card">
+  
+  <div class="stat-card clickable-card" onclick="window.location.href='<%= pets_path %>'">
     <div class="stat-icon">
       <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon" %>
     </div>
     <div class="stat-content">
       <div class="stat-number"><%= current_household&.pets&.count || 0 %></div>
       <div class="stat-label">登録ペット</div>
+    </div>
+    <div class="card-arrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
   </div>
 </div>
