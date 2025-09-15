@@ -186,11 +186,16 @@
 <script>
 // タイピングアニメーション関数
 function startTypingAnimation() {
-  const typingContent = document.getElementById('typing-content');
-  const staticContent = document.getElementById('static-content');
-  const analysisText = document.getElementById('ai-analysis-text');
-  
-  if (typingContent && staticContent && analysisText) {
+  try {
+    const typingContent = document.getElementById('typing-content');
+    const staticContent = document.getElementById('static-content');
+    const analysisText = document.getElementById('ai-analysis-text');
+    
+    if (!typingContent || !staticContent || !analysisText) {
+      console.log('Required elements not found for typing animation');
+      return;
+    }
+    
     // 静的コンテンツを非表示にして、タイピングアニメーションを開始
     staticContent.style.display = 'none';
     typingContent.style.display = 'block';
@@ -198,10 +203,20 @@ function startTypingAnimation() {
     // 元のテキストを取得
     const originalText = staticContent.innerHTML;
     
+    if (!originalText || originalText.trim() === '') {
+      console.log('No content to animate');
+      return;
+    }
+    
     // HTMLタグを除去してプレーンテキストを取得
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = originalText;
     const plainText = tempDiv.textContent || tempDiv.innerText || '';
+    
+    if (!plainText || plainText.trim() === '') {
+      console.log('No plain text found');
+      return;
+    }
     
     // タイピングアニメーションを実行
     let currentIndex = 0;
@@ -216,15 +231,23 @@ function startTypingAnimation() {
       } else {
         // タイピング完了
         analysisText.classList.add('typing-complete');
+        staticContent.style.display = 'block';
+        typingContent.style.display = 'none';
       }
     }
     
     // 少し遅延してからタイピング開始
     setTimeout(typeText, 500);
+  } catch (error) {
+    console.error('Error in typing animation:', error);
   }
 }
 
 // ページ読み込み時にタイピングアニメーションを開始
-document.addEventListener('DOMContentLoaded', startTypingAnimation);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startTypingAnimation);
+} else {
+  startTypingAnimation();
+}
 
 </script>
