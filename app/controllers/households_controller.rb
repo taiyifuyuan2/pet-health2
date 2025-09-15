@@ -15,6 +15,8 @@ class HouseholdsController < ApplicationController
     if @household.save
       # 作成者をownerとして追加
       @household.memberships.create!(user: current_user, role: 'owner')
+      # セッションに世帯IDを保存
+      session[:household_id] = @household.id
       redirect_to dashboard_path, notice: '世帯を作成しました'
     else
       render :new

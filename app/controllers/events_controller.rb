@@ -9,6 +9,12 @@ class EventsController < ApplicationController
     Rails.logger.info "params: #{params.inspect}"
     Rails.logger.info "current_user: #{current_user.inspect}"
 
+    # 世帯が存在しない場合は世帯作成ページにリダイレクト
+    unless current_household
+      redirect_to new_household_path, alert: '予定を表示する前に、まず世帯を作成してください。'
+      return
+    end
+
     # 月間フィルタリング
     @month = if params[:month]
                Date.parse("#{params[:month]}-01")
@@ -22,30 +28,23 @@ class EventsController < ApplicationController
     @status_filter = params[:status]
 
     # 実際のイベントデータを取得
-    if current_household
-      @events = current_household.events
-                                 .where(scheduled_at: @month_range)
-                                 .order(:scheduled_at)
+    @events = current_household.events
+                               .where(scheduled_at: @month_range)
+                               .order(:scheduled_at)
 
-      # ステータスフィルタリングを適用
-      case @status_filter
-      when 'overdue'
-        @events = @events.where(status: 'pending').where('scheduled_at < ?', Time.current)
-        @page_title = '未完了の予定'
-      when 'completed'
-        @events = @events.where(status: 'completed')
-        @page_title = '完了した予定'
-      else
-        @page_title = '今月の予定'
-      end
-
-      Rails.logger.info "Loaded #{@events.count} events from household for #{@month.strftime('%Y年%m月')} with status: #{@status_filter}"
+    # ステータスフィルタリングを適用
+    case @status_filter
+    when 'overdue'
+      @events = @events.where(status: 'pending').where('scheduled_at < ?', Time.current)
+      @page_title = '未完了の予定'
+    when 'completed'
+      @events = @events.where(status: 'completed')
+      @page_title = '完了した予定'
     else
-      @events = []
       @page_title = '今月の予定'
-      Rails.logger.info 'No household found, using empty events array'
     end
 
+    Rails.logger.info "Loaded #{@events.count} events from household for #{@month.strftime('%Y年%m月')} with status: #{@status_filter}"
     Rails.logger.info 'Events setup completed successfully'
   rescue StandardError => e
     Rails.logger.error "Error in EventsController#index: #{e.message}"

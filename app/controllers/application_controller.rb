@@ -23,7 +23,19 @@ class ApplicationController < ActionController::Base
   end
 
   def current_household
-    @current_household ||= current_user&.households&.first
+    @current_household ||= begin
+      return nil unless current_user
+      
+      # セッションに保存された世帯IDから取得
+      if session[:household_id]
+        current_user.households.find_by(id: session[:household_id])
+      else
+        # セッションにない場合は最初の世帯を取得し、セッションに保存
+        household = current_user.households.first
+        session[:household_id] = household&.id
+        household
+      end
+    end
   end
   helper_method :current_household
 
