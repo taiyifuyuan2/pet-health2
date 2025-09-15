@@ -272,78 +272,96 @@ function startTypingAnimation() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('ai-question-form');
-  const submitButton = document.getElementById('submit-question');
-  const answerContainer = document.getElementById('ai-answer-container');
+// 安全な初期化関数
+(function() {
+  function initQuestionForm() {
+    try {
+      const form = document.getElementById('ai-question-form');
+      const submitButton = document.getElementById('submit-question');
+      const answerContainer = document.getElementById('ai-answer-container');
   
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const question = document.getElementById('health-question').value.trim();
-    console.log('Question submitted:', question);
-    
-    if (!question) {
-      alert('質問を入力してください。');
-      return;
-    }
-    
-    // ボタンを無効化してローディング状態に
-    submitButton.disabled = true;
-    submitButton.innerHTML = '<div class="loading-spinner"></div>AIが回答中...';
-    
-    // 回答コンテナを表示
-    answerContainer.style.display = 'block';
-    answerContainer.innerHTML = '<div class="loading-spinner"></div>AIが回答を生成しています...';
-    
-    // CSRFトークンを取得
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    console.log('CSRF Token:', csrfToken);
-    
-    // AIに質問を送信
-    const url = `/pets/<%= @pet.id %>/ai_question`;
-    console.log('Sending request to:', url);
-    
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'text/html',
-        'X-CSRF-Token': csrfToken,
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      body: JSON.stringify({ question: question })
-    })
-    .then(response => {
-      console.log('Response status:', response.status);
-      console.log('Response headers:', response.headers);
-      if (!response.ok) {
-        return response.text().then(text => {
-          console.error('Error response body:', text);
-          throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
-        });
+      if (!form || !submitButton || !answerContainer) {
+        console.log('Required form elements not found');
+        return;
       }
-      return response.text();
-    })
-    .then(html => {
-      console.log('Received HTML length:', html.length);
-      console.log('Received HTML preview:', html.substring(0, 200));
-      answerContainer.innerHTML = html;
       
-      // タイピングアニメーションを開始
-      setTimeout(() => {
-        startTypingAnimation();
-      }, 100);
-    })
-    .catch(error => {
-      console.error('Error details:', error);
-      answerContainer.innerHTML = '<div class="ai-answer-content">申し訳ございません。エラーが発生しました。もう一度お試しください。<br>エラー詳細: ' + error.message + '</div>';
-    })
-    .finally(() => {
-      // ボタンを元に戻す
-      submitButton.disabled = false;
-      submitButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>AIに質問する';
-    });
-  });
-});
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const question = document.getElementById('health-question').value.trim();
+        console.log('Question submitted:', question);
+        
+        if (!question) {
+          alert('質問を入力してください。');
+          return;
+        }
+        
+        // ボタンを無効化してローディング状態に
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<div class="loading-spinner"></div>AIが回答中...';
+        
+        // 回答コンテナを表示
+        answerContainer.style.display = 'block';
+        answerContainer.innerHTML = '<div class="loading-spinner"></div>AIが回答を生成しています...';
+        
+        // CSRFトークンを取得
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        console.log('CSRF Token:', csrfToken);
+        
+        // AIに質問を送信
+        const url = `/pets/<%= @pet.id %>/ai_question`;
+        console.log('Sending request to:', url);
+        
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'text/html',
+            'X-CSRF-Token': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify({ question: question })
+        })
+        .then(response => {
+          console.log('Response status:', response.status);
+          console.log('Response headers:', response.headers);
+          if (!response.ok) {
+            return response.text().then(text => {
+              console.error('Error response body:', text);
+              throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+            });
+          }
+          return response.text();
+        })
+        .then(html => {
+          console.log('Received HTML length:', html.length);
+          console.log('Received HTML preview:', html.substring(0, 200));
+          answerContainer.innerHTML = html;
+          
+          // タイピングアニメーションを開始
+          setTimeout(() => {
+            startTypingAnimation();
+          }, 100);
+        })
+        .catch(error => {
+          console.error('Error details:', error);
+          answerContainer.innerHTML = '<div class="ai-answer-content">申し訳ございません。エラーが発生しました。もう一度お試しください。<br>エラー詳細: ' + error.message + '</div>';
+        })
+        .finally(() => {
+          // ボタンを元に戻す
+          submitButton.disabled = false;
+          submitButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>AIに質問する';
+        });
+      });
+    } catch (error) {
+      console.error('Error initializing question form:', error);
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initQuestionForm);
+  } else {
+    setTimeout(initQuestionForm, 100);
+  }
+})();
 </script>

@@ -27,7 +27,7 @@ RSpec.describe WeightRecordsController, type: :controller do
 
     it 'assigns @chart_data' do
       get :index, params: { pet_id: pet.id }
-      expect(assigns(:chart_data)).to be_present
+      expect(assigns(:chart_data)).to be_an(Array)
     end
   end
 

@@ -13,15 +13,11 @@ class Event < ApplicationRecord
 
   after_initialize :set_default_status, if: :new_record?
 
-
-
   private
 
   def set_default_status
     self.status ||= :pending
   end
-
-
 
   scope :due_between, ->(from, to) { where(scheduled_at: from..to) }
   scope :pending, -> { where(status: :pending) }

@@ -45,14 +45,14 @@ weight_count = 0
   base_weight = pet.weight_kg
   weight_variation = (rand - 0.5) * 1.0
   weight = (base_weight + weight_variation).round(1)
-  
-  if rand < 0.8  # 80%の確率で記録を作成
-    WeightRecord.find_or_create_by(pet: pet, date: date) do |record|
-      record.weight_kg = weight
-      record.note = ['元気に過ごしています', '食欲良好', '少し疲れ気味'].sample
-    end
-    weight_count += 1
+
+  next unless rand < 0.8 # 80%の確率で記録を作成
+
+  WeightRecord.find_or_create_by(pet: pet, date: date) do |record|
+    record.weight_kg = weight
+    record.note = %w[元気に過ごしています 食欲良好 少し疲れ気味].sample
   end
+  weight_count += 1
 end
 
 # 散歩ログを作成
@@ -60,23 +60,23 @@ puts '散歩ログを作成中...'
 walk_count = 0
 (0..29).each do |i|
   date = i.days.ago.to_date
-  
-  if rand < 0.6  # 60%の確率で散歩記録を作成
-    distance = case rand(3)
-               when 0 then rand(1.0..3.0).round(1)  # 1-3km
-               when 1 then rand(3.0..5.0).round(1)  # 3-5km
-               else rand(0.5..2.0).round(1)         # 0.5-2km
-               end
-    
-    duration = (distance * rand(15..25)).round(0)
-    
-    WalkLog.find_or_create_by(pet: pet, date: date) do |log|
-      log.distance_km = distance
-      log.duration_minutes = duration
-      log.note = ['公園でたくさん遊びました', '他の犬と仲良くできました', '雨の日は短めに', '新しい散歩コースを発見'].sample
-    end
-    walk_count += 1
+
+  next unless rand < 0.6 # 60%の確率で散歩記録を作成
+
+  distance = case rand(3)
+             when 0 then rand(1.0..3.0).round(1)  # 1-3km
+             when 1 then rand(3.0..5.0).round(1)  # 3-5km
+             else rand(0.5..2.0).round(1)         # 0.5-2km
+             end
+
+  duration = (distance * rand(15..25)).round(0)
+
+  WalkLog.find_or_create_by(pet: pet, date: date) do |log|
+    log.distance_km = distance
+    log.duration_minutes = duration
+    log.note = %w[公園でたくさん遊びました 他の犬と仲良くできました 雨の日は短めに 新しい散歩コースを発見].sample
   end
+  walk_count += 1
 end
 
 puts 'データ作成完了！'

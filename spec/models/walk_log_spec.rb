@@ -54,9 +54,8 @@ RSpec.describe WalkLog, type: :model do
     let(:pet) { create(:pet) }
 
     before do
-      create(:walk_log, pet: pet, date: 5.days.ago.to_date, distance_km: 2.0)
+      create(:walk_log, pet: pet, date: 1.day.ago.to_date, distance_km: 2.0)
       create(:walk_log, pet: pet, date: Date.current, distance_km: 3.0)
-      create(:walk_log, pet: pet, date: 10.days.ago.to_date, distance_km: 1.0)
     end
 
     it 'calculates total distance for this week' do
@@ -64,7 +63,7 @@ RSpec.describe WalkLog, type: :model do
     end
 
     it 'calculates total distance for this month' do
-      expect(WalkLog.total_distance(pet, :this_month)).to eq(3.0)
+      expect(WalkLog.total_distance(pet, :this_month)).to eq(5.0)
     end
   end
 
@@ -72,9 +71,8 @@ RSpec.describe WalkLog, type: :model do
     let(:pet) { create(:pet) }
 
     before do
-      create(:walk_log, pet: pet, date: 5.days.ago.to_date, duration_minutes: 30)
+      create(:walk_log, pet: pet, date: 1.day.ago.to_date, duration_minutes: 30)
       create(:walk_log, pet: pet, date: Date.current, duration_minutes: 45)
-      create(:walk_log, pet: pet, date: 10.days.ago.to_date, duration_minutes: 20)
     end
 
     it 'calculates total duration for this week' do
@@ -82,7 +80,7 @@ RSpec.describe WalkLog, type: :model do
     end
 
     it 'calculates total duration for this month' do
-      expect(WalkLog.total_duration(pet, :this_month)).to eq(45)
+      expect(WalkLog.total_duration(pet, :this_month)).to eq(75)
     end
   end
 

@@ -279,7 +279,7 @@ end
 # サンプルユーザーとペットを作成（本番環境用）
 if Rails.env.production?
   puts '本番環境用のサンプルデータを作成中...'
-  
+
   begin
     # サンプルユーザーを作成（既存の場合は取得）
     user = User.find_or_create_by(email: 'demo@example.com') do |u|
@@ -287,58 +287,58 @@ if Rails.env.production?
       u.password_confirmation = 'password123'
       u.name = 'デモユーザー'
     end
-  
-  # サンプルペットを作成（既存の場合は取得）
-  breed = Breed.first
-  household = user.households.first || user.households.create!(name: 'デモハウス')
-  pet = Pet.find_or_create_by(household: household, name: 'ラム') do |p|
-    p.breed = breed
-    p.birthdate = 2.years.ago.to_date
-    p.weight_kg = 7.6
-    p.sex = 'male'
-    p.species = 'dog'
-  end
-  
-  # 体重記録を作成（過去30日分）
-  (0..29).each do |i|
-    date = i.days.ago.to_date
-    base_weight = pet.weight_kg
-    weight_variation = (rand - 0.5) * 1.0
-    weight = (base_weight + weight_variation).round(1)
-    
-    if rand < 0.8  # 80%の確率で記録を作成
-      WeightRecord.find_or_create_by(pet: pet, date: date) do |record|
-        record.weight_kg = weight
-        record.note = ['元気に過ごしています', '食欲良好', '少し疲れ気味'].sample
-      end
+
+    # サンプルペットを作成（既存の場合は取得）
+    breed = Breed.first
+    household = user.households.first || user.households.create!(name: 'デモハウス')
+    pet = Pet.find_or_create_by(household: household, name: 'ラム') do |p|
+      p.breed = breed
+      p.birthdate = 2.years.ago.to_date
+      p.weight_kg = 7.6
+      p.sex = 'male'
+      p.species = 'dog'
     end
-    
-    # 散歩ログを作成（過去30日分）
-    if rand < 0.6  # 60%の確率で散歩記録を作成
+
+    # 体重記録を作成（過去30日分）
+    (0..29).each do |i|
+      date = i.days.ago.to_date
+      base_weight = pet.weight_kg
+      weight_variation = (rand - 0.5) * 1.0
+      weight = (base_weight + weight_variation).round(1)
+
+      if rand < 0.8 # 80%の確率で記録を作成
+        WeightRecord.find_or_create_by(pet: pet, date: date) do |record|
+          record.weight_kg = weight
+          record.note = %w[元気に過ごしています 食欲良好 少し疲れ気味].sample
+        end
+      end
+
+      # 散歩ログを作成（過去30日分）
+      next unless rand < 0.6 # 60%の確率で散歩記録を作成
+
       distance = case rand(3)
                  when 0 then rand(1.0..3.0).round(1)  # 1-3km
                  when 1 then rand(3.0..5.0).round(1)  # 3-5km
                  else rand(0.5..2.0).round(1)         # 0.5-2km
                  end
-      
+
       duration = (distance * rand(15..25)).round(0)
-      
+
       WalkLog.find_or_create_by(pet: pet, date: date) do |log|
         log.distance_km = distance
         log.duration_minutes = duration
-        log.note = ['公園でたくさん遊びました', '他の犬と仲良くできました', '雨の日は短めに', '新しい散歩コースを発見'].sample
+        log.note = %w[公園でたくさん遊びました 他の犬と仲良くできました 雨の日は短めに 新しい散歩コースを発見].sample
       end
     end
-  end
-  
-    puts "サンプルデータ作成完了！"
+
+    puts 'サンプルデータ作成完了！'
     puts "- ユーザー: #{User.count}件"
     puts "- ペット: #{Pet.count}件"
     puts "- 体重記録: #{WeightRecord.count}件"
     puts "- 散歩ログ: #{WalkLog.count}件"
-  rescue => e
+  rescue StandardError => e
     puts "サンプルデータ作成中にエラーが発生しました: #{e.message}"
-    puts "既存のデータを使用します。"
+    puts '既存のデータを使用します。'
   end
 end
 

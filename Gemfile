@@ -47,8 +47,8 @@ gem 'sidekiq'
 gem 'redis', '>= 4.0.1'
 
 # AI Integration
-gem 'ruby-openai'
 gem 'httparty'
+gem 'ruby-openai'
 
 # Environment variables
 gem 'dotenv-rails'

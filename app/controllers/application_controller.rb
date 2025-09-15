@@ -6,12 +6,12 @@ class ApplicationController < ActionController::Base
   before_action :ensure_household_exists!, unless: :skip_household_check?
 
   # ログイン後のリダイレクト先を設定
-  def after_sign_in_path_for(resource)
+  def after_sign_in_path_for(_resource)
     dashboard_path
   end
 
   # ログアウト後のリダイレクト先を設定
-  def after_sign_out_path_for(resource_or_scope)
+  def after_sign_out_path_for(_resource_or_scope)
     new_user_session_path
   end
 
@@ -37,6 +37,6 @@ class ApplicationController < ActionController::Base
     # HouseholdsControllerのnewとcreateアクションでは世帯チェックをスキップ
     # Deviseのコントローラーでも世帯チェックをスキップ
     (controller_name == 'households' && action_name.in?(%w[new create])) ||
-    devise_controller?
+      devise_controller?
   end
 end
