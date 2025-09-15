@@ -1,57 +1,58 @@
 <!-- ペットヘッダー -->
 <div class="pet-header">
-  <div class="pet-info">
-    <div class="pet-avatar-large">
-      <img src="<%= @pet.profile_image_url %>" alt="<%= @pet.name %>の写真" class="pet-avatar-image">
-    </div>
-    <div class="pet-details">
-      <h1 class="pet-name"><%= @pet.name %></h1>
-      <div class="pet-basic-info">
-        <div class="pet-info-item">
-          <span class="info-icon">
-            <%= image_tag "icons/dog.jpeg", alt: "種類", class: "icon-small" %>
-          </span>
-          <%= @pet.species %>
+  <div class="pet-header-background">
+    <div class="pet-info">
+      <div class="pet-avatar-container">
+        <div class="pet-avatar-large">
+          <img src="<%= @pet.profile_image_url %>" alt="<%= @pet.name %>の写真" class="pet-avatar-image">
         </div>
-        <% if @pet.sex.present? %>
+        <div class="pet-status-badge">
+          <span class="status-dot"></span>
+          <span class="status-text">健康</span>
+        </div>
+      </div>
+      <div class="pet-details">
+        <h1 class="pet-name"><%= @pet.name %></h1>
+        <p class="pet-subtitle"><%= @pet.species %> • <%= @pet.breed&.name || "犬種不明" %></p>
+        <div class="pet-basic-info">
           <div class="pet-info-item">
             <span class="info-icon">
-              <%= image_tag "icons/user.jpeg", alt: "性別", class: "icon-small" %>
+              <%= image_tag "icons/dog.jpeg", alt: "種類", class: "icon-small" %>
             </span>
-            <%= @pet.sex %>
+            <span class="info-text"><%= @pet.species %></span>
           </div>
-        <% end %>
-        <% if @pet.birthdate.present? %>
-          <div class="pet-info-item">
-            <span class="info-icon">
-              <%= image_tag "icons/birthday.jpeg", alt: "誕生日", class: "icon-small" %>
-            </span>
-            <%= @pet.birthdate.strftime('%Y年%m月%d日') %>
-          </div>
-        <% end %>
-        <% if @pet.breed.present? %>
-          <div class="pet-info-item">
-            <span class="info-icon">
-              <%= image_tag "icons/dog.jpeg", alt: "犬種", class: "icon-small" %>
-            </span>
-            <%= @pet.breed.name %>
-          </div>
-        <% end %>
-        <% if @pet.weight_kg.present? %>
-          <div class="pet-info-item">
-            <span class="info-icon">
-              <%= image_tag "icons/check.svg", alt: "体重", class: "icon-small" %>
-            </span>
-            <%= @pet.weight_kg %>kg
-          </div>
-        <% end %>
+          <% if @pet.sex.present? %>
+            <div class="pet-info-item">
+              <span class="info-icon">
+                <%= image_tag "icons/user.jpeg", alt: "性別", class: "icon-small" %>
+              </span>
+              <span class="info-text"><%= @pet.sex %></span>
+            </div>
+          <% end %>
+          <% if @pet.birthdate.present? %>
+            <div class="pet-info-item">
+              <span class="info-icon">
+                <%= image_tag "icons/birthday.jpeg", alt: "誕生日", class: "icon-small" %>
+              </span>
+              <span class="info-text"><%= @pet.birthdate.strftime('%Y年%m月%d日') %></span>
+            </div>
+          <% end %>
+          <% if @pet.weight_kg.present? %>
+            <div class="pet-info-item">
+              <span class="info-icon">
+                <%= image_tag "icons/check.svg", alt: "体重", class: "icon-small" %>
+              </span>
+              <span class="info-text"><%= @pet.weight_kg %>kg</span>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="pet-actions">
-    <%= link_to "編集", edit_pet_path(@pet), class: "btn btn-secondary" %>
-    <%= link_to "削除", @pet, data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, 
-                class: "btn btn-danger" %>
+    <div class="pet-actions">
+      <%= link_to "編集", edit_pet_path(@pet), class: "btn btn-secondary" %>
+      <%= link_to "削除", @pet, data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, 
+                  class: "btn btn-danger" %>
+    </div>
   </div>
 </div>
 

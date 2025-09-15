@@ -7,8 +7,15 @@ class DashboardController < ApplicationController
     @household = current_household
     return redirect_to new_household_path unless @household
 
-    @today = Date.current
+    # 日本時間基準で計算
+    jst_time = Time.current.in_time_zone('Asia/Tokyo')
+    @today = jst_time.to_date
     @this_month = @today.beginning_of_month..@today.end_of_month
+
+    # デバッグ用ログ（本番環境でも確認可能）
+    Rails.logger.info "Dashboard Debug - JST Time: #{jst_time}"
+    Rails.logger.info "Dashboard Debug - Today: #{@today}"
+    Rails.logger.info "Dashboard Debug - This Month: #{@this_month.begin} to #{@this_month.end}"
 
     # 今月の予定
     @upcoming_events = @household.events
@@ -16,6 +23,10 @@ class DashboardController < ApplicationController
                                  .pending
                                  .order(:scheduled_at)
                                  .limit(10)
+
+    # デバッグ用ログ
+    Rails.logger.info "Dashboard Debug - Upcoming Events Count: #{@upcoming_events.count}"
+    Rails.logger.info "Dashboard Debug - All Events in Month: #{@household.events.due_between(@this_month.begin, @this_month.end).count}"
 
     # 未完了の予定
     @overdue_events = @household.events

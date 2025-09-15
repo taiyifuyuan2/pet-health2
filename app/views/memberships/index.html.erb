@@ -1,9 +1,14 @@
 <div class="page-header">
   <div class="header-content">
-    <h1 class="page-title">
-      <%= image_tag "icons/user.jpeg", alt: "メンバー管理", class: "icon-inline" %>
-      メンバー管理
-    </h1>
+    <div class="header-info">
+      <div class="header-icon">
+        <%= image_tag "icons/user.jpeg", alt: "メンバー管理", class: "icon-large" %>
+      </div>
+      <div class="header-text">
+        <h1 class="page-title">メンバー管理</h1>
+        <p class="page-subtitle"><%= @household.name %>のメンバーを管理</p>
+      </div>
+    </div>
     <div class="header-actions">
       <%= link_to "世帯詳細", household_path(@household), class: "btn btn-outline" %>
     </div>
