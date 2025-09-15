@@ -7,7 +7,12 @@ class ApplicationController < ActionController::Base
 
   # ログイン後のリダイレクト先を設定
   def after_sign_in_path_for(_resource)
-    dashboard_path
+    # 招待トークンがある場合は招待受け入れページにリダイレクト
+    if session[:invitation_token]
+      invitation_path(session[:invitation_token])
+    else
+      dashboard_path
+    end
   end
 
   # ログアウト後のリダイレクト先を設定

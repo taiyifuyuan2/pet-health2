@@ -1,0 +1,271 @@
+<div class="page-header">
+  <div class="header-content">
+    <h1 class="page-title">
+      <%= image_tag "icons/user.jpeg", alt: "メンバー管理", class: "icon-inline" %>
+      メンバー管理
+    </h1>
+    <div class="header-actions">
+      <%= link_to "世帯詳細", household_path(@household), class: "btn btn-outline" %>
+    </div>
+  </div>
+</div>
+
+<div class="membership-container">
+  <!-- 招待フォーム -->
+  <div class="invitation-section">
+    <h2>新しいメンバーを招待</h2>
+    <%= form_with model: [@household, @invitation || @household.invitations.build], local: true, class: "invitation-form" do |form| %>
+      <div class="form-group">
+        <%= form.label :email, "メールアドレス", class: "form-label" %>
+        <%= form.email_field :email, class: "form-input", placeholder: "example@email.com", required: true %>
+      </div>
+      
+      <div class="form-group">
+        <%= form.label :role, "権限", class: "form-label" %>
+        <%= form.select :role, 
+            options_for_select([
+              ['編集者（編集・追加・削除可能）', 'editor'],
+              ['閲覧者（閲覧のみ）', 'viewer']
+            ], 'editor'), 
+            {}, 
+            { class: "form-select" } %>
+      </div>
+      
+      <div class="form-actions">
+        <%= form.submit "招待メールを送信", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- メンバー一覧 -->
+  <div class="members-section">
+    <h2>世帯メンバー</h2>
+    
+    <% if @memberships.any? %>
+      <div class="members-list">
+        <% @memberships.each do |membership| %>
+          <div class="member-card">
+            <div class="member-info">
+              <div class="member-avatar">
+                <%= image_tag "icons/user.jpeg", alt: "ユーザー", class: "avatar-icon" %>
+              </div>
+              <div class="member-details">
+                <h3 class="member-name"><%= membership.user.name %></h3>
+                <p class="member-email"><%= membership.user.email %></p>
+                <span class="member-role role-<%= membership.role %>">
+                  <%= case membership.role
+                      when 'owner' then 'オーナー'
+                      when 'editor' then '編集者'
+                      when 'viewer' then '閲覧者'
+                      end %>
+                </span>
+              </div>
+            </div>
+            
+            <div class="member-actions">
+              <% unless membership.owner? %>
+                <%= form_with model: [@household, membership], method: :patch, local: true, class: "role-form" do |form| %>
+                  <%= form.select :role, 
+                      options_for_select([
+                        ['編集者', 'editor'],
+                        ['閲覧者', 'viewer']
+                      ], membership.role), 
+                      {}, 
+                      { class: "form-select form-select-sm", onchange: "this.form.submit()" } %>
+                <% end %>
+                
+                <%= link_to "削除", [@household, membership], 
+                    method: :delete, 
+                    class: "btn btn-danger btn-sm",
+                    data: { 
+                      confirm: "#{membership.user.name}さんを世帯から削除しますか？",
+                      turbo_method: :delete
+                    } %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty-state">
+        <p>まだメンバーがいません。</p>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.membership-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.invitation-section {
+  background: #f8f9fa;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  border: 1px solid #e9ecef;
+}
+
+.invitation-section h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.invitation-form {
+  display: grid;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #555;
+}
+
+.form-input, .form-select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-actions {
+  margin-top: 8px;
+}
+
+.members-section h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.member-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.member-avatar {
+  width: 48px;
+  height: 48px;
+  background: #f8f9fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-icon {
+  width: 24px;
+  height: 24px;
+  opacity: 0.6;
+}
+
+.member-details h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.member-email {
+  margin: 0 0 8px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.member-role {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.role-owner {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.role-editor {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.role-viewer {
+  background: #e8f5e8;
+  color: #388e3c;
+}
+
+.member-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-form {
+  display: inline-block;
+}
+
+.form-select-sm {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .member-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .member-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+</style>

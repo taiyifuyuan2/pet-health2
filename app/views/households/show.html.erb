@@ -20,6 +20,7 @@
     </div>
   </div>
   <div class="household-actions">
+    <%= link_to "メンバー管理", household_memberships_path(@household), class: "btn btn-outline" %>
     <%= link_to "編集", edit_household_path(@household), class: "btn btn-secondary" %>
     <%= link_to "ダッシュボード", dashboard_path, class: "btn btn-primary" %>
     <%= link_to "削除", household_path(@household), 

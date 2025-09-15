@@ -1,0 +1,249 @@
+<div class="invitation-page">
+  <div class="invitation-container">
+    <div class="invitation-header">
+      <h1>🐾 世帯招待</h1>
+      <p class="invitation-subtitle">ペット健康管理アプリ</p>
+    </div>
+
+    <div class="invitation-content">
+      <% if @invitation.expired? %>
+        <div class="alert alert-error">
+          <h2>招待の有効期限が切れています</h2>
+          <p>この招待リンクは有効期限が切れています。新しい招待を依頼してください。</p>
+        </div>
+      <% elsif @invitation.accepted? %>
+        <div class="alert alert-info">
+          <h2>既に参加済みです</h2>
+          <p>この招待は既に受け入れられています。</p>
+        </div>
+      <% else %>
+        <div class="invitation-details">
+          <h2>招待の詳細</h2>
+          <div class="invitation-info">
+            <div class="info-item">
+              <strong>世帯名:</strong>
+              <span><%= @invitation.household.name %></span>
+            </div>
+            <div class="info-item">
+              <strong>招待者:</strong>
+              <span><%= @invitation.invited_by.name %></span>
+            </div>
+            <div class="info-item">
+              <strong>権限:</strong>
+              <span class="role-badge role-<%= @invitation.role %>">
+                <%= case @invitation.role
+                    when 'owner' then 'オーナー'
+                    when 'editor' then '編集者'
+                    when 'viewer' then '閲覧者'
+                    end %>
+              </span>
+            </div>
+            <div class="info-item">
+              <strong>有効期限:</strong>
+              <span><%= @invitation.expires_at.strftime("%Y年%m月%d日 %H:%M") %></span>
+            </div>
+          </div>
+
+          <div class="invitation-features">
+            <h3>この世帯で利用できる機能</h3>
+            <ul>
+              <li>ペットの健康記録管理</li>
+              <li>ワクチン・健康診断の予定管理</li>
+              <li>体重・散歩記録の共有</li>
+              <li>AI健康相談機能</li>
+            </ul>
+          </div>
+
+          <div class="invitation-actions">
+            <% if user_signed_in? %>
+              <%= form_with url: accept_invitation_path(@invitation.token), method: :post, local: true, class: "accept-form" do |form| %>
+                <%= form.submit "世帯に参加する", class: "btn btn-primary btn-large" %>
+              <% end %>
+            <% else %>
+              <p class="login-required">世帯に参加するにはログインが必要です。</p>
+              <%= link_to "ログイン", new_user_session_path, class: "btn btn-primary btn-large" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+.invitation-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.invitation-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.invitation-header {
+  background: #f8f9fa;
+  padding: 32px;
+  text-align: center;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.invitation-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+.invitation-subtitle {
+  margin: 0;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.invitation-content {
+  padding: 32px;
+}
+
+.alert {
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.alert-error {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.alert-info {
+  background: #d1ecf1;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+}
+
+.alert h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+}
+
+.invitation-details h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.invitation-info {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item strong {
+  color: #555;
+  font-weight: 600;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.role-owner {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.role-editor {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.role-viewer {
+  background: #e8f5e8;
+  color: #388e3c;
+}
+
+.invitation-features {
+  margin-bottom: 32px;
+}
+
+.invitation-features h3 {
+  margin: 0 0 16px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.invitation-features ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #555;
+}
+
+.invitation-features li {
+  margin-bottom: 8px;
+}
+
+.invitation-actions {
+  text-align: center;
+}
+
+.accept-form {
+  display: inline-block;
+}
+
+.btn-large {
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.login-required {
+  margin: 0 0 16px 0;
+  color: #666;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .invitation-container {
+    margin: 0;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+  
+  .invitation-header, .invitation-content {
+    padding: 24px;
+  }
+  
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+</style>
