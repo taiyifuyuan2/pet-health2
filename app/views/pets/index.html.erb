@@ -59,7 +59,11 @@
       <div class="pet-card">
         <div class="pet-card-header">
           <div class="pet-avatar">
-            <img src="<%= pet.profile_image_url %>" alt="<%= pet.name %>の写真" class="pet-avatar-image">
+            <% if pet.profile_image.attached? %>
+              <%= image_tag pet.profile_image.variant(resize_to_fill: [60, 60]), alt: "#{pet.name}の写真", class: "pet-avatar-image" %>
+            <% else %>
+              <img src="<%= pet.profile_image_url %>" alt="<%= pet.name %>の写真" class="pet-avatar-image">
+            <% end %>
           </div>
           <div class="pet-card-actions">
             <%= link_to "詳細", pet_path(pet), class: "btn btn-sm btn-secondary" %>

@@ -4,7 +4,11 @@
     <div class="pet-info">
       <div class="pet-avatar-container">
         <div class="pet-avatar-large">
-          <img src="<%= @pet.profile_image_url %>" alt="<%= @pet.name %>の写真" class="pet-avatar-image">
+          <% if @pet.profile_image.attached? %>
+            <%= image_tag @pet.profile_image.variant(resize_to_fill: [120, 120]), alt: "#{@pet.name}の写真", class: "pet-avatar-image" %>
+          <% else %>
+            <img src="<%= @pet.profile_image_url %>" alt="<%= @pet.name %>の写真" class="pet-avatar-image">
+          <% end %>
         </div>
         <div class="pet-status-badge">
           <span class="status-dot"></span>

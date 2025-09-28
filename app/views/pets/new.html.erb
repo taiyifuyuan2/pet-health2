@@ -30,6 +30,16 @@
           </div>
         <% end %>
 
+        <% if @pet.errors[:profile_image].any? %>
+          <div class="alert alert-danger">
+            <ul>
+              <% @pet.errors[:profile_image].each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
         <!-- プロフィール写真 -->
         <div class="form-group pet-image-group">
           <label class="form-label">プロフィール写真</label>
@@ -38,14 +48,14 @@
               <img src="https://ui-avatars.com/api/?name=ペット&background=random&color=fff&size=200" alt="プロフィール写真" class="pet-image" id="pet-image-preview">
             </div>
             <div class="pet-image-actions">
-              <%= form.file_field :profile_image, class: "form-control-file", id: "pet-image-input", accept: "image/*" %>
+              <%= form.file_field :profile_image, class: "form-control-file", id: "pet-image-input", accept: "image/jpeg,image/png,image/gif,image/webp" %>
               <label for="pet-image-input" class="btn btn-outline">写真を選択</label>
               <button type="button" class="btn btn-outline" id="remove-pet-image">削除</button>
             </div>
           </div>
           <div class="form-help">
             <span class="help-icon">💡</span>
-            JPG、PNG、GIF形式の画像をアップロードできます（最大5MB）
+            JPEG、PNG、GIF、WebP形式の画像をアップロードできます（最大5MB）
           </div>
         </div>
 

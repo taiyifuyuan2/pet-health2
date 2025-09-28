@@ -45,6 +45,11 @@ class PetsController < ApplicationController
   def edit; end
 
   def update
+    # 画像削除の処理
+    if params[:pet][:remove_profile_image] == '1'
+      @pet.profile_image.purge
+    end
+
     if @pet.update(pet_params)
       redirect_to @pet, notice: 'ペット情報を更新しました'
     else
@@ -64,6 +69,6 @@ class PetsController < ApplicationController
   end
 
   def pet_params
-    params.require(:pet).permit(:name, :species, :sex, :birthdate, :notes, :profile_image, :breed_id, :weight_kg)
+    params.require(:pet).permit(:name, :species, :sex, :birthdate, :notes, :breed_id, :weight_kg, :remove_profile_image, profile_image: [])
   end
 end
