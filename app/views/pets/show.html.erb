@@ -5,7 +5,7 @@
       <div class="pet-avatar-container">
         <div class="pet-avatar-large">
           <% if @pet.profile_image.attached? %>
-            <%= image_tag @pet.profile_image.variant(resize_to_fill: [120, 120]), alt: "#{@pet.name}の写真", class: "pet-avatar-image" %>
+            <%= image_tag @pet.profile_image, alt: "#{@pet.name}の写真", class: "pet-avatar-image", style: "width: 120px; height: 120px; object-fit: cover; border-radius: 50%;" %>
           <% else %>
             <img src="<%= @pet.profile_image_url %>" alt="<%= @pet.name %>の写真" class="pet-avatar-image">
           <% end %>

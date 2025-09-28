@@ -109,7 +109,7 @@
                 <div class="event-subject">
                   <span class="subject-icon">
                     <% if event.subject.is_a?(Pet) && event.subject.profile_image.attached? %>
-                      <%= image_tag event.subject.profile_image.variant(resize_to_fill: [16, 16]), alt: "#{event.subject.name}の写真", class: "icon-small", style: "width: 16px; height: 16px; border-radius: 50%; object-fit: cover;" %>
+                      <%= image_tag event.subject.profile_image, alt: "#{event.subject.name}の写真", class: "icon-small", style: "width: 16px; height: 16px; border-radius: 50%; object-fit: cover;" %>
                     <% else %>
                       <%= image_tag "icons/dog.jpeg", alt: "ペット", class: "icon-small" %>
                     <% end %>

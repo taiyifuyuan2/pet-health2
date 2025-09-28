@@ -46,7 +46,7 @@
           <div class="pet-image-container">
             <div class="pet-image-preview">
               <% if @pet.profile_image.attached? %>
-                <%= image_tag @pet.profile_image.variant(resize_to_fill: [120, 120]), alt: "プロフィール写真", class: "pet-image", id: "pet-image-preview" %>
+                <%= image_tag @pet.profile_image, alt: "プロフィール写真", class: "pet-image", id: "pet-image-preview", style: "width: 120px; height: 120px; object-fit: cover; border-radius: 50%;" %>
               <% else %>
                 <img src="<%= @pet.profile_image_url %>" alt="プロフィール写真" class="pet-image" id="pet-image-preview">
               <% end %>

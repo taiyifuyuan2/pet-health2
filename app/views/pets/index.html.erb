@@ -60,7 +60,7 @@
         <div class="pet-card-header">
           <div class="pet-avatar">
             <% if pet.profile_image.attached? %>
-              <%= image_tag pet.profile_image.variant(resize_to_fill: [60, 60]), alt: "#{pet.name}の写真", class: "pet-avatar-image" %>
+              <%= image_tag pet.profile_image, alt: "#{pet.name}の写真", class: "pet-avatar-image", style: "width: 60px; height: 60px; object-fit: cover; border-radius: 50%;" %>
             <% else %>
               <img src="<%= pet.profile_image_url %>" alt="<%= pet.name %>の写真" class="pet-avatar-image">
             <% end %>
